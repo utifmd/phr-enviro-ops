@@ -13,24 +13,24 @@ return new class extends Migration
     {
         Schema::create('information', function (Blueprint $table) {
             $vehicleTypes = collect(\App\Utils\InformationVehicleTypeEnum::cases())
-                ->map(function ($item) {return $item->value;})->toArray();
+                ->map(fn ($item) => $item->value)->toArray();
 
             $shifts = collect(\App\Utils\InformationShiftEnum::cases())
-                ->map(function ($item) {return $item->value;})->toArray();
+                ->map(fn ($item) => $item->value)->toArray();
 
             $areas = collect(\App\Utils\InformationAreaEnum::cases())
-                ->map(function ($item) {return $item->value;})->toArray();
+                ->map(fn ($item) => $item->value)->toArray();
 
             $table->uuid('id')->primary();
-            $table->string('operator')->nullable();
             $table->enum('vehicle_type', $vehicleTypes);
-            $table->string('police_number')->nullable();
-            $table->string('driver_name')->nullable();
             $table->dateTime('start_plan')->nullable();
             $table->dateTime('end_plan')->nullable();
             $table->enum('shift', $shifts);
             $table->enum('area', $areas);
 
+            $table->foreignUuid('operator_id')->nullable(false)->constrained('operators');
+            $table->foreignUuid('vehicle_id')->nullable(false)->constrained('vehicles');
+            $table->foreignUuid('crew_id')->nullable(false)->constrained('crews');
             $table->foreignUuid('post_id')
                 ->constrained('posts')
                 ->cascadeOnDelete();

@@ -6,16 +6,17 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 /**
  * Class Order
  *
  * @property $id
- * @property $operator
+ * @property $operator_id
  * @property $vehicle_type
- * @property $police_number
- * @property $driver_name
+ * @property $vehicle_id
+ * @property $crew_id
  * @property $start_plan
  * @property $end_plan
  * @property $shift
@@ -36,13 +37,19 @@ class Information extends Model
     protected $table = 'information';
 
     protected $fillable = [
-        'operator', 'vehicle_type', 'police_number', 'driver_name', 'start_plan', 'end_plan', 'shift', 'area', 'post_id'
+        'operator_id', 'vehicle_type', 'vehicle_id', 'crew_id', 'start_plan', 'end_plan', 'shift', 'area', 'post_id'
     ];
 
     function post(): BelongsTo
     {
         return $this->belongsTo(Post::class);
     }
+
+    public function vehicle(): HasOne
+    {
+        return $this->hasOne(Vehicle::class, 'vehicle_id', 'id');
+    }
+
     const ROUTE_POS = 1;
 
     const ROUTE_NAME = 'information';

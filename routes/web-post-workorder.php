@@ -9,9 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/posts', \App\Livewire\Posts\Index::class)
-        ->name('posts.index');
-
+    // Route::get('/posts', \App\Livewire\Posts\Index::class)->name('posts.index');
     // Route::get('/posts/create', \App\Livewire\Posts\Create::class)->name('posts.create');
 
     Route::get('/posts/show/{post}', \App\Livewire\Posts\Show::class)
@@ -61,8 +59,7 @@ Route::middleware('auth')->group(function () {
         ->name('information.edit');
 
 
-    /*Route::get('/image-urls', \App\Livewire\ImageUrls\Index::class)
-        ->name('image-urls.index');
+    // Route::get('/image-urls', \App\Livewire\ImageUrls\Index::class)->name('image-urls.index');
 
     Route::get('/image-urls/create', \App\Livewire\ImageUrls\Create::class)
         ->name('image-urls.create');
@@ -74,8 +71,10 @@ Route::middleware('auth')->group(function () {
         ->name('image-urls.edit');
 
 
-    Route::view('/workorders', 'livewire.workorders.index')
-        ->name('workorders');
+    //Route::view('/workorders', 'livewire.workorders.index')->name('workorders');
+
+    Route::get('/workorders', \App\Livewire\Workorders\Index::class)
+        ->name('workorders.index');
 
     // Route::view('/workorders/create', 'livewire.workorders.create')->name('workorders.create');
 
@@ -83,7 +82,7 @@ Route::middleware('auth')->group(function () {
         ->name('workorders.create');
 
     Route::get('/workorders/show/{post}', \App\Livewire\Workorders\Show::class)
-        ->name('workorders.show');*/
+        ->name('workorders.show');
 
     //Route::view('/workorders/show', 'livewire.workorders.show')->name('workorders.show');
 });

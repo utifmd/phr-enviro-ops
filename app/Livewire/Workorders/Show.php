@@ -89,7 +89,7 @@ class Show extends Component
             $this->removeUserCurrentPost->execute($this->userId);
             $posted = Post::query()->find($this->postId);
             $posted->title = $this->generatedWoNumber;
-            $posted->description = $this->information->operator;
+            $posted->description = $this->information->operator_id;
             $posted->save();
 
             $path = public_path('images/barcode/').$this->generatedWoNumber.'.png';
