@@ -26,3 +26,4 @@ Route::middleware('guest')->group(function () {
 
 require __DIR__.'/web-users.php';
 require __DIR__.'/web-post-workorder.php';
+require __DIR__.'/web-well.php';
