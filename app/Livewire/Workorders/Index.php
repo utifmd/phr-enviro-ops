@@ -16,7 +16,8 @@ class Index extends Component
     #[Layout('layouts.app')]
     public function render(): View
     {
-        $posts = Post::query()->where('type', '=', PostTypeEnum::POST_WO_TYPE->value)->paginate();
+        $posts = Post::query()
+            ->where('type', '=', PostTypeEnum::POST_WO_TYPE->value)->paginate();
 
         return view('livewire.workorders.index', compact('posts'))
             ->with('i', $this->getPage() * $posts->perPage());

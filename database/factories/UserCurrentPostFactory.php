@@ -3,9 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\Information;
-use App\Models\Order;
+use App\Models\PlanOrder;
 use App\Models\Post;
-use App\Models\TripPlan;
+use App\Models\PlanTrip;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

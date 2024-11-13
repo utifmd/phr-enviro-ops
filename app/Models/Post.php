@@ -16,17 +16,16 @@ use Illuminate\Support\Str;
  * @property $title
  * @property $description
  * @property $type
- * @property //$trip_plan
- * @property //$order
- * @property //$user_current_post
+ * @property $user_id
  * @property $created_at
  * @property $updated_at
  *
  * # RELATIONAL
  * @property $information
- * @property $ordersDetail
- * @property $tripPlans
+ * @property $planOrder
+ * @property $planTrips
  * @property $imageUrl
+ * @property $imageUrls
  *
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -47,6 +46,13 @@ class Post extends Model
         'title', 'description', 'type', 'user_id'
     ];
     protected $perPage = 8;
+
+    function imageUrl(): HasOne
+    {
+        return $this->hasOne(
+            ImageUrl::class, 'post_id', 'id'
+        );
+    }
 
     function imageUrls(): HasMany
     {
@@ -69,24 +75,17 @@ class Post extends Model
         );
     }*/
 
-    function tripPlans(): HasMany
+    function planTrips(): HasMany
     {
         return $this->hasMany(
-            TripPlan::class, 'post_id', 'id'
+            PlanTrip::class, 'post_id', 'id'
         );
     }
 
-    function ordersDetail(): HasOne
+    function planOrder(): HasOne
     {
         return $this->hasOne(
-            Order::class, 'post_id', 'id'
-        );
-    }
-
-    function imageUrl(): HasOne
-    {
-        return $this->hasOne(
-            ImageUrl::class, 'post_id', 'id'
+            PlanOrder::class, 'post_id', 'id'
         );
     }
 

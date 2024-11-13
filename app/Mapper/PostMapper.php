@@ -22,13 +22,14 @@ class PostMapper implements IPostMapper
         $model->id = $post->get('id');
         $model->type = $post->get('type');
         $model->title = $post->get('title');
-        $model->desc = $post->get('desc');
+        $model->description = $post->get('description');
         $model->user_id = $post->get('user_id');
         $model->created_at = $post->get('created_at');
         $model->updated_at = $post->get('updated_at');
 
-        $model->uploadedUrls = $post->get('uploadedUrls') ?? [];
-        $model->workOrders = $post->get('workOrders') ?? [];
+        $model->imageUrls = $post->get('imageUrls') ?? [];
+        $model->planOrder = $post->get('planOrders') ?? [];
+        $model->planTrips = $post->get('planTrips') ?? [];
         $model->user = $post->get('user') ?? null;
         $model->operator = $post->get('operator') ?? null;
         return $model;
@@ -40,13 +41,14 @@ class PostMapper implements IPostMapper
         $post->id = $model['id'];
         $post->type = $model['type'];
         $post->title = $model['title'];
-        $post->desc = $model['desc'];
+        $post->description = $model['description'];
         $post->user_id = $model['user_id'];
         $post->created_at = $model['created_at'];
         $post->updated_at = $model['updated_at'];
 
-        $post->uploadedUrls = $model['uploadedUrls'] ?? [];
-        $post->workOrders = $model['workOrders'] ?? [];
+        $post->imageUrls = $model['imageUrls'] ?? [];
+        $post->planOrder = $model['planOrder'] ?? [];
+        $post->planTrips = $model['planTrips'] ?? [];
         $post->user = $model['user'] ?? null;
         $post->operator = $model['operator'] ?? null;
         return $post;

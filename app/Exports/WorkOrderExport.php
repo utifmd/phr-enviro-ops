@@ -3,7 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Information;
-use App\Models\Order;
+use App\Models\PlanOrder;
 use App\Models\Post;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
@@ -23,43 +23,27 @@ class WorkOrderExport implements
     private string $generatedWoNumber;
 
     private Information $information;
-    private Order $order;
+    private PlanOrder $order;
     private Collection $tripPlans;
     /**
     * @return void
     */
-    public function __construct(Post $post, string $generatedWoNumber, string $qrBase64Data) {
+    public function __construct(
+        Post $post, string $generatedWoNumber, string $qrBase64DataOrPath, bool $isPath = false) {
         $this->information = $post->information;
-        $this->order = $post->ordersDetail;
-        $this->tripPlans = $post->tripPlans;
+        $this->order = $post->planOrder;
+        $this->tripPlans = $post->planTrips;
 
         /*Log::debug("WorkOrderExport __construct");
         Log::debug(json_encode($this->information));*/
         $this->generatedWoNumber = $generatedWoNumber;
-        $this->barcodeImages[$generatedWoNumber] = $this->generateBarcodeImage($qrBase64Data);
+
+        $this->barcodeImages[$generatedWoNumber] = $isPath
+            ? $qrBase64DataOrPath
+            : $this->generateBarcodeImagePath($qrBase64DataOrPath);
     }
 
-
-    /*public function map($order): array
-    {
-
-        $DNS1D = new DNS1D();
-        $barcode = $DNS1D->getBarcodePNG($order->id, 'C39');
-
-
-        $this->barcodeImages[$order->id] = $this->generateBarcodeImage($barcode);
-
-        return [
-            $order->id,
-            $order->status,
-            $order->description,
-
-            'barcode' => '',
-        ];
-    }*/
-
-
-    protected function generateBarcodeImage(string $barcode): false|string
+    protected function generateBarcodeImagePath(string $barcode): false|string
     {
         $barcodeImage = base64_decode($barcode);
         $barcodePath = public_path('images/barcodes');
@@ -86,11 +70,21 @@ class WorkOrderExport implements
 
             Log::debug($e->getMessage());
         }
-        $drawing->setWidth(60);
+        $drawing->setWidth(80);
         $drawing->setCoordinates('H2');
         $drawings[] = $drawing;
 
         return $drawings;
+    }
+    public function view(): View
+    {
+
+        return view('livewire.workorders.blueprint', [
+            "information" => $this->information,
+            "order" => $this->order,
+            "tripPlans" => $this->tripPlans,
+            "generatedWoNumber" => $this->generatedWoNumber
+        ]);
     }
     public function styles(Worksheet $sheet): void
     {
@@ -121,14 +115,22 @@ class WorkOrderExport implements
             ->setFillType(Fill::FILL_SOLID)
             ->setStartColor(new Color('BDD7EE'));*/
     }
-    public function view(): View
+    /*public function map($order): array
     {
 
-        return view('livewire.workorders.blueprint', [
-            "information" => $this->information,
-            "order" => $this->order,
-            "tripPlans" => $this->tripPlans,
-            "generatedWoNumber" => $this->generatedWoNumber
-        ]);
-    }
+        $DNS1D = new DNS1D();
+        $barcode = $DNS1D->getBarcodePNG($order->id, 'C39');
+
+
+        $this->barcodeImages[$order->id] = $this->generateBarcodeImage($barcode);
+
+        return [
+            $order->id,
+            $order->status,
+            $order->description,
+
+            'barcode' => '',
+        ];
+    }*/
+
 }

@@ -6,7 +6,7 @@ use App\Livewire\Actions\GetStep;
 use App\Livewire\Actions\UpdateUserCurrentPost;
 use App\Livewire\Forms\InformationForm;
 use App\Models\Information;
-use App\Models\Order;
+use App\Models\PlanOrder;
 use App\Repositories\Contracts\ICrewRepository;
 use App\Repositories\Contracts\IDBRepository;
 use App\Repositories\Contracts\IOperatorRepository;
@@ -103,8 +103,8 @@ class Create extends Component
             $this->form->store();
             $userCurrentPost = [
                 'steps' => '0;1;2',
-                'step_at' => Order::ROUTE_POS,
-                'url' => Order::ROUTE_NAME . '.create'
+                'step_at' => PlanOrder::ROUTE_POS,
+                'url' => PlanOrder::ROUTE_NAME . '.create'
             ];
             $this->userCurrentPostRepos->update(
                 $this->userId, $userCurrentPost

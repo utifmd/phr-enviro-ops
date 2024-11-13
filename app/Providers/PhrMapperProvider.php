@@ -3,10 +3,8 @@
 namespace App\Providers;
 
 use App\Mapper\Contracts\IPostMapper;
-use App\Mapper\Contracts\IUploadedUrlMapper;
 use App\Mapper\Contracts\IUserMapper;
 use App\Mapper\PostMapper;
-use App\Mapper\UploadedUrlMapper;
 use App\Mapper\UserMapper;
 use App\Utils\Contracts\IUtility;
 use App\Utils\Utility;
@@ -21,7 +19,6 @@ class PhrMapperProvider extends ServiceProvider
         IUtility::class => Utility::class,
         IUserMapper::class => UserMapper::class,
         IPostMapper::class => PostMapper::class,
-        IUploadedUrlMapper::class => UploadedUrlMapper::class,
     ];
 
     public function provides(): array
@@ -30,7 +27,6 @@ class PhrMapperProvider extends ServiceProvider
             IUtility::class,
             IUserMapper::class,
             IPostMapper::class,
-            IUploadedUrlMapper::class,
         ];
     }
     public function register(): void

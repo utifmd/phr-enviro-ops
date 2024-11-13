@@ -4,42 +4,48 @@
         <div>
             <table class="mt-8 py-2">
                 <tr>
-                    <td class="py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">Operator</td>
-                    <td class="px-3 py-4 text-sm text-gray-500">:</td>
-                    <td class="px-3 py-4 text-sm text-gray-500">{{$information->operator->short_name}}</td>
+                    <td class="py-4 pl-4 text-sm font-semibold text-gray-900">WO Number</td>
+                    <td class="px-3 py-4 text-sm font-semibold text-gray-900">:</td>
+                    <td class="px-3 py-4 text-sm text-gray-500">{{$generatedWoNumber}}</td>
+                </tr>
                 <tr>
-                    <td class="py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">Vehicle Type</td>
-                    <td class="px-3 py-4 text-sm text-gray-500">:</td>
+                    <td class="py-4 pl-4 text-sm font-semibold text-gray-900">Operator</td>
+                    <td class="px-3 py-4 text-sm font-semibold text-gray-900">:</td>
+                    <td class="px-3 py-4 text-sm text-gray-500">{{$information->operator->short_name}}</td>
+                </tr>
+                <tr>
+                    <td class="py-4 pl-4 text-sm font-semibold text-gray-900">Vehicle Type</td>
+                    <td class="px-3 py-4 text-sm font-semibold text-gray-900">:</td>
                     <td class="px-3 py-4 text-sm text-gray-500">{{$information->vehicle_type}}</td>
                 </tr>
                 <tr>
-                    <td class="py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">Vehicle Number</td>
-                    <td class="px-3 py-4 text-sm text-gray-500">:</td>
+                    <td class="py-4 pl-4 text-sm font-semibold text-gray-900">Vehicle Number</td>
+                    <td class="px-3 py-4 text-sm font-semibold text-gray-900">:</td>
                     <td class="px-3 py-4 text-sm text-gray-500">{{$information->vehicle->plat}}</td>
                 </tr>
                 <tr>
-                    <td class="py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">Driver Name</td>
-                    <td class="px-3 py-4 text-sm text-gray-500">:</td>
+                    <td class="py-4 pl-4 text-sm font-semibold text-gray-900">Driver Name</td>
+                    <td class="px-3 py-4 text-sm font-semibold text-gray-900">:</td>
                     <td class="px-3 py-4 text-sm text-gray-500">{{$information->crew->name}}</td>
                 </tr>
                 <tr>
-                    <td class="py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">Start Plan</td>
-                    <td class="px-3 py-4 text-sm text-gray-500">:</td>
+                    <td class="py-4 pl-4 text-sm font-semibold text-gray-900">Start Plan</td>
+                    <td class="px-3 py-4 text-sm font-semibold text-gray-900">:</td>
                     <td class="px-3 py-4 text-sm text-gray-500">{{$information->start_plan}}</td>
                 </tr>
                 <tr>
-                    <td class="py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">End Plan</td>
-                    <td class="px-3 py-4 text-sm text-gray-500">:</td>
+                    <td class="py-4 pl-4 text-sm font-semibold text-gray-900">End Plan</td>
+                    <td class="px-3 py-4 text-sm font-semibold text-gray-900">:</td>
                     <td class="px-3 py-4 text-sm text-gray-500">{{$information->end_plan}}</td>
                 </tr>
                 <tr>
-                    <td class="py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">Shift</td>
-                    <td class="px-3 py-4 text-sm text-gray-500">:</td>
+                    <td class="py-4 pl-4 text-sm font-semibold text-gray-900">Shift</td>
+                    <td class="px-3 py-4 text-sm font-semibold text-gray-900">:</td>
                     <td class="px-3 py-4 text-sm text-gray-500">{{$information->shift}}</td>
                 </tr>
                 <tr>
-                    <td class="py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">Area</td>
-                    <td class="px-3 py-4 text-sm text-gray-500">:</td>
+                    <td class="py-4 pl-4 text-sm font-semibold text-gray-900">Area</td>
+                    <td class="px-3 py-4 text-sm font-semibold text-gray-900">:</td>
                     <td class="px-3 py-4 text-sm text-gray-500">{{$information->area}}</td>
                 </tr>
             </table>
@@ -50,9 +56,6 @@
         @elseif(!is_null($url = $postForm->postModel->imageUrl->url ?? null))
             <img src="{{ $url }}" alt="barcode" />
         @endif
-            <div class="text-lg mt-3 font-bold">
-                {{$generatedWoNumber}}
-            </div>
         </div>
     </div>
     <div class="mt-8 overflow-x-auto">

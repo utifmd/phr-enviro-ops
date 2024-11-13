@@ -36,7 +36,7 @@
             <tr class="even:bg-gray-50" wire:key="{{ $load['wbs_number'] }}">
                 <td class="whitespace-nowrap pl-4 py-4 text-sm font-semibold text-gray-900">{{ $load['num'].'. ' }}</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    <a href="{{ route('posts.load-request',  $load['ids_wellname']) }}" class="hover:opacity-50">
+                    <a href="{{ route('work-request',  $load['ids_wellname']) }}" class="hover:opacity-50">
                         {{ $load['well_number'] }}
                     </a>
                 </td>

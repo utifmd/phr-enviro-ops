@@ -8,7 +8,7 @@ use App\Livewire\Actions\RemoveUserCurrentPost;
 use App\Livewire\Forms\PostForm;
 use App\Models\ImageUrl;
 use App\Models\Information;
-use App\Models\Order;
+use App\Models\PlanOrder;
 use App\Models\Post;
 use App\Models\WorkOrder;
 use Illuminate\Contracts\View\View;
@@ -33,7 +33,7 @@ class Show extends Component
 
     public PostForm $postForm;
     public Information $information;
-    public Order $order;
+    public PlanOrder $order;
     public Collection $tripPlans;
 
     public ?string $userId = null;
@@ -59,15 +59,14 @@ class Show extends Component
         $this->stepAt = $getStep->getStepAt();
         $this->disabled = in_array(4, $this->steps) &&
             $this->stepAt != 4;
-        $this->disabled = true;
     }
 
     public function mount(Post $post): void
     {
         $this->postForm->setPostModel($post);
         $this->information = $post->information;
-        $this->order = $post->ordersDetail;
-        $this->tripPlans = $post->tripPlans;
+        $this->order = $post->planOrder;
+        $this->tripPlans = $post->planTrips;
 
         $this->setQrCode($post->information->vehicle->plat);
     }

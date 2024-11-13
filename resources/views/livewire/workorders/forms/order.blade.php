@@ -11,7 +11,7 @@
 
     <form wire:submit="addOrder" class="mt-6 space-y-6">
         @csrf
-        @include('livewire.order.form')
+        @include('livewire.plan-orders.form')
         <div class="flex items-center gap-4">
             <x-action-message class="me-3" on="add-information">
                 {{ __('Order added successfully.') }}

@@ -11,7 +11,7 @@
 
     <form wire:submit="addTripPlan" class="mt-6 space-y-6">
         @csrf
-        @include('livewire.trip-plan.form')
+        @include('livewire.plan-trips.form')
         <div class="flex items-center gap-4">
             <x-action-message class="me-3" on="add-trip-plan">
                 {{ __('Trip plan added successfully.') }}

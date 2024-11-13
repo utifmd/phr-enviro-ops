@@ -18,11 +18,11 @@ class Create extends Component
         $this->form->setPostModel($post);
     }
 
-    public function save()
+    public function save(): void
     {
         $this->form->store();
 
-        return $this->redirectRoute('posts.index', navigate: true);
+        $this->redirectRoute('posts.index', navigate: true);
     }
 
     #[Layout('layouts.app')]

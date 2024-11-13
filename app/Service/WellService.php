@@ -2,9 +2,9 @@
 
 namespace App\Service;
 
+use App\Models\ImageUrl;
 use App\Models\Post;
 use App\Repositories\Contracts\IPostRepository;
-use App\Repositories\Contracts\IUploadedUrlRepository;
 use App\Repositories\Contracts\IUserRepository;
 use App\Repositories\Contracts\IWellMasterRepository;
 use App\Repositories\Contracts\IWorkOrderRepository;
@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Log;
 class WellService implements IWellService
 {
     private IPostRepository $postRepository;
-    private IUploadedUrlRepository $uploadedUrlRepository;
     private IWorkOrderRepository $workOrderRepository;
     private IWellMasterRepository $wellMasterRepository;
     private IUtility $utility;
@@ -25,7 +24,6 @@ class WellService implements IWellService
 
     public function __construct(
         IPostRepository $postRepository,
-        IUploadedUrlRepository $uploadedUrlRepository,
         IWorkOrderRepository $workOrderRepository,
         IUserRepository $userRepository,
         IWellMasterRepository $wellMasterRepository,
@@ -33,7 +31,6 @@ class WellService implements IWellService
     {
         $this->userId = $userRepository->authenticatedUser()->id;
         $this->postRepository = $postRepository;
-        $this->uploadedUrlRepository = $uploadedUrlRepository;
         $this->workOrderRepository = $workOrderRepository;
         $this->wellMasterRepository = $wellMasterRepository;
         $this->utility = $utility;
@@ -50,9 +47,7 @@ class WellService implements IWellService
             if (is_null($postOrNull)) return null;
             $postId = $postOrNull->id;
 
-            $uploadedUrlRequest['post_id'] = $postId;
-            $this->uploadedUrlRepository
-                ->addUploadedUrl($uploadedUrlRequest);
+            ImageUrl::factory()->create(['post_id' => $postId]);
 
             foreach ($workOrdersRequest as $workOrderRequest) {
                 $workOrderRequest['post_id'] = $postId;
@@ -72,7 +67,7 @@ class WellService implements IWellService
     }
 
     public function updateWell(
-        array $postRequest, array $uploadedUrlRequest, array $workOrdersRequest): ?Post {
+        array $postRequest, array $imageUrlRequest, array $workOrdersRequest): ?Post {
         $post = null;
         $this->postRepository->async();
         try {
@@ -81,10 +76,8 @@ class WellService implements IWellService
             if (is_null($postOrNull)) return null;
             $postId = $postRequest['id']; //$postOrNull->id;
 
-            $uploadedUrlRequest['post_id'] = $postId;
-            $this->uploadedUrlRepository->updateUploadedUrl(
-                $uploadedUrlRequest['id'], $uploadedUrlRequest
-            );
+            ImageUrl::query()->find($imageUrlRequest['id'])->update($imageUrlRequest);
+
             if (count($workOrdersRequest) > 0) {
                 $this->workOrderRepository->removeWorkOrderBy($postId); // ?? throw new \Exception('remove work order failed.');
 

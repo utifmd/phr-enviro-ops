@@ -22,7 +22,7 @@
                 </svg>
             </span>
         @endif
-        <a class="{{in_array(1, $steps) ? '' : 'pointer-events-none'}}" href="{{ route('information.create')}}" wire:navigate.hover>
+        <a class="{{in_array(1, $steps) ? '' : 'pointer-events-none'}}" href="{{ route(\App\Models\Information::ROUTE_NAME.'.create')}}" wire:navigate.hover>
             <h3 class="{{$stepAt == 1 ? 'text-green-600 font-bold' : 'font-medium'}} leading-tight">Information</h3>
         </a>
         <p class="text-sm">Detail contractor information</p>
@@ -41,7 +41,7 @@
             </svg>
         </span>
         @endif
-        <a class="{{in_array(2, $steps) ? '' : 'pointer-events-none'}}" href="{{ route('orders.create')}}" wire:navigate.hover>
+        <a class="{{in_array(2, $steps) ? '' : 'pointer-events-none'}}" href="{{ route(\App\Models\PlanOrder::ROUTE_NAME.'.create')}}" wire:navigate.hover>
             <h3 class="{{$stepAt == 2 ? 'text-green-600 font-bold' : 'font-medium'}} leading-tight">Order Detail</h3>
         </a>
         <p class="text-sm">Step details workorder here</p>
@@ -60,7 +60,7 @@
             </svg>
         </span>
         @endif
-        <a class="{{in_array(3, $steps) ? '' : 'pointer-events-none'}}" href="{{ route('trip-plans.confirm')}}" wire:navigate.hover>
+        <a class="{{in_array(3, $steps) ? '' : 'pointer-events-none'}}" href="{{ route(\App\Models\PlanTrip::ROUTE_NAME.'.confirm')}}" wire:navigate.hover>
             <h3 class="{{$stepAt == 3 ? 'text-green-600 font-bold' : 'font-medium'}} leading-tight">Trip Plan</h3>
         </a>
         <p class="text-sm">Step details trip plan of workorder were here</p>

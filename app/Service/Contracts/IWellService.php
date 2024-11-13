@@ -14,7 +14,7 @@ interface IWellService
 
     function updateWell(
         array $postRequest,
-        array $uploadedUrlRequest,
+        array $imageUrlRequest,
         array $workOrdersRequest): ?Post;
 
     function getWellPostById(string $postId): ?Post;
