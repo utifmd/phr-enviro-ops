@@ -3,114 +3,42 @@
 namespace App\Livewire\Workorders;
 
 use App\Exports\WorkOrderExport;
-use App\Livewire\Actions\GetStep;
-use App\Livewire\Actions\RemoveUserCurrentPost;
 use App\Livewire\Forms\PostForm;
-use App\Models\ImageUrl;
 use App\Models\Information;
 use App\Models\PlanOrder;
 use App\Models\Post;
 use App\Models\WorkOrder;
-use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Maatwebsite\Excel\Facades\Excel;
-use Milon\Barcode\DNS2D;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-/* TODO:
- * - populate these forms to show view
- * - print the data with qrcode
- * - create operator table relation with vehicle, and driver
- * */
 class Show extends Component
 {
-    private DNS2D $codeGenerator;
-    private RemoveUserCurrentPost $removeUserCurrentPost;
-
     public PostForm $postForm;
     public Information $information;
-    public PlanOrder $order;
-    public Collection $tripPlans;
+    public PlanOrder $planOrder;
+    public Collection $planTrips;
 
-    public ?string $userId = null;
-    public string $postId;
+    public string $userId;
     public string $generatedWoNumber;
-    public string $qrBase64Data;
-    public array $steps;
-    public int $stepAt;
-    public bool $disabled;
+    public string $imagePath;
 
     public function __construct()
     {
         $user = auth()->user();
-        $getStep = new GetStep($user);
-        $this->removeUserCurrentPost = new RemoveUserCurrentPost();
-        $this->codeGenerator = new DNS2D();
-        if ($currentPost = $user->currentPost ?? false) {
-
-            $this->userId = $user->getAuthIdentifier();
-            $this->postId = $currentPost->post_id;
-        }
-        $this->steps = $getStep->getSteps();
-        $this->stepAt = $getStep->getStepAt();
-        $this->disabled = in_array(4, $this->steps) &&
-            $this->stepAt != 4;
+        $this->userId = $user->getAuthIdentifier();
     }
-
     public function mount(Post $post): void
     {
         $this->postForm->setPostModel($post);
         $this->information = $post->information;
-        $this->order = $post->planOrder;
-        $this->tripPlans = $post->planTrips;
-
-        $this->setQrCode($post->information->vehicle->plat);
-    }
-
-    private function setQrCode(string $platNumber): void
-    {
-        $this->generatedWoNumber = "VT-WO-". date('YmdHis');
-            // str_pad($count, 3, 0, STR_PAD_LEFT);
-        $woUrl = asset(WorkOrder::ROUTE_NAME.'/request/'.$this->generatedWoNumber);
-
-        $this->qrBase64Data = $this->codeGenerator
-            ->getBarcodePNG($woUrl, 'QRcode', 10, 10);
-    }
-
-    public function finish(): void
-    {
-        try {
-            DB::beginTransaction();
-            $this->removeUserCurrentPost->execute($this->userId);
-            $posted = Post::query()->find($this->postId);
-            $posted->title = $this->generatedWoNumber;
-            $posted->description = $this->information->operator->name;
-            $posted->save();
-
-            $path = 'images/barcodes/'.$this->generatedWoNumber.'.png';
-            $imageUrl = [
-                'path' => $path,
-                'url' => asset($path),
-                'post_id' => $this->postId
-            ];
-            ImageUrl::query()->create($imageUrl);
-
-            DB::commit();
-        } catch (\Throwable $exception) {
-
-            Log::error($exception->getMessage());
-            DB::rollBack();
-        }
-        session()->flash(
-            'message', 'Workorder successfully published.'
-        );
-        $this->redirectRoute(
-            WorkOrder::ROUTE_NAME.'.index', navigate: true
-        );
+        $this->planOrder = $post->planOrder;
+        $this->planTrips = $post->planTrips;
+        $this->generatedWoNumber = $post->title;
+        $this->imagePath = $post->imageUrl->path;
     }
 
     public function export(): BinaryFileResponse
@@ -118,16 +46,14 @@ class Show extends Component
         $workOrderExport = new WorkOrderExport(
             $this->postForm->postModel,
             $this->generatedWoNumber,
-            $this->qrBase64Data
+            $this->imagePath, true
         );
-        $this->disabled = false;
         $filename = $this->generatedWoNumber.'.xlsx';
         return Excel::download($workOrderExport, $filename);
     }
-
     #[Layout('layouts.app')]
     public function render(): View
     {
-        return view('livewire.workorders.show');
+        return view('livewire.'.WorkOrder::ROUTE_NAME.'.show');
     }
 }

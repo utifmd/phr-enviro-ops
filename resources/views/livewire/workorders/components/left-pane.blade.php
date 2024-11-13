@@ -79,7 +79,7 @@
             </svg>
         </span>
         @endif
-        <a class="{{in_array(4, $steps) ? '' : 'pointer-events-none'}}" href="{{ route('workorders.show', $postId ?? '')}}" wire:navigate.hover>
+        <a class="{{in_array(4, $steps) ? '' : 'pointer-events-none'}}" href="{{ route(\App\Models\WorkOrder::ROUTE_NAME.'.blueprint', $postId ?? '')}}" wire:navigate.hover>
             <h3 class="{{$stepAt == 4 ? 'text-green-600 font-bold' : 'font-medium'}} leading-tight">Work Order</h3>
         </a>
         <p class="text-sm">Final step to publish work order</p>

@@ -11,17 +11,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/posts', \App\Livewire\Posts\Index::class)
-        ->name('posts.index');
-
-    Route::get('/posts/create', \App\Livewire\Posts\Create::class)
-        ->name('posts.create');
-
-    Route::get('/posts/show/{post}', \App\Livewire\Posts\Show::class)
-        ->name('posts.show');
-
-    // Route::get('/posts/update/{post}', \App\Livewire\Posts\Edit::class)->name('posts.edit');
-
     Route::get('/plan-orders', \App\Livewire\PlanOrders\Index::class)
         ->name('plan-orders.index');
 
@@ -75,6 +64,9 @@ Route::middleware('auth')->group(function () {
         ->name('image-urls.edit');
 
 
+    Route::get('/'. WorkOrder::ROUTE_NAME.'/blueprint/{post}', \App\Livewire\Workorders\Blueprint::class)
+        ->name(WorkOrder::ROUTE_NAME.'.blueprint');
+
     Route::get('/'. WorkOrder::ROUTE_NAME, \App\Livewire\Workorders\Index::class)
         ->name(WorkOrder::ROUTE_NAME.'.index');
 
@@ -84,7 +76,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/'. WorkOrder::ROUTE_NAME.'/show/{post}', \App\Livewire\Workorders\Show::class)
         ->name(WorkOrder::ROUTE_NAME.'.show');
 
-    Route::get('/'. WorkOrder::ROUTE_NAME.'/request/index', \App\Livewire\Workorders\Show::class)
+    Route::get(
+        '/'. WorkOrder::ROUTE_NAME.'/request/index',
+        \App\Livewire\Workorders\Request\Index::class)
         ->name(WorkOrder::ROUTE_NAME.'.request.index');
 
     Route::get(

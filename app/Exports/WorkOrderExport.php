@@ -23,16 +23,16 @@ class WorkOrderExport implements
     private string $generatedWoNumber;
 
     private Information $information;
-    private PlanOrder $order;
-    private Collection $tripPlans;
+    private PlanOrder $planOrder;
+    private Collection $planTrips;
     /**
     * @return void
     */
     public function __construct(
         Post $post, string $generatedWoNumber, string $qrBase64DataOrPath, bool $isPath = false) {
         $this->information = $post->information;
-        $this->order = $post->planOrder;
-        $this->tripPlans = $post->planTrips;
+        $this->planOrder = $post->planOrder;
+        $this->planTrips = $post->planTrips;
 
         /*Log::debug("WorkOrderExport __construct");
         Log::debug(json_encode($this->information));*/
@@ -79,10 +79,10 @@ class WorkOrderExport implements
     public function view(): View
     {
 
-        return view('livewire.workorders.blueprint', [
+        return view('livewire.workorders.blueprint-tabled', [
             "information" => $this->information,
-            "order" => $this->order,
-            "tripPlans" => $this->tripPlans,
+            "planOrder" => $this->planOrder,
+            "planTrips" => $this->planTrips,
             "generatedWoNumber" => $this->generatedWoNumber
         ]);
     }

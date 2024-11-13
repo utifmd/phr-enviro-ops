@@ -58,7 +58,7 @@ class Create extends Component
             $this->user->getAuthIdentifier()
         );
         session()->flash(
-            'message', 'Detail Orders successfully submitted, please follow the next step!'
+            'message', 'Show Orders successfully submitted, please follow the next step!'
         );
         $this->redirectRoute(Post::ROUTE_NAME.'.index', navigate: true);
     }

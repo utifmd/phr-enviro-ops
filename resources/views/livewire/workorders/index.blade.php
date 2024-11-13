@@ -14,7 +14,7 @@
                         <p class="mt-2 text-sm text-gray-700">A list of all the {{ __('Workorders') }}.</p>
                     </div>
                     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <a type="button" wire:confirm="Are you sure you want to create new workorder?" wire:navigate href="{{ route('workorders.create') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add new workorder</a>
+                        <a type="button" wire:confirm="Are you sure you want to create new workorder?" wire:navigate href="{{ route(\App\Models\WorkOrder::ROUTE_NAME.'.create') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add new workorder</a>
                     </div>
                 </div>
 
@@ -44,7 +44,7 @@
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $post->information->start_plan ?? 'NA' }} - {{$post->information->end_plan ?? 'NA'}}</td>
 
                                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
-                                            <a wire:navigate href="{{ route('posts.show', $post->id) }}" class="text-gray-600 font-bold hover:text-gray-900 mr-2">{{ __('Show') }}</a>
+                                            <a wire:navigate href="{{ route(\App\Models\WorkOrder::ROUTE_NAME.'.show', $post->id) }}" class="text-gray-600 font-bold hover:text-gray-900 mr-2">{{ __('Show') }}</a>
                                             {{--<a wire:navigate href="{{ route('posts.edit', $post->id) }}" class="text-indigo-600 font-bold hover:text-indigo-900  mr-2">{{ __('Edit') }}</a>--}}
                                             <button
                                                 class="text-red-600 font-bold hover:text-red-900"

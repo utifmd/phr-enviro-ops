@@ -99,7 +99,7 @@ new class extends Component {
                         <x-dropdown-link :href="route('profile')" wire:navigate>
                             {{ __('Profile') }}
                         </x-dropdown-link>
-                        <x-dropdown-link :href="route('posts.index')" wire:navigate>
+                        <x-dropdown-link :href="route(\App\Models\WorkOrder::ROUTE_NAME.'.index')" wire:navigate>
                             {{ __('My Requests') }}
                         </x-dropdown-link>
 
@@ -193,7 +193,7 @@ new class extends Component {
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('posts.index')" wire:navigate>
+                <x-responsive-nav-link :href="route(\App\Models\WorkOrder::ROUTE_NAME.'.index')" wire:navigate>
                     {{ __('My Requests') }}
                 </x-responsive-nav-link>
 

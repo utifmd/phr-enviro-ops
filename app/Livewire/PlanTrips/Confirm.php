@@ -6,6 +6,7 @@ use App\Livewire\Actions\GetStep;
 use App\Livewire\Actions\UpdateUserCurrentPost;
 use App\Models\PlanOrder;
 use App\Models\PlanTrip;
+use App\Models\WorkOrder;
 use App\Utils\TripPlanTypeEnum;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
@@ -127,7 +128,7 @@ class Confirm extends Component
             $userCurrentPost = [
                 'steps' => '0;1;2;3;4',
                 'step_at' => 4,
-                'url' => 'workorders.show'
+                'url' => WorkOrder::ROUTE_NAME.'.blueprint'
             ];
             $updateUserCurrentPost($this->userId, $userCurrentPost);
             DB::commit();
