@@ -11,8 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('actual_trips', function (Blueprint $table) {
-            $table->id();
+        Schema::create('work_trips', function (Blueprint $table) {
+            $areaNameAllowed = collect(\App\Utils\AreaNameEnum::cases())->map(fn($case) => $case->value)->toArray();
+            $actNameAllowed = collect(\App\Utils\ActNameEnum::cases())->map(fn($case) => $case->value)->toArray();
+            $typeAllowed = collect(\App\Utils\WorkTripTypeEnum::cases())->map(fn($case) => $case->value)->toArray();
+
+            $table->uuid('id')->primary();
+            $table->enum('type', $typeAllowed);
+            $table->date('date');
+            $table->time('time');
+            $table->enum('act_name', $actNameAllowed);
+            $table->string('act_process');
+            $table->string('act_unit');
+            $table->integer('act_value');
+            $table->enum('area_name', $areaNameAllowed);
+            $table->string('area_loc');
+            $table->foreignUuid('post_id')
+                ->nullable(false)
+                ->constrained('posts');
             $table->timestamps();
         });
     }

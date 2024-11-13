@@ -2,7 +2,7 @@
 
 namespace App\Utils;
 
-enum VehicleTypeEnum: string
+enum VehicleClassEnum: string
 {
     case HEAVY_VEHICLE_TYPE = 'HEAVY_VEHICLE_TYPE';
     case HEAVY_EQUIPMENT_TYPE = 'HEAVY_EQUIPMENT_TYPE';

@@ -7,7 +7,9 @@ use App\Livewire\Actions\UpdateUserCurrentPost;
 use App\Models\PlanOrder;
 use App\Models\PlanTrip;
 use App\Models\WorkOrder;
+use App\Models\WorkTrip;
 use App\Utils\TripPlanTypeEnum;
+use App\Utils\WorkTripTypeEnum;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -114,13 +116,26 @@ class Confirm extends Component
             $updateUserCurrentPost = new UpdateUserCurrentPost();
 
             foreach ($this->tripPlans as $tripPlan) {
-                $model = new PlanTrip();
+                /*$model = new PlanTrip();
                 $model->start_from = $tripPlan['start_from'];
                 $model->finish_to = $tripPlan['finish_to'];
                 $model->trip_type = $tripPlan['trip_type'];
                 $model->post_id = $this->postId;
-                $model->save();
+                $model->save();*/
+                $tripPlan['post_id'] = $this->postId;
+                PlanTrip::query()->create($tripPlan);
             }
+
+            /*$workTrip = [
+                'act_name' => $acts[$actIdx]['name'],
+                'act_process' => $acts[$actIdx]['process'],
+                'act_unit' => $acts[$actIdx]['unit'],
+                'area_name' => $areas[$areaIdx]['name'],
+                'area_loc' => $areas[$areaIdx]['location'],
+                'post_id' => $postIds[rand(0, count($postIds) - 1)],
+            ];
+            WorkTrip::factory(count($this->tripPlans))->create($workTrip);*/
+
             PlanOrder::query()
                 ->where('post_id', '=', $this->postId)
                 ->update(['trip' => $this->tripTimes]);

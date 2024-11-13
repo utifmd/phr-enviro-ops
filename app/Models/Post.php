@@ -24,6 +24,7 @@ use Illuminate\Support\Str;
  * @property $information
  * @property $planOrder
  * @property $planTrips
+ * @property $workTrip
  * @property $imageUrl
  * @property $imageUrls
  *
@@ -45,7 +46,7 @@ class Post extends Model
     protected $fillable = [
         'title', 'description', 'type', 'user_id'
     ];
-    protected $perPage = 8;
+    protected $perPage = 20;
 
     function imageUrl(): HasOne
     {
@@ -68,13 +69,6 @@ class Post extends Model
         );
     }
 
-    /*function tripPlan(): HasOne
-    {
-        return $this->hasOne(
-            TripPlan::class, 'post_id', 'id'
-        );
-    }*/
-
     function planTrips(): HasMany
     {
         return $this->hasMany(
@@ -89,15 +83,12 @@ class Post extends Model
         );
     }
 
-    /*function userCurrentPost(): HasOne
+    function workTrip(): HasOne
     {
         return $this->hasOne(
-            UserCurrentPost::class, 'user_id', 'id'
+            WorkTrip::class, 'post_id', 'id'
         );
-    }*/
-    const ROUTE_POS = 0;
-
-    const ROUTE_NAME = 'posts';
+    }
 
     protected static function booted(): void
     {
@@ -105,4 +96,7 @@ class Post extends Model
             $model->id = Str::uuid()->toString();
         });
     }
+    const ROUTE_POS = 0;
+
+    const ROUTE_NAME = 'posts';
 }

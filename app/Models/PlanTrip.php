@@ -32,7 +32,7 @@ use Illuminate\Support\Str;
  */
 class PlanTrip extends Model
 {
-    use HasFactory, HasUuids;
+    use HasUuids;
 
     public $incrementing = false;
 
@@ -41,7 +41,7 @@ class PlanTrip extends Model
     protected $table = 'plan_trips';
 
     protected $fillable = [
-        'start_from', 'finish_to', 'trip_type', 'actual_start', 'actual_finish', 'km_start', 'km_end', 'km_actual', 'km_contract', 'start_working_date', 'end_working_date', 'total_standby_hour', 'total_working_hour', 'job_ticket_number', 'post_id'
+        'start_from', 'finish_to', 'trip_type', 'post_id'
     ];
     function post(): BelongsTo
     {

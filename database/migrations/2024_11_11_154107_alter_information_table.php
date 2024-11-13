@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('information', function (Blueprint $table) {
-            $vehicleTypes = collect(\App\Utils\VehicleTypeEnum::cases())
+            $vehicleTypes = collect(\App\Utils\VehicleClassEnum::cases())
                 ->map(fn ($item) => $item->value)->toArray();
 
             $table->enum('vehicle_type', $vehicleTypes)->change();

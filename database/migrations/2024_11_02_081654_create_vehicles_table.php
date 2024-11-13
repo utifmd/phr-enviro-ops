@@ -1,6 +1,6 @@
 <?php
 
-use App\Utils\VehicleTypeEnum;
+use App\Utils\VehicleClassEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,12 +14,13 @@ return new class extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $allowedType = collect(VehicleTypeEnum::cases())
+            $allowedType = collect(VehicleClassEnum::cases())
                 ->map(function ($case) {return $case->value;})
                 ->toArray();
 
             $table->string('plat')->nullable(false)->unique();
-            $table->enum('type', $allowedType);
+            $table->enum('class', $allowedType);
+            $table->string('type');
             $table->string('vendor');
 
             $table->foreignId('operator_id')

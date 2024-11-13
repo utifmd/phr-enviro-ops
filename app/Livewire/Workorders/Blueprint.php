@@ -21,11 +21,6 @@ use Maatwebsite\Excel\Facades\Excel;
 use Milon\Barcode\DNS2D;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-/* TODO:
- * - populate these forms to show view
- * - print the data with qrcode
- * - create operator table relation with vehicle, and driver
- * */
 class Blueprint extends Component
 {
     private DNS2D $codeGenerator;
@@ -67,13 +62,15 @@ class Blueprint extends Component
         $this->planOrder = $post->planOrder;
         $this->planTrips = $post->planTrips;
 
-        $this->setQrCode($post->information->vehicle->plat);
+        $this->setQrCode($post->get()->count() +1);
     }
 
-    private function setQrCode(string $platNumber): void
+    private function setQrCode(int $count): void
     {
-        $this->generatedWoNumber = "VT-WO-". date('YmdHis'); // str_pad($count, 3, 0, STR_PAD_LEFT);
-        $woUrl = asset(WorkOrder::ROUTE_NAME.'/request/create/'.$this->generatedWoNumber);
+        $this->generatedWoNumber = "VT-WO-". date('YmdH') . str_pad(
+            $count, 5, 0, STR_PAD_LEFT
+        );
+        $woUrl = asset(WorkOrder::ROUTE_NAME.'/request/create/'.$this->postId);
         $this->qrBase64Data = $this->codeGenerator
             ->getBarcodePNG($woUrl, 'QRcode', 10, 10);
     }

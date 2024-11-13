@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Utils\VehicleTypeEnum;
+use App\Utils\VehicleClassEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +19,7 @@ class VehicleFactory extends Factory
     {
         return [
             'plat' => fake()->name,
-            'type' => VehicleTypeEnum::HEAVY_VEHICLE_TYPE->value,
+            'type' => VehicleClassEnum::HEAVY_VEHICLE_TYPE->value,
             'vendor' => fake()->name,
             'operator_id' => null
         ];
