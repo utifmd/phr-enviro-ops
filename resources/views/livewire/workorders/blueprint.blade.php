@@ -6,21 +6,21 @@
                 <tr>
                     <td class="py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">Operator</td>
                     <td class="px-3 py-4 text-sm text-gray-500">:</td>
-                    <td class="px-3 py-4 text-sm text-gray-500">{{$information->operator}}</td>
+                    <td class="px-3 py-4 text-sm text-gray-500">{{$information->operator->short_name}}</td>
                 <tr>
                     <td class="py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">Vehicle Type</td>
                     <td class="px-3 py-4 text-sm text-gray-500">:</td>
                     <td class="px-3 py-4 text-sm text-gray-500">{{$information->vehicle_type}}</td>
                 </tr>
                 <tr>
-                    <td class="py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">Police Number</td>
+                    <td class="py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">Vehicle Number</td>
                     <td class="px-3 py-4 text-sm text-gray-500">:</td>
-                    <td class="px-3 py-4 text-sm text-gray-500">{{$information->police_number}}</td>
+                    <td class="px-3 py-4 text-sm text-gray-500">{{$information->vehicle->plat}}</td>
                 </tr>
                 <tr>
                     <td class="py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">Driver Name</td>
                     <td class="px-3 py-4 text-sm text-gray-500">:</td>
-                    <td class="px-3 py-4 text-sm text-gray-500">{{$information->driver_name}}</td>
+                    <td class="px-3 py-4 text-sm text-gray-500">{{$information->crew->name}}</td>
                 </tr>
                 <tr>
                     <td class="py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">Start Plan</td>
@@ -47,7 +47,12 @@
         <div class="mt-6 p-4">
         @if(isset($qrBase64Data))
             <img src="data:image/png;base64,{{ $qrBase64Data }}" alt="barcode" />
+        @elseif(!is_null($url = $postForm->postModel->imageUrl->url ?? null))
+            <img src="{{ $url }}" alt="barcode" />
         @endif
+            <div class="text-lg mt-3 font-bold">
+                {{$generatedWoNumber}}
+            </div>
         </div>
     </div>
     <div class="mt-8 overflow-x-auto">
@@ -69,7 +74,7 @@
                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Wr Number</th>
                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Rig Name</th>
                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Pic</th>
-                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Change</th>
+                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Charge</th>
                     </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 bg-white">
@@ -87,7 +92,7 @@
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{$order->wr_number}}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{$order->rig_name}}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{$order->pic}}</td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{$order->change}}</td>
+                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{$order->charge}}</td>
                     </tr>
                     </tbody>
                 </table>

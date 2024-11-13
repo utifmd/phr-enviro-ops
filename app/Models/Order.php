@@ -27,7 +27,7 @@ use Illuminate\Support\Str;
  * @property $wr_number
  * @property $rig_name
  * @property $pic
- * @property $change
+ * @property $charge
  * @property $post_id
  *
  * @package App
@@ -44,7 +44,7 @@ class Order extends Model
     protected $table = 'orders';
 
     protected $fillable = [
-        'status', 'description', 'req_qty', 'rem_qty', 'sch_qty', 'uom', 'required_date', 'pick_up_from', 'destination', 'wr_number', 'rig_name', 'pic', 'change', 'post_id', 'yard', 'trip'
+        'status', 'description', 'req_qty', 'rem_qty', 'sch_qty', 'uom', 'required_date', 'pick_up_from', 'destination', 'wr_number', 'rig_name', 'pic', 'charge', 'post_id', 'yard', 'trip'
     ];
     function post(): BelongsTo
     {

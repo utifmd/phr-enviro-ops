@@ -14,13 +14,13 @@
                         <p class="mt-2 text-sm text-gray-700">Details of {{ __('Workorder') }}.</p>
                     </div>
                     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <a type="button" wire:navigate href="{{ route('posts.index') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Back</a>
+                        <a type="button" wire:navigate href="{{ route('workorders.index') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Back</a>
                     </div>
                 </div>
 
                 <div class="flow-root">
                     <div class="mt-8 overflow-x-auto">
-                        @include('livewire.workorders.blueprint', [])
+                        @include('livewire.workorders.blueprint')
                         {{--<div class="inline-block min-w-full py-2 align-middle">
                             <div class="mt-6 border-t border-gray-100">
                                 <dl class="divide-y divide-gray-100">

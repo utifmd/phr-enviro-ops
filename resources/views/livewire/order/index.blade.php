@@ -25,7 +25,7 @@
                                 <thead>
                                 <tr>
                                     <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">No</th>
-                                    
+
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Status</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Description</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Req Qty</th>
@@ -38,7 +38,7 @@
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Wr Number</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Rig Name</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Pic</th>
-									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Change</th>
+									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Charge</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Post Id</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Yard</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Trip</th>
@@ -50,7 +50,7 @@
                                 @foreach ($orders as $order)
                                     <tr class="even:bg-gray-50" wire:key="{{ $order->id }}">
                                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ ++$i }}</td>
-                                        
+
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $order->status }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $order->description }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $order->req_qty }}</td>
@@ -63,7 +63,7 @@
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $order->wr_number }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $order->rig_name }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $order->pic }}</td>
-										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $order->change }}</td>
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $order->charge }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $order->post_id }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $order->yard }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $order->trip }}</td>

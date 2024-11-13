@@ -10,6 +10,7 @@ use App\Models\ImageUrl;
 use App\Models\Information;
 use App\Models\Order;
 use App\Models\Post;
+use App\Models\WorkOrder;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -58,6 +59,7 @@ class Show extends Component
         $this->stepAt = $getStep->getStepAt();
         $this->disabled = in_array(4, $this->steps) &&
             $this->stepAt != 4;
+        $this->disabled = true;
     }
 
     public function mount(Post $post): void
@@ -67,16 +69,13 @@ class Show extends Component
         $this->order = $post->ordersDetail;
         $this->tripPlans = $post->tripPlans;
 
-        $this->setQrCode($post->ordersDetail->id);
+        $this->setQrCode($post->information->vehicle->plat);
     }
 
-    private function setQrCode(string $orderId): void
+    private function setQrCode(string $platNumber): void
     {
-        $this->generatedWoNumber = "VT-WO-".
-            date('YmdHis').
-            str_pad(
-                $orderId, 3, 0, STR_PAD_LEFT
-            );
+        $this->generatedWoNumber = "VT-WO-". date('YmdHis');
+            // str_pad($count, 3, 0, STR_PAD_LEFT);
         $this->qrBase64Data = $this->codeGenerator->getBarcodePNG(
             $this->generatedWoNumber, 'QRcode', 10, 10
         );
@@ -89,10 +88,10 @@ class Show extends Component
             $this->removeUserCurrentPost->execute($this->userId);
             $posted = Post::query()->find($this->postId);
             $posted->title = $this->generatedWoNumber;
-            $posted->description = $this->information->operator_id;
+            $posted->description = $this->information->operator->name;
             $posted->save();
 
-            $path = public_path('images/barcode/').$this->generatedWoNumber.'.png';
+            $path = 'images/barcodes/'.$this->generatedWoNumber.'.png';
             $imageUrl = [
                 'path' => $path,
                 'url' => asset($path),
@@ -110,7 +109,7 @@ class Show extends Component
             'message', 'Workorder successfully published.'
         );
         $this->redirectRoute(
-            Post::ROUTE_NAME.'.index', navigate: true
+            WorkOrder::ROUTE_NAME.'.index', navigate: true
         );
     }
 
@@ -121,6 +120,7 @@ class Show extends Component
             $this->generatedWoNumber,
             $this->qrBase64Data
         );
+        $this->disabled = false;
         $filename = $this->generatedWoNumber.'.xlsx';
         return Excel::download($workOrderExport, $filename);
     }

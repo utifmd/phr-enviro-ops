@@ -23,6 +23,11 @@ use Illuminate\Support\Str;
  * @property $area
  * @property $post_id
  *
+ * RELATION
+ * @property $operator
+ * @property $vehicle
+ * @property $crew
+ *
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
@@ -45,9 +50,19 @@ class Information extends Model
         return $this->belongsTo(Post::class);
     }
 
+    public function operator(): HasOne
+    {
+        return $this->hasOne(Operator::class, 'id', 'operator_id');
+    }
+
     public function vehicle(): HasOne
     {
-        return $this->hasOne(Vehicle::class, 'vehicle_id', 'id');
+        return $this->hasOne(Vehicle::class, 'id', 'vehicle_id');
+    }
+
+    public function crew(): HasOne
+    {
+        return $this->hasOne(Crew::class, 'id', 'crew_id');
     }
 
     const ROUTE_POS = 1;

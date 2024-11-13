@@ -21,7 +21,7 @@ class OrderForm extends Form
     public $wr_number = '';
     public $rig_name = '';
     public $pic = '';
-    public $change = '';
+    public $charge = '';
     public $post_id = '';
     public $yard = '';
     public $trip = '';
@@ -41,7 +41,7 @@ class OrderForm extends Form
             'wr_number' => 'required|string',
             'rig_name' => 'required|string',
             'pic' => 'required|string',
-            'change' => 'required|string',
+            'charge' => 'required|string',
             'post_id' => 'required|',
             'yard' => 'required|string',
             'trip' => 'required|integer',
@@ -64,7 +64,7 @@ class OrderForm extends Form
         $this->wr_number = $this->orderModel->wr_number;
         $this->rig_name = $this->orderModel->rig_name;
         $this->pic = $this->orderModel->pic;
-        $this->change = $this->orderModel->change;
+        $this->charge = $this->orderModel->charge;
         $this->post_id = $this->orderModel->post_id;
         $this->yard = $this->orderModel->yard;
         $this->trip = $this->orderModel->trip;

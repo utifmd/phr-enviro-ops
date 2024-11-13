@@ -83,7 +83,7 @@ class Post extends Model
         );
     }
 
-    function imageUrl()
+    function imageUrl(): HasOne
     {
         return $this->hasOne(
             ImageUrl::class, 'post_id', 'id'

@@ -1,3 +1,5 @@
+@props(['disabled' => false])
+
 <div class="grid grid-cols-2 gap-4">
     <div>
         <x-input-label for="required_date" :value="__('Required Date')"/>
@@ -53,7 +55,11 @@
     </div>
     <div>
         <x-input-label for="pick_up_from" :value="__('Pick Up From')"/>
-        <x-text-input wire:model="form.pick_up_from" id="pick_up_from" name="pick_up_from" type="text" class="mt-1 block w-full" autocomplete="pick_up_from" placeholder="Pick Up From"/>
+        <x-text-search-option wire:model="form.pick_up_from" wire:keydown.shift="onPickUpFromChange" id="pick_up_from" name="pick_up_from">
+            @foreach($searchedWells as $well)
+                <li @click="open = false" wire:click="onPickUpFromSelect('{{json_encode($well)}}')" class="px-4 py-2 hover:bg-indigo-100 cursor-pointer">{{ $well->ids_wellname ?? $well->field_name ?? 'NA' }}</li>
+            @endforeach
+        </x-text-search-option>
         @error('form.pick_up_from')
         <x-input-error class="mt-2" :messages="$message"/>
         @enderror
@@ -94,9 +100,9 @@
         @enderror
     </div>
     <div>
-        <x-input-label for="change" :value="__('Change')"/>
-        <x-text-input wire:model="form.change" id="change" name="change" type="text" class="mt-1 block w-full" autocomplete="change" placeholder="Change"/>
-        @error('form.change')
+        <x-input-label for="charge" :value="__('Charge')"/>
+        <x-text-input wire:model="form.charge" id="charge" name="charge" type="text" class="mt-1 block w-full" autocomplete="charge" placeholder="Charge"/>
+        @error('form.charge')
         <x-input-error class="mt-2" :messages="$message"/>
         @enderror
     </div>
@@ -128,6 +134,6 @@
         @error('form.post_id')
             <x-input-error class="mt-2" :messages="$message"/>
         @enderror
-        <x-primary-button disabled="{{$disabled}}">Submit</x-primary-button>
+        <x-primary-button>Submit</x-primary-button>
     </div>
 </div>

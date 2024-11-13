@@ -7,7 +7,15 @@ use App\Livewire\Actions\UpdateUserCurrentPost;
 use App\Livewire\Forms\OrderForm;
 use App\Models\Order;
 use App\Models\TripPlan;
+use App\Models\WellMaster;
+use App\Repositories\Contracts\ICrewRepository;
+use App\Repositories\Contracts\IDBRepository;
+use App\Repositories\Contracts\IOperatorRepository;
+use App\Repositories\Contracts\IUserCurrentPostRepository;
+use App\Repositories\Contracts\IVehicleRepository;
+use App\Repositories\Contracts\IWellMasterRepository;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
@@ -15,8 +23,14 @@ use Livewire\Component;
 
 class Create extends Component
 {
+    protected IDBRepository $dbRepos;
+    protected IUserCurrentPostRepository $userCurrentPostRepos;
+    protected IWellMasterRepository $wellRepos;
     public OrderForm $form;
     private Authenticatable $user;
+
+    protected WellMaster $wellMaster;
+    public Collection $searchedWells;
 
     public string $postId;
     public array $steps;
@@ -59,16 +73,44 @@ class Create extends Component
         $this->form->setOrderModel($orderModel);
     }
 
-    public function save()
+    public function booted(
+        IDBRepository $dbRepos,
+        IWellMasterRepository $wellRepos,
+        IUserCurrentPostRepository $userCurrentPostRepos): void
+    {
+        $this->wellMaster = new WellMaster();
+        $this->dbRepos = $dbRepos;
+        $this->wellRepos = $wellRepos;
+        $this->userCurrentPostRepos = $userCurrentPostRepos;
+
+        $this->onPickUpFromChange();
+    }
+
+    public function onPickUpFromChange(): void
+    {
+        $this->searchedWells = empty($this->form->pick_up_from)
+            ? $this->wellRepos->getWellMasters(1)
+            : $this->wellRepos->getWellMastersByQuery($this->form->pick_up_from);
+    }
+
+    public function onPickUpFromSelect(string $encodedWell): void
+    {
+        $well = json_decode($encodedWell);
+
+        $this->form->pick_up_from = $well->ids_wellname;
+        $this->form->rig_name = $well->rig_no;
+        $this->form->charge = $well->wbs_number;
+    }
+
+    public function save(): void
     {
         $this->form->store();
 
-        return $this->redirectRoute('orders.index', navigate: true);
+        $this->redirectRoute('orders.index', navigate: true);
     }
 
     public function addOrderThenNextToTripPlan(): void
     {
-        $updateUserCurrentPost = new UpdateUserCurrentPost();
         $this->form->store();
 
         $userCurrentPost = [
@@ -76,7 +118,7 @@ class Create extends Component
             'step_at' => TripPlan::ROUTE_POS,
             'url' => TripPlan::ROUTE_NAME . '.confirm'
         ];
-        $updateUserCurrentPost(
+        $this->userCurrentPostRepos->update(
             $this->user->getAuthIdentifier(), $userCurrentPost
         );
         session()->flash(

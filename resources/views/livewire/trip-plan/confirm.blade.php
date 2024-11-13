@@ -1,3 +1,4 @@
+@props(['disabled' => false])
 <table class="w-full divide-y divide-gray-300">
     <thead>
     <tr>
@@ -31,5 +32,5 @@
 </table>
 
 <div class="flex items-center mt-12 gap-4">
-    <x-primary-button disabled="{{$disabled}}">Submit</x-primary-button>
+    <x-primary-button>Submit</x-primary-button>
 </div>

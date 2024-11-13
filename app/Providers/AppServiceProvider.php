@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Post;
 use App\Models\User;
+use App\Policies\PostPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
@@ -27,6 +29,17 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
         Gate::policy(User::class, UserPolicy::class);
+        Gate::policy(Post::class, PostPolicy::class);
+
+        Gate::define(UserPolicy::IS_NOT_GUEST_ROLE, [UserPolicy::class, 'isUserRoleIsNotGuest']);
+        Gate::define(UserPolicy::IS_PT_ROLE, [UserPolicy::class, 'isUserRoleIsPT']);
+        Gate::define(UserPolicy::IS_PT_ONLY_ROLE, [UserPolicy::class, 'isUserRoleIsPTOnly']);
+        Gate::define(UserPolicy::IS_PHR_ROLE, [UserPolicy::class, 'isUserRoleIsPhr']);
+        Gate::define(UserPolicy::IS_DEV_ROLE, [UserPolicy::class, 'isUserRoleIsDev']);
+
+        Gate::define(PostPolicy::IS_USER_OR_PHR_OWNED, [PostPolicy::class, 'isPhrOrUserOwnThePost']);
+        Gate::define(PostPolicy::IS_USER_OWNED, [PostPolicy::class, 'isUserOwnThePost']);
+        Gate::define(PostPolicy::IS_THE_POST_STILL_PENDING, [PostPolicy::class, 'isThePostStillPending']);
 
         Gate::define(UserPolicy::IS_USER_HAS_CURRENT_POST, [UserPolicy::class, 'isUserHasCurrentPost']);
     }
