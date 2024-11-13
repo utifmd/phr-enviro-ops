@@ -2,9 +2,7 @@
 
 namespace App\Livewire\WellMasters;
 
-use App\Models\WellMaster;
 use App\Service\Contracts\IWellService;
-use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
@@ -37,13 +35,13 @@ class Index extends Component
         $this->redirectRoute('well-masters.index', navigate: true);
     }
 
-    public function onWellNamePressed(WellMaster $wellMaster): void
+    /*public function onWellNamePressed(WellMaster $wellMaster): void
     {
         Session::put(WellMaster::WELL_MASTER_NAME, $wellMaster);
         Session::save();
 
         $this->redirectRoute('posts.create', navigate: true);
-    }
+    }*/
 
     #[Layout('layouts.app')]
     public function render(): View

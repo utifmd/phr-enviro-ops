@@ -21,10 +21,10 @@ class Index extends Component
             ->with('i', $this->getPage() * $posts->perPage());
     }
 
-    public function delete(Post $post)
+    public function delete(Post $post): void
     {
         $post->delete();
 
-        return $this->redirectRoute('posts.index', navigate: true);
+        $this->redirectRoute('posts.index', navigate: true);
     }
 }

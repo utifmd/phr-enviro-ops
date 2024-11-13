@@ -75,9 +75,10 @@ class Show extends Component
     {
         $this->generatedWoNumber = "VT-WO-". date('YmdHis');
             // str_pad($count, 3, 0, STR_PAD_LEFT);
-        $this->qrBase64Data = $this->codeGenerator->getBarcodePNG(
-            $this->generatedWoNumber, 'QRcode', 10, 10
-        );
+        $woUrl = asset(WorkOrder::ROUTE_NAME.'/request/'.$this->generatedWoNumber);
+
+        $this->qrBase64Data = $this->codeGenerator
+            ->getBarcodePNG($woUrl, 'QRcode', 10, 10);
     }
 
     public function finish(): void

@@ -27,6 +27,11 @@ Route::middleware('auth')->group(function () {
         ->name('well-masters.edit')
         ->can(UserPolicy::IS_PHR_ROLE);
 
+
+    Route::get('/well-masters/import', Import::class)
+        ->name('well-masters.import')
+        ->can(UserPolicy::IS_DEV_ROLE);
+
     /*Route::get('/export-to-excel/{datetime}', [DashboardExportController::class, 'export'])
         ->name('dashboard.export')
         ->can(UserPolicy::IS_PHR_ROLE);*/

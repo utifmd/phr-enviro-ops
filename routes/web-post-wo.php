@@ -5,7 +5,7 @@ use App\Livewire\Information\Edit;
 use App\Livewire\Information\Index;
 use App\Livewire\Information\Show;
 use App\Livewire\PlanTrips\Confirm;
-use App\Livewire\Workorders\WorkRequest;
+use App\Models\WorkOrder;
 use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Route;
 
@@ -75,22 +75,24 @@ Route::middleware('auth')->group(function () {
         ->name('image-urls.edit');
 
 
-    //Route::view('/workorders', 'livewire.workorders.index')->name('workorders');
+    Route::get('/'. WorkOrder::ROUTE_NAME, \App\Livewire\Workorders\Index::class)
+        ->name(WorkOrder::ROUTE_NAME.'.index');
 
-    Route::get('/workorders', \App\Livewire\Workorders\Index::class)
-        ->name('workorders.index');
+    Route::get('/'. WorkOrder::ROUTE_NAME.'/create', \App\Livewire\Workorders\Create::class)
+        ->name(WorkOrder::ROUTE_NAME.'.create');
 
-    // Route::view('/workorders/create', 'livewire.workorders.create')->name('workorders.create');
+    Route::get('/'. WorkOrder::ROUTE_NAME.'/show/{post}', \App\Livewire\Workorders\Show::class)
+        ->name(WorkOrder::ROUTE_NAME.'.show');
 
-    Route::get('/workorders/create', \App\Livewire\Workorders\Create::class)
-        ->name('workorders.create');
+    Route::get('/'. WorkOrder::ROUTE_NAME.'/request/index', \App\Livewire\Workorders\Show::class)
+        ->name(WorkOrder::ROUTE_NAME.'.request.index');
 
-    Route::get('/workorders/show/{post}', \App\Livewire\Workorders\Show::class)
-        ->name('workorders.show');
+    Route::get(
+        '/'. WorkOrder::ROUTE_NAME.'/request/create/{woNumber}',
+        \App\Livewire\Workorders\Request\Create::class)
+        ->name(WorkOrder::ROUTE_NAME.'.request.create');
 
-    //Route::view('/workorders/show', 'livewire.workorders.show')->name('workorders.show');
-
-    Route::get('/load-request/{idsWellName?}', WorkRequest::class)
+    Route::get('/load-request/{idsWellName?}', Index::class)
         ->name('work-request')
         ->can(UserPolicy::IS_PHR_ROLE);
 });

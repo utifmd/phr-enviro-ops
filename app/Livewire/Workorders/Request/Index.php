@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Workorders;
+namespace App\Livewire\Workorders\Request;
 
 use App\Service\Contracts\IWellService;
 use Illuminate\View\View;
@@ -8,7 +8,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class WorkRequest extends Component
+class Index extends Component
 {
     use WithPagination;
     private IWellService $service;

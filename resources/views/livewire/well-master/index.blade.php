@@ -75,9 +75,10 @@
                                                 {{ $wellMaster->field_name }}
                                             @endcan
                                         </td>
-                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                        {{--<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                             <button wire:navigate wire:click="onWellNamePressed({{ $wellMaster }})" class="text-blue-600 font-bold hover:text-blue-900 mr-2">{{ $wellMaster->ids_wellname }}</button>
-                                        </td>
+                                        </td>--}}
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $wellMaster->ids_wellname }}</td>
                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $wellMaster->well_number }}</td>
                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $wellMaster->legal_well }}</td>
                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $wellMaster->job_type }}</td>
