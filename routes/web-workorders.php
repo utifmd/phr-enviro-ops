@@ -1,7 +1,6 @@
 <?php
 
 use App\Livewire\Information\Create;
-use App\Livewire\Information\Edit;
 use App\Livewire\Information\Index;
 use App\Livewire\Information\Show;
 use App\Livewire\PlanTrips\Confirm;
@@ -20,8 +19,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/plan-orders/show/{order}', \App\Livewire\PlanOrders\Show::class)
         ->name('plan-orders.show');
 
-    Route::get('/plan-orders/update/{order}', \App\Livewire\PlanOrders\Edit::class)
-        ->name('plan-orders.edit');
+    /*Route::get('/plan-orders/update/{order}', \App\Livewire\PlanOrders\Edit::class)
+        ->name('plan-orders.edit');*/
 
 
     Route::get('/plan-trips', \App\Livewire\PlanTrips\Index::class)
@@ -48,8 +47,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/information/show/{information}', Show::class)
         ->name('information.show');
 
-    Route::get('/information/update/{information}', Edit::class)
-        ->name('information.edit');
+    /*Route::get('/information/update/{information}', Edit::class)
+        ->name('information.edit');*/
 
 
     // Route::get('/image-urls', \App\Livewire\ImageUrls\Index::class)->name('image-urls.index');
@@ -82,7 +81,7 @@ Route::middleware('auth')->group(function () {
         ->name(WorkOrder::ROUTE_NAME.'.request.index');
 
     Route::get(
-        '/'. WorkOrder::ROUTE_NAME.'/request/create/{woNumber}',
+        '/'. WorkOrder::ROUTE_NAME.'/request/create/{post}',
         \App\Livewire\Workorders\Request\Create::class)
         ->name(WorkOrder::ROUTE_NAME.'.request.create');
 

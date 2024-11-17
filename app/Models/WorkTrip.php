@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
  * Class User
  *
  * @property $id
+ * @property $type
  * @property $date
  * @property $time
  * @property $act_name

@@ -15,17 +15,7 @@ use Illuminate\Support\Str;
  * @property $start_from
  * @property $finish_to
  * @property $trip_type
- * @property $actual_start
- * @property $actual_finish
- * @property $km_start
- * @property $km_end
- * @property $km_actual
- * @property $km_contract
- * @property $start_working_date
- * @property $end_working_date
- * @property $total_standby_hour
- * @property $total_working_hour
- * @property $job_ticket_number
+ * @property $status
  * @property $post_id
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder

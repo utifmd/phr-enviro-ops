@@ -39,6 +39,30 @@ class Utility implements IUtility
         }
         return $result;
     }
+
+    public function getListOfTimes(int $startHour, int $endHour): array
+    {
+        $list = [];
+        for ($i = $startHour; $i <= $endHour; $i += 2) {
+            $list[] = str_pad(
+                    "$i",
+                    2,
+                    0,
+                    STR_PAD_LEFT) .':00:00';
+        }
+        return $list;
+    }
+    public function getListOfTimesOptions(int $startHour, int $endHour): array
+    {
+        $result = $this->getListOfTimes($startHour, $endHour);
+
+        return array_map(fn ($time)  => [
+            'name' => $time,
+            'value' => $time,
+
+        ], array_values($result));
+    }
+
     public function timeAgo(string $datetime): string
     {
         return $this->datetime->diffForHumans($datetime);

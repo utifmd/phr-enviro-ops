@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Service\Contracts\IWellService;
-use App\Service\WellService;
+use App\Services\Contracts\IWellService;
+use App\Services\WellService;
 use Illuminate\Support\ServiceProvider;
 
 class PhrServiceProvider extends ServiceProvider
@@ -11,19 +11,9 @@ class PhrServiceProvider extends ServiceProvider
     /**
      * Register services.
      */
-    public array $singletons = [
-        IWellService::class => WellService::class
-    ];
-
-    public function provides(): array
-    {
-        return [
-            IWellService::class
-        ];
-    }
     public function register(): void
     {
-        //
+        $this->app->bind(IWellService::class, WellService::class);
     }
 
     /**

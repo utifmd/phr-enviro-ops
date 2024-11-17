@@ -8,7 +8,7 @@ use App\Models\PlanOrder;
 use App\Models\PlanTrip;
 use App\Models\WorkOrder;
 use App\Models\WorkTrip;
-use App\Utils\TripPlanTypeEnum;
+use App\Utils\PlanTripTypeEnum;
 use App\Utils\WorkTripTypeEnum;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
@@ -24,8 +24,8 @@ class Confirm extends Component
     public array $steps;
     public int $stepAt;
     public bool $disabled;
-    public array $tripPlans = [];
-    public array $tripPlan = [];
+    public array $planTrips = [];
+    public array $planTrip = [];
     public int $tripTimes;
 
     public function __construct()
@@ -58,12 +58,12 @@ class Confirm extends Component
         ];
         $this->setTripTimes($tripOrder->trip);
         $this->setTripPlans($this->tripTimes, $tripPlan);
-        $this->tripPlan = $tripPlan;
+        $this->planTrip = $tripPlan;
     }
 
     public function onTripTimeKeyDownEnter(): void
     {
-        $this->setTripPlans($this->tripTimes, $this->tripPlan);
+        $this->setTripPlans($this->tripTimes, $this->planTrip);
     }
 
     private function getTripOrders(string $postId): Collection
@@ -74,34 +74,34 @@ class Confirm extends Component
             ->get();
     }
 
-    private function setTripPlans(int $times, array $tripPlan): void
+    private function setTripPlans(int $times, array $planTrip): void
     {
-        if (count($this->tripPlans) > 0) {
-            $this->tripPlans = [];
+        if (count($this->planTrips) > 0) {
+            $this->planTrips = [];
         }
         for ($i = 0; $i < $times; $i++) {
             $batch = [];
             $batch['no'] = $i + 1;
             switch ($i) {
                 case 0:
-                    $batch['trip_type'] = TripPlanTypeEnum::TRIP_PLAN_EMPTY;
-                    $batch['start_from'] = $tripPlan['yard'];
-                    $batch['finish_to'] = $tripPlan['pick_up_from'];
+                    $batch['trip_type'] = PlanTripTypeEnum::EMPTY;
+                    $batch['start_from'] = $planTrip['yard'];
+                    $batch['finish_to'] = $planTrip['pick_up_from'];
                     break;
 
                 case ($this->tripTimes -1):
-                    $batch['trip_type'] = TripPlanTypeEnum::TRIP_PLAN_BTB;
-                    $batch['start_from'] = $tripPlan['destination'];
-                    $batch['finish_to'] = $tripPlan['yard'];
+                    $batch['trip_type'] = PlanTripTypeEnum::BTB;
+                    $batch['start_from'] = $planTrip['destination'];
+                    $batch['finish_to'] = $planTrip['yard'];
                     break;
 
                 default:
-                    $batch['trip_type'] = TripPlanTypeEnum::TRIP_PLAN_LOADED;
-                    $batch['start_from'] = $tripPlan['pick_up_from'];
-                    $batch['finish_to'] = $tripPlan['destination'];
+                    $batch['trip_type'] = PlanTripTypeEnum::LOADED;
+                    $batch['start_from'] = $planTrip['pick_up_from'];
+                    $batch['finish_to'] = $planTrip['destination'];
                     break;
             }
-            $this->tripPlans[$i] = $batch;
+            $this->planTrips[$i] = $batch;
         }
     }
 
@@ -115,7 +115,7 @@ class Confirm extends Component
             DB::beginTransaction();
             $updateUserCurrentPost = new UpdateUserCurrentPost();
 
-            foreach ($this->tripPlans as $tripPlan) {
+            foreach ($this->planTrips as $tripPlan) {
                 /*$model = new PlanTrip();
                 $model->start_from = $tripPlan['start_from'];
                 $model->finish_to = $tripPlan['finish_to'];

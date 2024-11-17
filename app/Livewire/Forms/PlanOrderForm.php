@@ -80,8 +80,6 @@ class PlanOrderForm extends Form
     public function update(): void
     {
         $this->planOrder->update($this->validate());
-
-        $this->reset();
     }
 
     public function setStatus(string $status): void
@@ -97,5 +95,10 @@ class PlanOrderForm extends Form
     public function setYard(string $yard): void
     {
         $this->yard = $yard;
+    }
+
+    public function onSchQtyChange(): void
+    {
+        $this->trip = $this->sch_qty;
     }
 }

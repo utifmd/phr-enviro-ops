@@ -21,6 +21,7 @@ class VehicleFactory extends Factory
             'plat' => fake()->name,
             'type' => VehicleClassEnum::HEAVY_VEHICLE_TYPE->value,
             'vendor' => fake()->name,
+            'vehicle_class_id' => null,
             'operator_id' => null
         ];
     }

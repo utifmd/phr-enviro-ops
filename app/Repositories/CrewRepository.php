@@ -18,11 +18,11 @@ class CrewRepository implements ICrewRepository
         return $builder->get();
     }
 
-    function getCrewsOptions(?string $operatorId): Collection
+    function getCrewsOptions(?string $operatorId): array
     {
         return $this->getCrews($operatorId)->transform(function (Crew $crew) {
             $crew->value = $crew->id;
             return $crew;
-        });
+        })->toArray();
     }
 }

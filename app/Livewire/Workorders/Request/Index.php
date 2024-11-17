@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Workorders\Request;
 
-use App\Service\Contracts\IWellService;
+use App\Services\Contracts\IWellService;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;

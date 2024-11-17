@@ -5,8 +5,11 @@ namespace Database\Seeders;
 use App\Models\Activity;
 use App\Models\WorkTrip;
 use App\Models\Area;
+use App\Utils\ActNameEnum;
+use App\Utils\AreaNameEnum;
 use App\Utils\WorkTripTypeEnum;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
 
 class WorkTripSeeder extends Seeder
 {
@@ -15,15 +18,31 @@ class WorkTripSeeder extends Seeder
      */
     public function run(): void
     {
-        $postIds = [
-            '5a08a1f7-b30e-4d22-94fb-39d2e1205bdb',
-            '6bba2d2a-ed19-4b32-8f77-9e97fc647557',
-            '8a13358d-e59a-4138-b94b-d05532bc00ff'
-        ];
-        $areas = Area::query()->get()->all();
-        $acts = Activity::query()->get()->all();
+        // WorkTrip::query()->truncate();
 
-        for ($i = 0; $i < 153; $i++) {
+        /*$data = [
+            'type' => WorkTripTypeEnum::ACTUAL->value,
+            'act_name' => ActNameEnum::Incoming->value,
+            'act_process' => "Mud Pit Closure",
+            'act_unit' => "Load",
+            'act_value' => 24,
+            'area_name' => AreaNameEnum::MINAS->value,
+            'area_loc' => "CMTF-MINAS",
+            'date' => date("Y-m-d"),
+            'time' => date("H:i:s"),
+            'post_id' => '735b4915-04f7-4fc8-8edf-acf7896043b5', //rand(0, count($postIds) - 1)
+        ];
+        WorkTrip::query()->create($data);*/
+
+        /*$postIds = [
+            'da10586e-a2cd-4457-a50f-dd48073e4881',
+        ];
+        $areas = Area::query()
+            ->where('name', '=', AreaNameEnum::MINAS->value)
+            ->get();
+        $acts = Activity::all();
+
+        for ($i = 0; $i < 203; $i++) {
             $actIdx = rand(0, count($acts) - 1);
             $areaIdx = rand(0, count($areas) - 1);
             $data = [
@@ -33,9 +52,10 @@ class WorkTripSeeder extends Seeder
                 'act_unit' => $acts[$actIdx]['unit'],
                 'area_name' => $areas[$areaIdx]['name'],
                 'area_loc' => $areas[$areaIdx]['location'],
-                'post_id' => $postIds[rand(0, count($postIds) - 1)],
+                'post_id' => $postIds[0], //rand(0, count($postIds) - 1)
             ];
             WorkTrip::factory()->create($data);
         }
+        */
     }
 }

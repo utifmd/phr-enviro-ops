@@ -21,8 +21,8 @@ class WorkTripFactory extends Factory
     {
         return [
             'type' => WorkTripTypeEnum::PLAN->value,
-            'date' => fake()->date,
-            'time' => fake()->time,
+            'date' => date('d-m-Y'), //fake()->date,
+            'time' => date('H-i-s'), //fake()->time,
             'act_name' => ActNameEnum::Incoming->value,
             'act_process' => null,
             'act_unit' => null,

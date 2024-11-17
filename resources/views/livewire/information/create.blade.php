@@ -1,14 +1,14 @@
 <x-slot name="header">
     <div class="flex justify-between">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Create') }} Information
+            {{ __('Create') }} Information Plan
         </h2>
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{--<span>{{ $stepAt ? 'DONE' : '' }}</span>--}}
         </h2>
     </div>
 </x-slot>
-
+@props(['disabled' => false])
 <div class="flex flex-col md:flex-row p-12 space-x-6 space-y-6">
     <div class="w-full md:w-3/12 sm:p-6 lg:p-8">
         @include('livewire.workorders.components.left-pane', [
@@ -43,7 +43,7 @@
                             <div class="max-w-xl py-2 align-middle">
                                 <form method="POST" wire:submit="addInformationThenNextToOrder" role="form" enctype="multipart/form-data">
                                     @csrf
-                                    @include('livewire.information.form', ['disabled' => $disabled])
+                                    @include('livewire.information.form')
                                 </form>
                             </div>
                         </div>

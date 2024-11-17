@@ -18,12 +18,12 @@ class VehicleRepository implements IVehicleRepository
         return $builder->get();
     }
 
-    function getVehiclesOptions(?string $operatorId): Collection
+    function getVehiclesOptions(?string $operatorId): array
     {
         return $this->getVehicles($operatorId)->transform(function (Vehicle $vehicle) {
             $vehicle->name = $vehicle->plat;
             $vehicle->value = $vehicle->id;
             return $vehicle;
-        });
+        })->toArray();
     }
 }

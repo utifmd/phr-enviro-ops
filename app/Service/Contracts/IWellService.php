@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Contracts;
+namespace App\Services\Contracts;
 
 use App\Models\Post;
 use Illuminate\Pagination\LengthAwarePaginator;

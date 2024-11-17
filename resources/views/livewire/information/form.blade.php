@@ -13,21 +13,14 @@
         <x-input-error class="mt-2" :messages="$message"/>
         @enderror
     </div>
-    <div>
-        <x-input-label for="vehicle_type" :value="__('Vehicle Type')"/>
-        <x-select-option wire:model="form.vehicle_type" id="vehicle_type" name="vehicle_type"
-                         :cases="\App\Utils\VehicleClassEnum::cases()"/>
-        @error('form.vehicle_type')
-        <x-input-error class="mt-2" :messages="$message"/>
-        @enderror
-    </div>
     @if(!empty($form->operator_id))
         <div>
             <x-input-label for="vehicle_id" :value="__('Vehicle Number')"/>
             <x-select-option
-                    id="vehicle_id" name="vehicle_id"
-                    wire:model="form.vehicle_id"
-                    :cases="$vehicles"/>
+                id="vehicle_id" name="vehicle_id"
+                wire:model="form.vehicle_id"
+                wire:change="onVehicleChange"
+                :cases="$vehicles"/>
         </div>
         <div>
             <x-input-label for="crew_id" :value="__('Driver Name')"/>
@@ -40,6 +33,14 @@
             @enderror
         </div>
     @endif
+    <div>
+        <x-input-label for="vehicle_type" :value="__('Vehicle Type')"/>
+        <x-text-input
+            wire:model="form.vehicle_type" disabled="true" id="vehicle_type" name="vehicle_type" type="text" class="mt-1 block w-full" placeholder="Vehicle Type"/>
+        @error('form.vehicle_type')
+        <x-input-error class="mt-2" :messages="$message"/>
+        @enderror
+    </div>
     <div>
         <x-input-label for="start_plan" :value="__('Start Plan')"/>
         <x-text-input id="start_plan" name="start_plan" type="datetime-local" class="mt-1 block w-full"
@@ -60,15 +61,32 @@
     </div>
     <div>
         <x-input-label for="shift" :value="__('Shift')"/>
+        <div id="shift" class="flex flex-wrap ms-2 space-x-6">
+            <div class="flex items-center">
+                <input wire:model="form.shift" id="shift" name="shift" type="radio" value="{{\App\Utils\InformationShiftEnum::DAY->value}}" class="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 focusring-yellow-500 dark:focusring-yellow-600 dark:ring-offset-gray-800 focusring-2 dark:bg-gray-700 dark:border-gray-600">
+                <label for="red-radio" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{\App\Utils\InformationShiftEnum::DAY->value}}</label>
+            </div>
+            <div class="flex items-center">
+                <input wire:model="form.shift" id="shift" name="shift" type="radio" value="{{\App\Utils\InformationShiftEnum::NIGHT->value}}" class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focusring-green-500 dark:focusring-green-600 dark:ring-offset-gray-800 focusring-2 dark:bg-gray-700 dark:border-gray-600">
+                <label for="green-radio" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{\App\Utils\InformationShiftEnum::NIGHT->value}}</label>
+            </div>
+        </div>
+        @error('form.shift')
+        <x-input-error class="mt-2" messages="message"/>
+        @enderror
+    </div>
+   {{-- <div>
+        <x-input-label for="shift" :value="__('Shift')"/>
         <x-select-option wire:model="form.shift" id="shift" name="shift"
                          :cases="\App\Utils\InformationShiftEnum::cases()"/>
         @error('form.shift')
         <x-input-error class="mt-2" :messages="$message"/>
         @enderror
-    </div>
+    </div>--}}
     <div>
         <x-input-label for="area" :value="__('Area')"/>
-        <x-select-option wire:model="form.area" id="area" name="area" :cases="\App\Utils\InformationAreaEnum::cases()"/>
+        <x-text-input wire:model="form.area" disabled="true" id="area" name="area" />
+        {{--<x-select-option wire:model="form.area" id="area" name="area" :cases="\App\Utils\AreaNameEnum::cases()"/>--}}
         @error('form.area')
         <x-input-error class="mt-2" :messages="$message"/>
         @enderror

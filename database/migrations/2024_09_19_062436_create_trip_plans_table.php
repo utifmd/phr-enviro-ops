@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('trip_plans', function (Blueprint $table) {
-            $tripType = collect(\App\Utils\TripPlanTypeEnum::cases())
+            $tripType = collect(\App\Utils\PlanTripTypeEnum::cases())
                 ->map(function ($item) { return $item->value; })
                 ->toArray();
 

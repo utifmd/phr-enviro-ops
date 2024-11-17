@@ -7,5 +7,6 @@ use Illuminate\Support\Collection;
 interface IOperatorRepository
 {
     function getOperators(): Collection;
-    function getOperatorsOptions(): Collection;
+    function getOperatorsOptions(): array;
+    function getVehicleTypesOptions(): array;
 }

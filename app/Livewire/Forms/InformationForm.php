@@ -3,6 +3,7 @@
 namespace App\Livewire\Forms;
 
 use App\Models\Information;
+use App\Utils\AreaNameEnum;
 use Livewire\Form;
 
 class InformationForm extends Form
@@ -45,7 +46,7 @@ class InformationForm extends Form
         $this->start_plan = $this->informationModel->start_plan;
         $this->end_plan = $this->informationModel->end_plan;
         $this->shift = $this->informationModel->shift;
-        $this->area = $this->informationModel->area;
+        $this->area = AreaNameEnum::MINAS->value;
         $this->post_id = $this->informationModel->post_id;
     }
 
@@ -60,6 +61,6 @@ class InformationForm extends Form
     {
         $this->informationModel->update($this->validate());
 
-        $this->reset();
+        // $this->reset();
     }
 }

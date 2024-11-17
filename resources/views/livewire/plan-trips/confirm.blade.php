@@ -20,9 +20,9 @@
     </tr>
     </thead>
     <tbody class="divide-y divide-gray-200 bg-white">
-    @foreach ($tripPlans as $plan)
+    @foreach ($planTrips as $i => $plan)
         <tr class="even:bg-gray-50" wire:key="{{ $plan['no'] }}">
-            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ $plan['no'] }}</td>
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ $i+1 }}.</td>
             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $plan['start_from'] }}</td>
             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $plan['finish_to'] }}</td>
             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $plan['trip_type'] }}</td>
@@ -31,6 +31,8 @@
     </tbody>
 </table>
 
-<div class="flex items-center mt-12 gap-4">
-    <x-primary-button>Submit</x-primary-button>
-</div>
+@if(!isset($noAction))
+    <div class="flex items-center mt-12 gap-4">
+        <x-primary-button>Submit</x-primary-button>
+    </div>
+@endif

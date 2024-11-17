@@ -61,7 +61,7 @@
         </span>
         @endif
         <a class="{{in_array(3, $steps) ? '' : 'pointer-events-none'}}" href="{{ route(\App\Models\PlanTrip::ROUTE_NAME.'.confirm')}}" wire:navigate.hover>
-            <h3 class="{{$stepAt == 3 ? 'text-green-600 font-bold' : 'font-medium'}} leading-tight">Trip Plan</h3>
+            <h3 class="{{$stepAt == 3 ? 'text-green-600 font-bold' : 'font-medium'}} leading-tight">Trip Detail</h3>
         </a>
         <p class="text-sm">Step details trip plan of workorder were here</p>
     </li>

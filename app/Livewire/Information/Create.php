@@ -3,7 +3,6 @@
 namespace App\Livewire\Information;
 
 use App\Livewire\Actions\GetStep;
-use App\Livewire\Actions\UpdateUserCurrentPost;
 use App\Livewire\Forms\InformationForm;
 use App\Models\Information;
 use App\Models\PlanOrder;
@@ -12,7 +11,6 @@ use App\Repositories\Contracts\IDBRepository;
 use App\Repositories\Contracts\IOperatorRepository;
 use App\Repositories\Contracts\IUserCurrentPostRepository;
 use App\Repositories\Contracts\IVehicleRepository;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
@@ -27,41 +25,43 @@ class Create extends Component
     private string $userId;
 
     public InformationForm $form;
-    public ?Collection $operators = null;
-    public ?Collection $vehicles = null;
-    public ?Collection $crews = null;
+    public array $operators;
+    public array $vehicles;
+    // public array $vehicleTypes;
+    public array $crews;
     public string $postId;
     public array $steps;
     public int $stepAt;
     public bool $disabled;
+    public bool $isEditMode = false;
 
     public function __construct()
     {
         $user = auth()->user();
         $this->userId = $user->getAuthIdentifier();
-        $getStep = new GetStep($user);
         if ($currentPost = $user->currentPost ?? false){
 
             $this->postId = $currentPost->post_id;
         }
+        $getStep = new GetStep($user);
         $this->steps = $getStep->getSteps();
         $this->stepAt = $getStep->getStepAt();
-        $this->disabled = in_array(Information::ROUTE_POS, $this->steps) &&
-            $this->stepAt != Information::ROUTE_POS;
+        $this->disabled = false; // in_array(Information::ROUTE_POS, $this->steps) && $this->stepAt != Information::ROUTE_POS;
     }
 
     public function mount(Information $information): void
     {
-        $build = Information::query()
+        $builder = Information::query()
             ->where('post_id', '=', $this->postId)
             ->get();
+        $model = $information;
 
-        $informationModel = $build->isNotEmpty()
-            ? $build->first()
-            : $information;
-
-        $informationModel->post_id = $this->postId;
-        $this->form->setInformationModel($informationModel);
+        if ($builder->isNotEmpty()) {
+            $model = $builder->first();
+            $this->isEditMode = true;
+        }
+        $model->post_id = $this->postId;
+        $this->form->setInformationModel($model);
     }
 
     public function booted(
@@ -77,16 +77,52 @@ class Create extends Component
         $this->crewRepos = $crewRepos;
 
         $this->operators = $operatorRepos->getOperatorsOptions();
-        $this->onOperatorIdChange();
+        // $this->vehicleTypes = $operatorRepos->getVehicleTypesOptions();
+        $this->onOperatorIdInit();
     }
 
-    public function onOperatorIdChange(): void
+    public function onOperatorIdChange(): void {
+        $this->onOperatorIdInit();
+
+        $this->form->reset('vehicle_id', 'crew_id');
+    }
+    public function onOperatorIdInit(): void
     {
         $this->vehicles = $this->vehicleRepos
             ->getVehiclesOptions($this->form->operator_id);
 
         $this->crews = $this->crewRepos
             ->getCrewsOptions($this->form->operator_id);
+    }
+
+    public function onVehicleChange(): void
+    {
+        $vehicle = $this->form->informationModel->vehicle;
+        $this->form->vehicle_type = $vehicle->vehicleClass->name;
+    }
+
+    public function addInformationThenNextToOrder(): void
+    {
+        $this->form->store();
+        $userCurrentPost = [
+            'steps' => '0;1;2',
+            'step_at' => PlanOrder::ROUTE_POS,
+            'url' => PlanOrder::ROUTE_NAME . '.create'
+        ];
+        $this->userCurrentPostRepos->update($this->userId, $userCurrentPost);
+        session()->flash(
+            'message', 'Information successfully submitted, please follow the next step!'
+        );
+        $this->redirectRoute($userCurrentPost['url'], navigate: true);
+    }
+
+    public function changeInformation(): void
+    {
+        $this->form->update();
+
+        session()->flash('message',
+            'Information successfully updated, please follow the next step!'
+        );
     }
 
     public function save(): void
@@ -96,37 +132,12 @@ class Create extends Component
         $this->redirectRoute('information.index', navigate: true);
     }
 
-    public function addInformationThenNextToOrder(): void
-    {
-        try {
-            $this->dbRepos->async();
-            $this->form->store();
-            $userCurrentPost = [
-                'steps' => '0;1;2',
-                'step_at' => PlanOrder::ROUTE_POS,
-                'url' => PlanOrder::ROUTE_NAME . '.create'
-            ];
-            $this->userCurrentPostRepos->update(
-                $this->userId, $userCurrentPost
-            );
-            session()->flash(
-                'message', 'Information successfully submitted, please follow the next step!'
-            );
-            $this->redirectRoute($userCurrentPost['url'], navigate: true);
-            $this->dbRepos->await();
-
-        } catch (\Exception $exception) {
-            $message = $exception->getMessage();
-            session()->flash('message', $message);
-
-            Log::error($message);
-            $this->dbRepos->cancel();
-        }
-    }
-
     #[Layout('layouts.app')]
     public function render(): View
     {
+        if ($this->isEditMode)
+            return view('livewire.information.edit');
+
         return view('livewire.information.create');
     }
 }

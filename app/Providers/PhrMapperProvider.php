@@ -15,23 +15,12 @@ class PhrMapperProvider extends ServiceProvider
     /**
      * Register services.
      */
-    public array $singletons = [
-        IUtility::class => Utility::class,
-        IUserMapper::class => UserMapper::class,
-        IPostMapper::class => PostMapper::class,
-    ];
 
-    public function provides(): array
-    {
-        return [
-            IUtility::class,
-            IUserMapper::class,
-            IPostMapper::class,
-        ];
-    }
     public function register(): void
     {
-        //
+        $this->app->bind(IUtility::class, Utility::class);
+        $this->app->bind(IUserMapper::class, UserMapper::class);
+        $this->app->bind(IPostMapper::class, PostMapper::class);
     }
 
     /**

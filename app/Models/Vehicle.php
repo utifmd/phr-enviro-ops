@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
  * @property $plat
  * @property $type
  * @property $vendor
+ * @property $vehicleClass
  * @property $operator_id
  * @property $created_at
  * @property $updated_at
@@ -31,7 +32,7 @@ class Vehicle extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'plat', 'type', 'vendor', 'operator_id'
+        'plat', 'type', 'vendor', 'vehicle_class_id', 'operator_id'
     ];
 
     protected static function booted(): void
@@ -40,12 +41,19 @@ class Vehicle extends Model
             $model->id = Str::uuid()->toString();
         });
     }
-    public function operator(): BelongsTo {
+
+    public function operator(): BelongsTo
+    {
         return $this->belongsTo(Operator::class, 'id', 'operator_id');
     }
 
-    public function vehicle(): BelongsTo
+    public function vehicleClass(): BelongsTo
     {
-        return $this->belongsTo(Information::class);
+        return $this->belongsTo(VehicleClass::class, 'vehicle_class_id', 'id');
     }
+
+    /*public function vehicle(): BelongsTo
+    {
+        return $this->belongsTo(Vehicle::class, 'id', 'vehicle_id');
+    }*/
 }

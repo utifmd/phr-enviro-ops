@@ -7,5 +7,5 @@ use Illuminate\Support\Collection;
 interface IVehicleRepository
 {
     function getVehicles(?string $operatorId): Collection;
-    function getVehiclesOptions(?string $operatorId): Collection;
+    function getVehiclesOptions(?string $operatorId): array;
 }

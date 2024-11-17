@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
  * Class Order
  *
  * @property $id
+ * @property $status
  * @property $path
  * @property $unit
  * @property $description
