@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Services\Contracts\IWellService;
-use App\Services\WellService;
+use App\Service\WellService;
+use App\Service\Contracts\IWellService;
 use Illuminate\Support\ServiceProvider;
 
 class PhrServiceProvider extends ServiceProvider

@@ -2,7 +2,7 @@
 
 namespace App\Livewire\WellMasters;
 
-use App\Services\Contracts\IWellService;
+use App\Service\Contracts\IWellService;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;

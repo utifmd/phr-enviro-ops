@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Service;
 
 use App\Models\ImageUrl;
 use App\Models\Post;
@@ -8,7 +8,7 @@ use App\Repositories\Contracts\IPostRepository;
 use App\Repositories\Contracts\IUserRepository;
 use App\Repositories\Contracts\IWellMasterRepository;
 use App\Repositories\Contracts\IWorkOrderRepository;
-use App\Services\Contracts\IWellService;
+use App\Service\Contracts\IWellService;
 use App\Utils\Contracts\IUtility;
 use App\Utils\WorkOrderStatusEnum;
 use Illuminate\Pagination\LengthAwarePaginator;

@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Mapper\Contracts\IPostMapper;
 use App\Models\Post;
 use App\Repositories\Contracts\IPostRepository;
+use App\Utils\PostTypeEnum;
 use App\Utils\WorkOrderStatusEnum;
 use App\Utils\Contracts\IUtility;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -30,6 +31,11 @@ class PostRepository implements IPostRepository
 
         if (is_null($post->id)) return null;
         return $post;
+    }
+
+    function getPostByIdRaw(string $postId)
+    {
+        return Post::query()->find($postId);
     }
 
     function getPostById(string $postId): ?Post
@@ -62,7 +68,9 @@ class PostRepository implements IPostRepository
         $builder = Post::query();
 
         if (!is_null($idsWellName)) {
-            $builder = $builder->where('title', '=', $idsWellName);
+            $builder = $builder
+                ->where('title', '=', $idsWellName, 'and')
+                ->where('type', '=', PostTypeEnum::POST_WELL_TYPE->value);
         }
         $builder = $builder
             ->selectRaw('posts.*, (SELECT COUNT(w.id) FROM work_orders AS w WHERE w.post_id=posts.id AND w.status=?) AS pending_wo_length', [WorkOrderStatusEnum::STATUS_PENDING->value])
@@ -71,7 +79,7 @@ class PostRepository implements IPostRepository
 
         return $builder->through(function ($post){
             $post->timeAgo = $this->utility->timeAgo($post->created_at);
-            $post->transporter = trim(('('.$post->operator->department->short_name.') '.$post->operator->prefix.' '.$post->operator->name.' '.$post->operator->postfix) ?? 'NA');
+            $post->transporter = trim(('('.($post->operator->department->short_name ?? 'NA').') '.$post->operator->prefix.' '.$post->operator->name.' '.$post->operator->postfix) ?? 'NA');
             $post->woPendingReqCount = $this->utility->countWoPendingRequest($post);
             $post->desc = str_replace(';', ' ', $post->desc);
             return $post;
@@ -81,7 +89,8 @@ class PostRepository implements IPostRepository
     public function pagedPostByUserId(string $userId): LengthAwarePaginator
     {
         $builder = Post::query()
-            ->where('user_id', '=', $userId)
+            ->where('user_id', '=', $userId, 'and')
+            ->where('type', '=', PostTypeEnum::POST_WELL_TYPE->value)
             ->orderBy('created_at', 'desc')
             ->paginate();
 

@@ -1,12 +1,10 @@
-@props([
-    'cases' => null
-])
+@props(['cases' => null, 'isIdle' => true])
 <div>
     @if(!is_null($cases))
         <select
             {!! $attributes->merge(['class' => 'block w-full px-4 py-2.5 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 hover:opacity-50']) !!}
             name="roles" id="roles">
-            <option value="">All</option>
+            @if($isIdle) <option value="">All</option> @endif
             @foreach($cases as $case)
                 <option value="{{ $case->value ?? $case['value'] ?? 'NA' }}">
                     {{ $case->name ?? $case['name'] ?? 'NA' }}

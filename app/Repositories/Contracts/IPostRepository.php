@@ -3,12 +3,14 @@
 namespace App\Repositories\Contracts;
 
 use App\Models\Post;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 interface IPostRepository
 {
     function addPost(array $request): ?Post;
     function getPostById(string $postId): ?Post;
+    function getPostByIdRaw(string $postId);
     // function getPostByUserId(string $userId): ?Post;
     function countLoadPostBy(?string $userId, ?string $status): int;
     function pagedPosts(?string $idsWellName): LengthAwarePaginator;

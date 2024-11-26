@@ -40,18 +40,18 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/operators', \App\Livewire\Operators\Index::class)
         ->name('operators.index')
-        ->can(UserPolicy::IS_PHR_ROLE);
+        ->can(UserPolicy::IS_USER_IS_FAC_REP);
 
     Route::get('/operators/create', \App\Livewire\Operators\Create::class)
         ->name('operators.create')
-        ->can(UserPolicy::IS_PHR_ROLE);
+        ->can(UserPolicy::IS_USER_IS_FAC_REP);
 
     Route::get('/operators/show/{operator}', \App\Livewire\Operators\Show::class)
         ->name('operators.show')
-        ->can(UserPolicy::IS_PHR_ROLE);
+        ->can(UserPolicy::IS_USER_IS_FAC_REP);
 
     Route::get('/operators/update/{operator}', \App\Livewire\Operators\Edit::class)
         ->name('operators.edit')
-        ->can(UserPolicy::IS_PHR_ROLE);
+        ->can(UserPolicy::IS_USER_IS_FAC_REP);
 
 });

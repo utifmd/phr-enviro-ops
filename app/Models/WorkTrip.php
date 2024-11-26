@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 /**
@@ -22,8 +23,12 @@ use Illuminate\Support\Str;
  * @property $area_name
  * @property $area_loc
  * @property $post_id
+ * @property $couple_id
  * @property $created_at
  * @property $updated_at
+ *
+ * RELATION
+ * @property $info
  *
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -39,13 +44,27 @@ class WorkTrip extends Model
     protected $table = 'work_trips';
 
     protected $fillable = [
-        'type', 'date', 'time', 'act_name', 'act_process', 'act_unit', 'act_value', 'area_name', 'area_loc', 'post_id'
+        'type', 'date', 'time', 'act_name', 'act_process', 'act_unit', 'act_value', 'area_name', 'area_loc', 'post_id', 'work_trip_info_id'
     ];
 
     public function post(): BelongsTo
     {
         return $this->belongsTo(Post::class);
     }
+
+    public function info(): HasOne
+    {
+        return $this->hasOne(
+            WorkTripInfo::class, 'id', 'work_trip_info_id'
+        );
+    }
+
+    /*public function couple(): HasOne
+    {
+        return $this->hasOne(
+            WorkTrip::class, 'couple_id', 'couple_id'
+        ); //->where('type', '=', WorkTripTypeEnum::ACTUAL->value)
+    }*/
 
     protected static function booted(): void
     {

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('plan_orders', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('status')->nullable(false);
             $table->string('description')->nullable(false);
@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('wr_number')->nullable(false);
             $table->string('rig_name')->nullable(false);
             $table->string('pic')->nullable(false);
-            $table->string('change')->nullable(false);
+            $table->string('charge')->nullable(false);
 
             $table->timestamps();
             $table->foreignUuid('post_id')
@@ -41,6 +41,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('plan_orders');
     }
 };

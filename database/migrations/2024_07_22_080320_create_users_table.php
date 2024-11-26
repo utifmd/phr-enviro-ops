@@ -13,9 +13,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $roles = collect(UserRoleEnum::cases())
-                ->map(function ($case) { return $case->value; })
-                ->toArray();
+            $rolesAllowed = collect(UserRoleEnum::cases())
+                ->map(function ($case) { return $case->value; })->toArray();
+
+            $areaAllowed = collect(\App\Utils\AreaNameEnum::cases())
+                ->map(fn ($case) => $case->value)->toArray();
 
             $table->uuid('id')->primary();
             $table->string('name')->nullable(false);
@@ -23,10 +25,10 @@ return new class extends Migration
             $table->string('email')->unique()->nullable(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable(false);
-            $table->enum('role', $roles);
+            $table->enum('role', $rolesAllowed);
+            $table->enum('area_name', $areaAllowed);
 
             $table->foreignUuid('operator_id')
-                ->nullable(false)
                 ->constrained('operators');
 
             $table->rememberToken();
@@ -41,7 +43,7 @@ return new class extends Migration
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignUuid('user_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');

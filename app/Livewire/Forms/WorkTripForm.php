@@ -31,7 +31,7 @@ class WorkTripForm extends Form
 			'act_name' => 'required|string',
 			'act_process' => 'required|string',
 			'act_unit' => 'required|string',
-			'act_value' => 'required',
+			'act_value' => 'required|regex:/^[0-9]{1,3}\/[0-9]{1,3}$/',
 			'area_name' => 'required|string',
 			'area_loc' => 'required|string',
 			'post_id' => 'required|string',

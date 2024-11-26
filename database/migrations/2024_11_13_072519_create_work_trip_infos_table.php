@@ -1,5 +1,7 @@
 <?php
 
+use App\Utils\ActNameEnum;
+use App\Utils\AreaNameEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,13 +13,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('work_trips', function (Blueprint $table) {
-            $areaNameAllowed = collect(\App\Utils\AreaNameEnum::cases())->map(fn($case) => $case->value)->toArray();
-            $actNameAllowed = collect(\App\Utils\ActNameEnum::cases())->map(fn($case) => $case->value)->toArray();
-            $typeAllowed = collect(\App\Utils\WorkTripTypeEnum::cases())->map(fn($case) => $case->value)->toArray();
+        Schema::create('work_trip_infos', function (Blueprint $table) {
+            $areaNameAllowed = collect(AreaNameEnum::cases())
+                ->map(fn($case) => $case->value)->toArray();
+
+            $actNameAllowed = collect(ActNameEnum::cases())
+                ->map(fn($case) => $case->value)->toArray();
 
             $table->uuid('id')->primary();
-            $table->enum('type', $typeAllowed);
             $table->date('date');
             $table->time('time');
             $table->enum('act_name', $actNameAllowed);
@@ -26,9 +29,8 @@ return new class extends Migration
             $table->integer('act_value');
             $table->enum('area_name', $areaNameAllowed);
             $table->string('area_loc');
-            $table->foreignUuid('post_id')
-                ->nullable(false)
-                ->constrained('posts');
+
+            $table->foreignUuid('user_id')->constrained('users');
             $table->timestamps();
         });
     }
@@ -38,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('actual_trips');
+        Schema::dropIfExists('work_trip_infos');
     }
 };

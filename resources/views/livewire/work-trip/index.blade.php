@@ -41,7 +41,7 @@
                                 </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200 bg-white">
-                                @foreach ($workTripsState as $workTrip)
+                                @foreach ($workTrips as $workTrip)
                                     <tr class="even:bg-gray-50" wire:key="{{ $workTrip->id }}">
                                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ ++$i }}</td>
 
@@ -74,7 +74,7 @@
                             </table>
 
                             <div class="mt-4 px-4">
-                                {!! $workTripsState->withQueryString()->links() !!}
+                                {!! $workTrips->withQueryString()->links() !!}
                             </div>
                         </div>
                     </div>

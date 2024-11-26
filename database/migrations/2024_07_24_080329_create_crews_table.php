@@ -19,8 +19,7 @@ return new class extends Migration
                 ->default(CrewRoleEnum::OPERATOR_ROLE->value)
                 ->nullable(false);
 
-            $table->foreignId('operator_id')
-                ->nullable(false)
+            $table->foreignUuid('operator_id')
                 ->constrained('operators');
 
             $table->timestamps();

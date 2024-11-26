@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('areas', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->enum('name', collect(\App\Utils\AreaNameEnum::cases())
-                ->map(fn ($case) => $case->value)
-                ->toArray()
+                ->map(fn ($case) => $case->value)->toArray()
             );
             $table->string('location')->nullable(false)->unique();
             $table->timestamps();

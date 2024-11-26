@@ -69,10 +69,10 @@ class Utility implements IUtility
     }
     public function transporter(mixed $operator): string
     {
-        return trim('('.$operator->department_short_name.') '.
-            $operator->prefix.' '.
-            $operator->name.' '.
-            $operator->postfix
+        return trim('('.($operator->department->short_name ?? 'NA').') '.
+            ($operator->prefix ?? '').' '.
+            ($operator->name ?? 'NA').' '.
+            ($operator->postfix ?? '')
         );
     }
 

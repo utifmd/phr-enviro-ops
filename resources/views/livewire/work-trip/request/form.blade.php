@@ -1,5 +1,73 @@
 <div class="space-y-6">
-    <div class="w-full space-y-4">
+    {{--<table class="divide-y divide-gray-300 mt-6">
+        <tr>
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">TDS < 4000</td>
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">COD < 300</td>
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">8 Parameter</td>
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">Location</td>
+        </tr>
+        <tr>
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
+                TDS < 4000 COD < 300 & Memenuhi 8 Baku Mutu Parameter
+            </td>
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
+                <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+                </svg>
+            </td>
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
+                <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+                </svg>
+            </td>
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
+                <span>GS/CGS</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
+                <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+                </svg>
+            </td>
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
+                <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+                </svg>
+            </td>
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
+                <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+                </svg>
+            </td>
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
+                <span>GS/CGS</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
+                <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+                </svg>
+            </td>
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
+                <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+                </svg>
+            </td>
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
+                <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+                </svg>
+            </td>
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
+                <span>CMTF</span>
+            </td>
+        </tr>
+    </table>--}}
+    {{--<div class="w-full grid grid-cols-1 gap-2">--}}
+
+    <div class="w-full grid grid-cols-2 gap-6">
         <div>
             <x-input-label for="act_name" :value="__('Activity')"/>
             <x-radio-button
@@ -32,24 +100,11 @@
         </div>
         <div class="flex flex-row space-x-2 items-end">
             <div class="grow">
-                <x-input-label for="act_value" value="{{ 'Quota (Actual)' }}"/>
-                <x-text-input type="number" wire:model="form.act_value" id="act_value" name="act_value"
-                              placeholder="Qty"/>
-            </div>
-            <div class="w-9 text-5xl text-gray-500">
-                <span>/</span>
-            </div>
-            {{--<div class="grow">
                 <x-input-label for="act_value" value="{{ 'Quota (Actual/Planning)' }}"/>
                 <x-text-input type="text" pattern="[0-9]{1,3}/[0-9]{1,3}" wire:model="form.act_value" id="act_value" name="act_value"
                               placeholder="000/000"/>
-            </div>--}}
-            <div class="w-18">
-                <x-input-label for="act_value_plan" :value="__('Quota (Planning)')"/>
-                <x-text-input type="text" disabled="true" wire:model="form.act_value_plan" id="act_value_plan" name="act_value_plan"
-                              placeholder="15" required/>
             </div>
-            <div class="w-18">
+            <div class="w-16">
                 <x-input-label for="act_unit" :value="__('UOM')"/>
                 <x-text-input type="text" disabled="true" wire:model="form.act_unit" id="act_unit" name="act_unit"
                               placeholder="Unit" required/>
@@ -75,107 +130,38 @@
         </div>
         {{--@if(!empty($form->act_name)) @endif--}}
     </div>
-    <div>
-        @error('form.area_loc')
-        <x-input-error class="mt-2" :messages="$message"/>
-        @enderror
-        @error('form.area_name')
-        <x-input-error class="mt-2" :messages="$message"/>
-        @enderror
-        @error('form.date')
-        <x-input-error class="mt-2" :messages="$message"/>
-        @enderror
-        @error('form.time')
-        <x-input-error class="mt-2" :messages="$message"/>
-        @enderror
-        @error('form.type')
-        <x-input-error class="mt-2" :messages="$message"/>
-        @enderror
-        @error('form.act_value')
-        <x-input-error class="mt-2" :messages="$message"/>
-        @enderror
-        @error('form.act_unit')
-        <x-input-error class="mt-2" :messages="$message"/>
-        @enderror
-        @error('form.post_id')
-        <x-input-error class="mt-2" :messages="$message"/>
-        @enderror
-        @error('error')
-        <x-input-error class="mt-2" :messages="$message"/>
-        @enderror
-    </div>
+
+    @error('form.area_loc')
+    <x-input-error class="mt-2" :messages="$message"/>
+    @enderror
+    @error('form.area_name')
+    <x-input-error class="mt-2" :messages="$message"/>
+    @enderror
+    @error('form.date')
+    <x-input-error class="mt-2" :messages="$message"/>
+    @enderror
+    @error('form.time')
+    <x-input-error class="mt-2" :messages="$message"/>
+    @enderror
+    @error('form.type')
+    <x-input-error class="mt-2" :messages="$message"/>
+    @enderror
+    @error('form.act_value')
+    <x-input-error class="mt-2" :messages="$message"/>
+    @enderror
+    @error('form.act_unit')
+    <x-input-error class="mt-2" :messages="$message"/>
+    @enderror
+    @error('form.post_id')
+    <x-input-error class="mt-2" :messages="$message"/>
+    @enderror
+    @error('error')
+    <x-input-error class="mt-2" :messages="$message"/>
+    @enderror
     <div class="flex items-center gap-4">
         <x-primary-button>Submit</x-primary-button>
     </div>
 </div>
-{{--<table class="divide-y divide-gray-300 mt-6">
-    <tr>
-        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">TDS < 4000</td>
-        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">COD < 300</td>
-        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">8 Parameter</td>
-        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">Location</td>
-    </tr>
-    <tr>
-        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
-            TDS < 4000 COD < 300 & Memenuhi 8 Baku Mutu Parameter
-        </td>
-        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
-            <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
-            </svg>
-        </td>
-        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
-            <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
-            </svg>
-        </td>
-        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
-            <span>GS/CGS</span>
-        </td>
-    </tr>
-    <tr>
-        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
-            <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
-            </svg>
-        </td>
-        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
-            <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
-            </svg>
-        </td>
-        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
-            <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
-            </svg>
-        </td>
-        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
-            <span>GS/CGS</span>
-        </td>
-    </tr>
-    <tr>
-        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
-            <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
-            </svg>
-        </td>
-        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
-            <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
-            </svg>
-        </td>
-        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
-            <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
-            </svg>
-        </td>
-        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
-            <span>CMTF</span>
-        </td>
-    </tr>
-</table>--}}
-{{--<div class="w-full grid grid-cols-1 gap-2">--}}
-
 {{--
 <div class="space-y-6">
     <div>

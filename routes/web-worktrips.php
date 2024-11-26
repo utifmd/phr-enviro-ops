@@ -18,4 +18,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/work-trips/update/{workTrip}', Edit::class)
         ->name('work-trips.edit');
+
+    Route::get('/work-trips/requests', \App\Livewire\WorkTrips\Request\Index::class)
+        ->name('work-trips.requests.index');
+
+    Route::get('/work-trips/requests/show/{post}', \App\Livewire\WorkTrips\Request\Show::class)
+        ->name('work-trips.requests.show');
 });

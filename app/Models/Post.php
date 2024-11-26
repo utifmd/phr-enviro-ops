@@ -25,6 +25,7 @@ use Illuminate\Support\Str;
  * @property $planOrder
  * @property $planTrips
  * @property $workTrip
+ * @property $workTrips
  * @property $imageUrl
  * @property $imageUrls
  *
@@ -83,9 +84,28 @@ class Post extends Model
         );
     }
 
+    public function workOrders(): HasMany
+    {
+        return $this->hasMany(WorkOrder::class);
+    }
+
+    public function operator(): HasOne
+    {
+        return $this->hasOne(
+            Operator::class, 'id', 'operator_id'
+        );
+    }
+
     function workTrip(): HasOne
     {
         return $this->hasOne(
+            WorkTrip::class, 'post_id', 'id'
+        );
+    }
+
+    function workTrips(): HasMany
+    {
+        return $this->hasMany(
             WorkTrip::class, 'post_id', 'id'
         );
     }

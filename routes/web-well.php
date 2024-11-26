@@ -17,15 +17,15 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/well-masters/create', Create::class)
         ->name('well-masters.create')
-        ->can(UserPolicy::IS_PHR_ROLE);
+        ->can(UserPolicy::IS_USER_IS_FAC_REP);
 
     Route::get('/well-masters/show/{wellMaster}', Show::class)
         ->name('well-masters.show')
-        ->can(UserPolicy::IS_PHR_ROLE);
+        ->can(UserPolicy::IS_USER_IS_FAC_REP);
 
     Route::get('/well-masters/update/{wellMaster}', Edit::class)
         ->name('well-masters.edit')
-        ->can(UserPolicy::IS_PHR_ROLE);
+        ->can(UserPolicy::IS_USER_IS_FAC_REP);
 
 
     Route::get('/well-masters/import', Import::class)

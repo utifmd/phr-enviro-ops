@@ -25,6 +25,9 @@ use Illuminate\Support\Str;
  * @property $created_at
  * @property $updated_at
  *
+ * RELATION
+ * @property $currentPost
+ *
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
@@ -80,7 +83,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(
             UserCurrentPost::class, 'user_id', 'id'
-        );
+
+        )->where('steps', '=', -1);
     }
 
     protected static function booted(): void

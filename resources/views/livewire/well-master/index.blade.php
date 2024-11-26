@@ -17,21 +17,25 @@
                     <div class="min-w-md">
                         <x-input-label for="querySearch" :value="__('Pencarian Well Master')"/>
                         <x-text-input
-                            id="querySearch" name="querySearch" class="block w-full px-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 hover:opacity-50" autocomplete="querySearch" placeholder="Enter to search"
-                            wire:model="querySearch"
-                            wire:keydown.enter="search"
-                            type="text"/>
+                                id="querySearch" name="querySearch"
+                                class="block w-full px-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 hover:opacity-50"
+                                autocomplete="querySearch" placeholder="Enter to search"
+                                wire:model="querySearch"
+                                wire:keydown.enter="search"
+                                type="text"/>
 
                         @error('querySearch')
                         <x-input-error class="mt-2" :messages="$message"/>
                         @enderror
                     </div>
-                    @can(\App\Policies\UserPolicy::IS_PHR_ROLE)
+                    @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
                         <x-menu>
-                            <x-dropdown-link href="{{ route('well-masters.create') }}" class="cursor-pointer text-blue-600">
+                            <x-dropdown-link href="{{ route('well-masters.create') }}"
+                                             class="cursor-pointer text-blue-600">
                                 {{ __('Add New Well Master') }}
                             </x-dropdown-link>
-                            <x-dropdown-link href="{{ route('well-masters.import') }}" class="cursor-pointer text-blue-600">
+                            <x-dropdown-link href="{{ route('well-masters.import') }}"
+                                             class="cursor-pointer text-blue-600">
                                 {{ __('Import Well Master') }}
                             </x-dropdown-link>
                         </x-menu>
@@ -43,23 +47,66 @@
                             <table class="w-full divide-y divide-gray-300">
                                 <thead>
                                 <tr>
-                                    <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">No</th>
-                                    <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Field Name</th>
-                                    <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Ids Wellname</th>
-                                    <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Well Number</th>
-                                    <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Legal Well</th>
-                                    <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Job Type</th>
-                                    <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Job Sub Type</th>
-                                    <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Rig Type</th>
-                                    <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Rig No</th>
-                                    <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Wbs Number</th>
-                                    <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Actual Drmi</th>
-                                    <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Actual Spud</th>
-                                    <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Actual Drmo</th>
-                                    <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Status</th>
+                                    <th scope="col"
+                                        class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                        No
+                                    </th>
+                                    <th scope="col"
+                                        class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                        Field Name
+                                    </th>
+                                    <th scope="col"
+                                        class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                        Ids Wellname
+                                    </th>
+                                    <th scope="col"
+                                        class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                        Well Number
+                                    </th>
+                                    <th scope="col"
+                                        class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                        Legal Well
+                                    </th>
+                                    <th scope="col"
+                                        class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                        Job Type
+                                    </th>
+                                    <th scope="col"
+                                        class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                        Job Sub Type
+                                    </th>
+                                    <th scope="col"
+                                        class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                        Rig Type
+                                    </th>
+                                    <th scope="col"
+                                        class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                        Rig No
+                                    </th>
+                                    <th scope="col"
+                                        class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                        Wbs Number
+                                    </th>
+                                    <th scope="col"
+                                        class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                        Actual Drmi
+                                    </th>
+                                    <th scope="col"
+                                        class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                        Actual Spud
+                                    </th>
+                                    <th scope="col"
+                                        class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                        Actual Drmo
+                                    </th>
+                                    <th scope="col"
+                                        class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                        Status
+                                    </th>
 
-                                    @can(\App\Policies\UserPolicy::IS_PHR_ROLE)
-                                        <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"></th>
+                                    @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
+                                        <th scope="col"
+                                            class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"></th>
                                     @endcan
                                 </tr>
                                 </thead>
@@ -69,8 +116,10 @@
                                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ ++$i }}</td>
 
                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                            @can(\App\Policies\UserPolicy::IS_PHR_ROLE)
-                                                <a wire:navigate href="{{ route('well-masters.show', $wellMaster->id) }}" class="text-green-600 font-bold hover:text-green-900 mr-2">{{ $wellMaster->field_name }}</a>
+                                            @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
+                                                <a wire:navigate
+                                                   href="{{ route('well-masters.show', $wellMaster->id) }}"
+                                                   class="text-green-600 font-bold hover:text-green-900 mr-2">{{ $wellMaster->field_name }}</a>
                                             @else
                                                 {{ $wellMaster->field_name }}
                                             @endcan
@@ -91,14 +140,16 @@
                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $wellMaster->actual_drmo }}</td>
                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $wellMaster->status }}</td>
 
-                                        @can(\App\Policies\UserPolicy::IS_PHR_ROLE)
+                                        @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
                                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
-                                                <a wire:navigate href="{{ route('well-masters.edit', $wellMaster->id) }}" class="text-indigo-600 font-bold hover:text-indigo-900  mr-2">{{ __('Edit') }}</a>
+                                                <a wire:navigate
+                                                   href="{{ route('well-masters.edit', $wellMaster->id) }}"
+                                                   class="text-indigo-600 font-bold hover:text-indigo-900  mr-2">{{ __('Edit') }}</a>
                                                 <button
-                                                    class="text-red-600 font-bold hover:text-red-900"
-                                                    type="button"
-                                                    wire:click="delete('{{ $wellMaster->id }}')"
-                                                    wire:confirm="Are you sure you want to delete?">
+                                                        class="text-red-600 font-bold hover:text-red-900"
+                                                        type="button"
+                                                        wire:click="delete('{{ $wellMaster->id }}')"
+                                                        wire:confirm="Are you sure you want to delete?">
                                                     {{ __('Delete') }}
                                                 </button>
                                             </td>

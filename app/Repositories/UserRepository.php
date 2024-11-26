@@ -159,8 +159,7 @@ class UserRepository implements IUserRepository
     function authenticatedUser(): ?User
     {
         if(!$this->isAuthenticated()) return null;
-        return $this->mapper->fromAuth(
-            Auth::user()
-        );
+
+        return $this->mapper->fromAuth(Auth::user());
     }
 }

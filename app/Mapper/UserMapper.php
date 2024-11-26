@@ -21,7 +21,7 @@ class UserMapper implements IUserMapper
         $user = new User();
         if (!$auth) return null;
 
-        $user->id = $auth->id;
+        $user->id = $auth->getAuthIdentifier();
         $user->username = $auth->username;
         $user->email = $auth->email;
         $user->email_verified_at = $auth->email_verified_at;
