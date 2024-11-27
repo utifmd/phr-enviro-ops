@@ -12,6 +12,7 @@ use App\Repositories\Contracts\IPostRepository;
 use App\Repositories\Contracts\IUserRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\ActNameEnum;
+use App\Utils\ActUnitEnum;
 use App\Utils\Contracts\IUtility;
 use App\Utils\PostTypeEnum;
 use App\Utils\WorkTripScheduleEnum;
@@ -191,7 +192,7 @@ class Create extends Component
     private function adjustActivityUnit(): void
     {
         $unit = $this->form->act_name != ActNameEnum::Production->value
-            ? 'load' : 'm3';
+            ? ActUnitEnum::LOAD->value : ActUnitEnum::M3->value;
         $this->form->act_unit = $unit;
     }
 

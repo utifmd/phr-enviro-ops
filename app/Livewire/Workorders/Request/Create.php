@@ -13,6 +13,7 @@ use App\Policies\WorkTripPolicy;
 use App\Repositories\Contracts\IDBRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\ActNameEnum;
+use App\Utils\ActUnitEnum;
 use App\Utils\PlanTripTypeEnum;
 use App\Utils\WorkTripTypeEnum;
 use Illuminate\Support\Collection;
@@ -57,8 +58,8 @@ class Create extends Component
         $this->processes = $this->workTripRepos->getProcessOptions($this->form->act_name);
         $this->locations = $this->workTripRepos->getLocationsOptions($this->form->area_name);
 
-        $this->form->act_unit =
-            $this->form->act_name != ActNameEnum::Production->value ? 'load' : 'm3';
+        $this->form->act_unit = $this->form->act_name != ActNameEnum::Production->value
+            ? ActUnitEnum::LOAD->value : ActUnitEnum::M3->value;
     }
 
     public function onSubmit(): void

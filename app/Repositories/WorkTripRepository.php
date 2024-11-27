@@ -6,6 +6,7 @@ use App\Models\Activity;
 use App\Models\Area;
 use App\Models\WorkTrip;
 use App\Repositories\Contracts\IWorkTripRepository;
+use App\Utils\ActNameEnum;
 use Illuminate\Support\Collection;
 
 class WorkTripRepository implements IWorkTripRepository
@@ -69,6 +70,18 @@ class WorkTripRepository implements IWorkTripRepository
             ->map(function(Area $area) {
                 $area->name = $area->location;
                 $area->value = $area->location;
+                return $area;
+            })
+            ->toArray();
+    }
+    public function getLocations(string $areaName): array
+    {
+        return Area::query()
+            ->where('name', '=', $areaName)->get()
+            ->map(function(Area $area) {
+                $area->actName = str_contains($area->location, 'CMTF')
+                    ? ActNameEnum::Incoming->value
+                    : ActNameEnum::Outgoing->value;
                 return $area;
             })
             ->toArray();

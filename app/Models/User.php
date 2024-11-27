@@ -21,12 +21,15 @@ use Illuminate\Support\Str;
  * @property $email_verified_at
  * @property $password
  * @property $role
+ * @property $area_name
+ * @property $operator_id
  * @property $remember_token
  * @property $created_at
  * @property $updated_at
  *
  * RELATION
  * @property $currentPost
+ * @property $operator
  *
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -63,6 +66,8 @@ class User extends Authenticatable
         'email',
         'username',
         'role',
+        'area_name',
+        'operator_id',
         'password',
     ];
 
@@ -77,6 +82,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function operator(): HasOne
+    {
+        return $this->hasOne(
+            Operator::class, 'id', 'operator_id'
+        );
     }
 
     public function currentPost(): HasOne

@@ -14,5 +14,6 @@ interface IWorkTripRepository
 
     function getProcessOptions(?string $actName): array;
     function getLocationsOptions(?string $areaName): array;
+    function getLocations(string $areaName): array;
     public function getByPostId($id): Collection;
 }

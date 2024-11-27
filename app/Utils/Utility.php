@@ -40,6 +40,15 @@ class Utility implements IUtility
         return $result;
     }
 
+    public function getListOfDates(int $nextDayCount): array
+    {
+        $list = [];
+        for ($i = 0; $i < $nextDayCount; $i++) {
+            $list[] = date('Y-m-d', strtotime('+' . $i . ' day'));
+        }
+        return $list;
+    }
+
     public function getListOfTimes(int $startHour, int $endHour): array
     {
         $list = [];
@@ -52,15 +61,35 @@ class Utility implements IUtility
         }
         return $list;
     }
-    public function getListOfTimesOptions(int $startHour, int $endHour): array
+    public function getListOfTimesOptions(
+        int $startHour, int $endHour, ?bool $isWholeTime = null): array
     {
         $result = $this->getListOfTimes($startHour, $endHour);
+
+        if($isWholeTime) array_unshift(
+            $result, $result[0]." - ".$result[count($result) - 1]
+        );
 
         return array_map(fn ($time)  => [
             'name' => $time,
             'value' => $time,
 
         ], array_values($result));
+    }
+
+    public function getListOfDatesOptions(int $nextDayCount): array
+    {
+        $dates = $this->getListOfDates($nextDayCount);
+        $result = array();
+
+        for ($i = 0; $i < count($dates); $i++) {
+            $result[$i]['name'] = $dates[$i];
+            $result[$i]['value'] = $dates[$i];
+
+            if ($nextDayCount != 2) continue;
+            $result[$i]['name'] .= (' '.($i == 0 ? '(Today)' : '(Next Day)'));
+        }
+        return $result;
     }
 
     public function timeAgo(string $datetime): string

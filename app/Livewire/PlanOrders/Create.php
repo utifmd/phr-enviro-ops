@@ -14,6 +14,7 @@ use App\Repositories\Contracts\IUserCurrentPostRepository;
 use App\Repositories\Contracts\IWellMasterRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\ActNameEnum;
+use App\Utils\ActUnitEnum;
 use App\Utils\WorkTripTypeEnum;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\View\View;
@@ -151,7 +152,7 @@ class Create extends Component
     {
         $this->onActivityInit();
         $unit = $this->workTripForm->act_name != ActNameEnum::Production->value
-            ? 'load' : 'm3';
+            ? ActUnitEnum::LOAD->value : ActUnitEnum::M3->value;
         $this->form->uom = $unit;
         $this->workTripForm->act_unit = $unit;
     }
