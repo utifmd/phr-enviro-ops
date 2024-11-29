@@ -6,6 +6,7 @@ use App\Livewire\Forms\WorkTripInfoForm;
 use App\Models\Activity;
 use App\Models\Area;
 use App\Models\WorkTripInfo;
+use App\Repositories\Contracts\IDBRepository;
 use App\Repositories\Contracts\IUserRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\ActNameEnum;
@@ -22,23 +23,32 @@ use Livewire\Component;
 
 class Create extends Component
 {
+    #[Url]
+    public ?string $dateParam = null;
+
+    protected IDBRepository $dbRepos;
     protected IUtility $util;
     protected IUserRepository $usrRepos;
     protected IWorkTripRepository $wtRepos;
 
     public WorkTripInfoForm $form;
-    public array $authUsr, $infoState, $locations, $dateOptions, $timeOptions;
-
-    #[Url] // isEditMode
-    public ?string $dateParam = null;
+    public array
+        $authUsr, $infoState, $locations,
+        $dateOptions, $timeOptions, $delInfoQueue = [];
+    public string $focusedDate;
+    public bool $isEditMode = false;
 
     public function mount(
         WorkTripInfo $workTripInfo,
+        IDBRepository $dbRepos,
         IUtility $util,
-        IUserRepository $usrRepos, IWorkTripRepository $wtRepos): void
+        IUserRepository $usrRepos,
+        IWorkTripRepository $wtRepos): void
     {
         $date = $this->dateParam;
+        $this->isEditMode = !is_null($date);
 
+        $this->dbRepos = $dbRepos;
         $this->util = $util;
         $this->usrRepos = $usrRepos;
         $this->wtRepos = $wtRepos;
@@ -48,16 +58,36 @@ class Create extends Component
         $this->initDateOptions($date);
         $this->initTimeOptions($date);
         $this->initLocOptions();
+        $this->checkInfoState($date);
+    }
 
-        if (!is_null($date)) {
+    public function hydrate(
+        IDBRepository $dbRepos, IWorkTripRepository $wtRepos): void
+    {
+        $this->dbRepos = $dbRepos;
+        $this->wtRepos = $wtRepos;
+    }
+
+    private function checkInfoState($dateParam): void
+    {
+        $this->isEditMode = !is_null($dateParam);
+        if ($this->isEditMode) {
+            $this->getInfoState($dateParam);
+            return;
+        }
+        if ($this->wtRepos->areInfosExistBy($date = $this->focusedDate)) {
+            $this->isEditMode = $date;
+            $this->form->date = $date;
             $this->getInfoState($date);
             return;
         }
         $this->initInfoState();
-    } // public function hydrate(): void { $this->initAuthUser(); }
+    }
 
     private function initDateOptions(?string $date = null): void
     {
+        $this->focusedDate = date('Y-m-d');
+
         if (!is_null($date)) {
             $this->dateOptions[] = ['name' => $date, 'value', $date];
             return;
@@ -97,9 +127,10 @@ class Create extends Component
 
     private function initInfoState(): void
     {
-        if (is_null($this->dateParam))
+        if (!$this->isEditMode) {
             $this->infoState = array();
-
+            $this->form->act_value = 0;
+        }
         $this->form->user_id = $this->authUsr['id'];
         $acts = Activity::all();
 
@@ -109,7 +140,7 @@ class Create extends Component
 
     private function getInfoState(string $date): void
     {
-        $this->infoState = WorkTripInfo::query()->where('date', $date)->get()->toArray();
+        $this->infoState = $this->wtRepos->getInfoByDate($date);
     }
 
     private function populateByGS(Collection $acts): void
@@ -153,14 +184,18 @@ class Create extends Component
 
     private function mapInfoState(array $infoState, $time): array
     {
-        return array_map(
+        $infoState = array_map(
             function ($info) use($time): array {
                 $info['date'] = $this->form->date;
                 $info['time'] = $time ?? $this->form->time;
+
                 unset($info['workTripInfoModel']);
                 return $info;
             },
             array_values($infoState)
+        );
+        return array_filter(
+            $infoState, fn ($info) => !str_contains($info['time'], '-')
         );
     }
 
@@ -184,7 +219,12 @@ class Create extends Component
 
     public function onInfoStateActNameSelected($idx): void
     {
-        unset($this->infoState[$idx]);
+        try {
+            $this->delInfoQueue[] = $this->infoState[$idx]['id'];
+            unset($this->infoState[$idx]);
+        } catch (\Exception $e) {
+            $this->addError('error', $e->getMessage());
+        }
     }
 
     /**
@@ -196,38 +236,56 @@ class Create extends Component
         $this->initInfoState();
     }
 
-    /*public function onDateOptionChange(): void
+    /**
+     * @throws ValidationException
+     */
+    public function onDateOptionChange(): void
     {
-        Log::debug('selected date: '. $this->form->date);
+        $this->form->validate(['date' => 'required|string']);
+        $this->focusedDate = $this->form->date;
+        $this->checkInfoState(null);
     }
 
-    public function onTimeOptionChange(): void
+    /*public function onTimeOptionChange(): void
     {
         Log::debug('selected time: '. $this->form->time);
     }*/
 
     private function savePopulated($time): void
     {
+        if (!empty($this->delInfoQueue)) foreach ($this->delInfoQueue as $infoId) {
+            $this->wtRepos->removeInfoById($infoId);
+        }
+        if ($this->isEditMode) {
+            foreach ($this->infoState as $info) {
+                $this->wtRepos->updateInfo($info);
+            }
+            return;
+        }
         $infoState = $this->mapInfoState($this->infoState, $time);
-
         foreach ($infoState as $info) {
-            WorkTripInfo::query()->create($info);
+            $this->wtRepos->addInfo($info);
         }
     }
 
     public function save(): void
     {
-        if (str_contains($this->form->time, '-')) {
-            $times = array_map(fn($opt) => $opt['value'], array_values($this->timeOptions));
-
-            foreach ($times as $time) {
-                $this->savePopulated($time);
+        try {
+            $this->dbRepos->async();
+            if (str_contains($this->form->time, '-')) {
+                $times = array_map(fn($opt) => $opt['value'], array_values($this->timeOptions));
+                foreach ($times as $time) { $this->savePopulated($time); }
+            } else {
+                $this->savePopulated(null);
             }
+            $this->dbRepos->await();
+
             $this->redirectRoute('work-trip-infos.index', navigate: true);
-            return;
+        } catch (\Throwable $t) {
+            $this->dbRepos->cancel();
+
+            $this->addError('error', $t->getMessage());
         }
-        $this->savePopulated(null);
-        $this->redirectRoute('work-trip-infos.index', navigate: true);
     }
 
     #[Layout('layouts.app')]

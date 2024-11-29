@@ -16,7 +16,7 @@
                         <p class="mt-2 text-sm text-gray-700">A list of all the {{ __('Planning'). $tile }}.</p>
                     </div>
                     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <a type="button" wire:navigate href="{{ route('work-trip-infos.create') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add new</a>
+                        <a type="button" wire:navigate href="{{ route('work-trip-infos.create') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add Plan</a>
                     </div>
                 </div>
 
@@ -30,19 +30,19 @@
 
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Date</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Total</th>
-									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Unit</th>
+									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Last Update By</th>
 
                                     <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"></th>
                                 </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200 bg-white">
-                                @foreach ($groupedInfoState as $info)
+                                @foreach ($infoState as $info)
                                     <tr class="even:bg-gray-50" wire:key="{{ $info->date }}">
                                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ ++$i }}.</td>
 
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $info->date }}</td>
-										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $info->act_value_sum }}</td>
-										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $info->act_unit }}</td>
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $info->act_value_sum }} {{ $info->act_unit }}</td>
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $info->user }}</td>
 
                                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
                                             <a wire:navigate href="{{ route('work-trip-infos.create-by', $info->date) }}" class="text-gray-600 font-bold hover:text-gray-900 mr-2">{{ __('Show & Edit') }}</a>
@@ -61,7 +61,7 @@
                             </table>
 
                             <div class="mt-4 px-4">
-                                {{--{!! $groupedInfoState->withQueryString()->links() !!}--}}
+                                {!! $infoState->withQueryString()->links() !!}
                             </div>
                         </div>
                     </div>

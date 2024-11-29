@@ -5,10 +5,14 @@
         <x-radio-button
             :cases="$dateOptions"
             wire:model="form.date"
-            {{--wire:change.prevent="onDateOptionChange"--}}
+            wire:change.prevent="onDateOptionChange"
             id="date" name="date"/>
 
         @error('form.date')
+        <x-input-error class="mt-2" :messages="$message"/>
+        @enderror
+
+        @error('error')
         <x-input-error class="mt-2" :messages="$message"/>
         @enderror
     </div>
@@ -45,6 +49,6 @@
     @endforeach--}}
 
     <div class="flex items-center gap-4">
-        <x-primary-button>Submit</x-primary-button>
+        <x-primary-button>{{$isEditMode ? 'Update' : 'Create'}}</x-primary-button>
     </div>
 </div>

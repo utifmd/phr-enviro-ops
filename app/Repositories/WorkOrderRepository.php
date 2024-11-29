@@ -188,19 +188,4 @@ class WorkOrderRepository implements IWorkOrderRepository
         };
         return $builder->get();
     }
-
-    function async(): void
-    {
-        DB::beginTransaction();
-    }
-
-    function await(): void
-    {
-        DB::commit();
-    }
-
-    function cancel(?int $toLevel = null): void
-    {
-        DB::rollBack($toLevel);
-    }
 }

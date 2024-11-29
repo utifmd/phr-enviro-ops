@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 /**
@@ -23,7 +25,7 @@ use Illuminate\Support\Str;
  * @property $updated_at
  *
  * RELATION
- * @property $users
+ * @property $user
  *
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -38,9 +40,16 @@ class WorkTripInfo extends Model
 
     protected $table = 'work_trip_infos';
 
+    protected $perPage = 10;
+
     protected $fillable = [
         'date', 'time', 'act_name', 'act_process', 'act_unit', 'act_value', 'area_name', 'area_loc', 'user_id'
     ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     protected static function booted(): void
     {

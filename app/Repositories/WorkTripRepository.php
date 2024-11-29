@@ -5,8 +5,12 @@ namespace App\Repositories;
 use App\Models\Activity;
 use App\Models\Area;
 use App\Models\WorkTrip;
+use App\Models\WorkTripInfo;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\ActNameEnum;
+use App\Utils\ActUnitEnum;
+use App\Utils\AreaNameEnum;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class WorkTripRepository implements IWorkTripRepository
@@ -85,5 +89,48 @@ class WorkTripRepository implements IWorkTripRepository
                 return $area;
             })
             ->toArray();
+    }
+
+    public function addInfo(array $workTripInfo): void
+    {
+        WorkTripInfo::query()->create($workTripInfo);
+    }
+
+    public function updateInfo(array $workTripInfo): void
+    {
+        WorkTripInfo::query()
+            ->find($workTripInfo['id'])
+            ->update($workTripInfo);
+    }
+
+    public function removeInfoById(string $id): void
+    {
+        WorkTripInfo::query()->find($id)->delete();
+    }
+
+    public function getInfoByDate(string $date): array
+    {
+        return WorkTripInfo::query()
+            ->where('date', $date)->get()->toArray();
+    }
+
+    public function getInfoByArea(string $area): LengthAwarePaginator
+    {
+        return WorkTripInfo::query()
+        ->selectRaw('date, act_unit, users.name AS user, SUM(act_value) AS act_value_sum')
+        /*->where('user_id', '=', $this->authId, 'and')*/
+        ->leftJoin('users', 'users.id', '=', 'work_trip_infos.user_id')
+        ->where('work_trip_infos.area_name', '=', $area, 'and')
+        ->where('act_unit', '=', ActUnitEnum::LOAD->value)
+        ->groupBy('date', 'act_unit', 'user')
+        ->paginate();
+    }
+    public function getInfos(): LengthAwarePaginator
+    {
+        return WorkTripInfo::query()->paginate();
+    }
+    public function areInfosExistBy(string $date): bool
+    {
+        return WorkTripInfo::query()->where('date', '=', $date)->exists();
     }
 }
