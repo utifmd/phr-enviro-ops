@@ -24,6 +24,22 @@ class PostRepository implements IPostRepository
         $this->utility = $utility;
     }
 
+    public function generatePost(array $user): ?string
+    {
+        $post = [
+            'type' => PostTypeEnum::POST_WELL_TYPE->value,
+            'operator_id' => $user['operator_id'],
+            'user_id' => $user['id'],
+        ];
+        $posted = Post::factory()->create($post);
+        return $posted->id;
+    }
+
+    public function arePostExistAt(string $date): bool
+    {
+        return Post::query()->where('date', $date)->exists();
+    }
+
     function addPost(array $request): ?Post
     {
         $createdPost = Post::query()->create($request);
@@ -103,14 +119,13 @@ class PostRepository implements IPostRepository
         });
     }
 
-    function updatePost(string $post_id, array $request): ?Post
+    function updatePost(array $request): ?Post
     {
         try {
-            $model = Post::query()->find($post_id);
-            $model->title = $request['title'];
-            $model->desc = $request['desc'];
-
-            if(!$model->save()) return null;
+            $model = Post::query()->find($request['id']);
+            /*$model->title = $request['title'];
+            $model->desc = $request['desc'];*/
+            if(!$model->update($request)) return null;
             return $model
                 ->get()
                 ->first();

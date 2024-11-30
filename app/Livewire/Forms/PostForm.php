@@ -8,7 +8,7 @@ use Livewire\Form;
 class PostForm extends Form
 {
     public ?Post $postModel;
-    
+
     public $title = '';
     public $description = '';
     public $type = '';
@@ -25,7 +25,7 @@ class PostForm extends Form
     public function setPostModel(Post $postModel): void
     {
         $this->postModel = $postModel;
-        
+
         $this->title = $this->postModel->title;
         $this->description = $this->postModel->description;
         $this->type = $this->postModel->type;

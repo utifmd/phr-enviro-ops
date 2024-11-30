@@ -11,10 +11,6 @@
         @error('form.date')
         <x-input-error class="mt-2" :messages="$message"/>
         @enderror
-
-        @error('error')
-        <x-input-error class="mt-2" :messages="$message"/>
-        @enderror
     </div>
     {{--<div>
         <x-input-label for="area_loc" :value="__('Location')"/>
@@ -38,7 +34,7 @@
         @enderror
     </div>
     <div>
-        <x-input-label for="btn_apply" :value="__('Apply')"/>
+        <x-input-label for="btn_apply" :value="__('Apply to all')"/>
         <button id="btn_apply" name="btn_apply" type="button" wire:click="onStateInfoPressed" class="mt-1 block p-3 text-xs font-medium text-center items-center rounded-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
             <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 1 1 0-18c1.052 0 2.062.18 3 .512M7 9.577l3.923 3.923 8.5-8.5M17 14v6m-3-3h6"/></svg>
         </button>
@@ -48,6 +44,9 @@
         @include('livewire.work-trip-info.tabled', ['timeOpt' => $timeOpt['value']])
     @endforeach--}}
 
+    @error('error')
+    <x-input-error class="mt-2" :messages="$message"/>
+    @enderror
     <div class="flex items-center gap-4">
         <x-primary-button>{{$isEditMode ? 'Update' : 'Create'}}</x-primary-button>
     </div>

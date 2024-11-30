@@ -23,8 +23,7 @@ return new class extends Migration
             $table->string('type');
             $table->string('vendor');
 
-            $table->foreignId('operator_id')
-                ->nullable(false)
+            $table->foreignUuid('operator_id')
                 ->constrained('operators');
 
             $table->timestamps();

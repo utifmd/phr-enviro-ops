@@ -36,14 +36,11 @@ return new class extends Migration
             $table->string('area_loc');
             $table->enum('status', $statusAllowed);
 
-            $table->foreignUuid('work_trip_info_id')
-                ->constrained('work_trips')
-                ->cascadeOnDelete();
-
             $table->foreignUuid('post_id')
                 ->constrained('posts')
                 ->cascadeOnDelete();
 
+            $table->foreignUuid('user_id')->constrained('users');
             $table->timestamps();
         });
     }

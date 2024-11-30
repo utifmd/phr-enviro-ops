@@ -31,6 +31,7 @@ use Illuminate\Support\Str;
  * RELATION
  * @property $currentPost
  * @property $operator
+ * @property $posts
  *
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -98,6 +99,13 @@ class User extends Authenticatable
             UserCurrentPost::class, 'user_id', 'id'
 
         )->where('steps', '=', -1);
+    }
+
+    public function posts(): HasMany
+    {
+        return $this->hasMany(
+            Post::class, 'user_id', 'id'
+        );
     }
 
     public function workTripInfos(): HasMany

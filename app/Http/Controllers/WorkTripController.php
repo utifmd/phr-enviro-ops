@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\WorkTripResource;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Service\WorkTripService;
+use App\Utils\WorkTripStatusEnum;
 use Illuminate\Http\JsonResponse;
 
 class WorkTripController extends Controller
@@ -17,8 +18,9 @@ class WorkTripController extends Controller
     }
     public function index(): JsonResponse
     {
-        $data = $this->workTripRepos->index();
-
+        $data = $this->workTripRepos->indexByStatus(
+            WorkTripStatusEnum::APPROVED->value
+        );
         return WorkTripService::sendResponse(
             WorkTripResource::collection($data)
         );

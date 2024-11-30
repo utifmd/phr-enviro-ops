@@ -23,12 +23,14 @@ use Illuminate\Support\Str;
  * @property $area_name
  * @property $area_loc
  * @property $post_id
+ * @property $user_id
  * @property $couple_id
  * @property $created_at
  * @property $updated_at
  *
  * RELATION
- * @property $info
+ * @property $post
+ * @property $user
  *
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -44,7 +46,7 @@ class WorkTrip extends Model
     protected $table = 'work_trips';
 
     protected $fillable = [
-        'type', 'date', 'time', 'act_name', 'act_process', 'act_unit', 'act_value', 'area_name', 'area_loc', 'post_id', 'work_trip_info_id'
+        'type', 'date', 'time', 'act_name', 'act_process', 'act_unit', 'act_value', 'area_name', 'area_loc', 'status', 'post_id', 'user_id'
     ];
 
     public function post(): BelongsTo
@@ -52,11 +54,9 @@ class WorkTrip extends Model
         return $this->belongsTo(Post::class);
     }
 
-    public function info(): HasOne
+    public function user(): BelongsTo
     {
-        return $this->hasOne(
-            WorkTripInfo::class, 'id', 'work_trip_info_id'
-        );
+        return $this->belongsTo(User::class);
     }
 
     /*public function couple(): HasOne

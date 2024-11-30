@@ -30,6 +30,10 @@ return new class extends Migration
             $table->enum('area_name', $areaNameAllowed);
             $table->string('area_loc');
 
+            $table->foreignUuid('post_id')
+                ->constrained('posts')
+                ->cascadeOnDelete();
+
             $table->foreignUuid('user_id')->constrained('users');
             $table->timestamps();
         });

@@ -28,9 +28,12 @@ return new class extends Migration
             $table->enum('shift', $shifts);
             $table->enum('area', $areas);
 
-            $table->foreignUuid('operator_id')->nullable(false)->constrained('operators');
-            $table->foreignUuid('vehicle_id')->nullable(false)->constrained('vehicles');
-            $table->foreignUuid('crew_id')->nullable(false)->constrained('crews');
+            $table->foreignUuid('operator_id')
+                ->constrained('operators');
+            $table->foreignUuid('vehicle_id')
+                ->constrained('vehicles');
+            $table->foreignUuid('crew_id')
+                ->constrained('crews');
             $table->foreignUuid('post_id')
                 ->constrained('posts')
                 ->cascadeOnDelete();

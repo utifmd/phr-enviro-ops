@@ -20,12 +20,14 @@ use Illuminate\Support\Str;
  * @property $act_value
  * @property $area_name
  * @property $area_loc
+ * @property $post_id
  * @property $user_id
  * @property $created_at
  * @property $updated_at
  *
  * RELATION
  * @property $user
+ * @property $post
  *
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -43,8 +45,13 @@ class WorkTripInfo extends Model
     protected $perPage = 10;
 
     protected $fillable = [
-        'date', 'time', 'act_name', 'act_process', 'act_unit', 'act_value', 'area_name', 'area_loc', 'user_id'
+        'date', 'time', 'act_name', 'act_process', 'act_unit', 'act_value', 'area_name', 'area_loc', 'post_id', 'user_id'
     ];
+
+    public function post(): BelongsTo
+    {
+        return $this->belongsTo(Post::class);
+    }
 
     public function user(): BelongsTo
     {

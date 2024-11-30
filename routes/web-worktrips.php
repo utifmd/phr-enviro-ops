@@ -15,6 +15,10 @@ Route::middleware('auth')->group(function () {
         ->name('work-trips.create')
         ->can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW);
 
+    Route::get('/work-trips/create/{dateParam}', Create::class)
+        ->name('work-trips.create-by')
+        ->can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW);
+
     Route::get('/work-trips/show/{workTrip}', Show::class)
         ->name('work-trips.show')
         ->can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW);
@@ -22,15 +26,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/work-trips/update/{workTrip}', Edit::class)
         ->name('work-trips.edit')
         ->can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW);
-
-    Route::get('/work-trips/requests', \App\Livewire\WorkTrips\Request\Index::class)
-        ->name('work-trips.requests.index')
-        ->can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW);
-
-    Route::get('/work-trips/requests/show/{post}', \App\Livewire\WorkTrips\Request\Show::class)
-        ->name('work-trips.requests.show')
-        ->can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW);
-
 
     Route::get('/work-trip-infos', \App\Livewire\WorkTripInfos\Index::class)
         ->name('work-trip-infos.index')
@@ -50,6 +45,15 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/work-trip-infos/update/{workTripInfo}', \App\Livewire\WorkTripInfos\Edit::class)
         ->name('work-trip-infos.edit')
+        ->can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP);
+
+
+    Route::get('/work-trips/requests', \App\Livewire\WorkTrips\Request\Index::class)
+        ->name('work-trips.requests.index')
+        ->can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP);
+
+    Route::get('/work-trips/requests/show/{post}', \App\Livewire\WorkTrips\Request\Show::class)
+        ->name('work-trips.requests.show')
         ->can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP);
 
 });

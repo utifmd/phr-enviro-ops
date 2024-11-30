@@ -10,6 +10,8 @@ use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\ActNameEnum;
 use App\Utils\ActUnitEnum;
 use App\Utils\AreaNameEnum;
+use App\Utils\WorkTripStatusEnum;
+use App\Utils\WorkTripTypeEnum;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -26,6 +28,11 @@ class WorkTripRepository implements IWorkTripRepository
     public function index(): Collection
     {
         return WorkTrip::all();
+    }
+
+    public function indexByStatus(string $status): Collection
+    {
+        return WorkTrip::query()->where('status', $status)->get();
     }
 
     public function getById($id): Collection
@@ -91,6 +98,61 @@ class WorkTripRepository implements IWorkTripRepository
             ->toArray();
     }
 
+    public function sumInfoAndTripByArea(string $area): LengthAwarePaginator
+    {
+        return WorkTrip::query()
+            ->selectRaw(
+                'type, date, act_unit, users.name AS user_actual, SUM(act_value) AS value_actual_sum, status')
+            ->leftJoin('users', 'users.id', '=', 'work_trips.user_id')
+            ->where('work_trips.area_name', '=', $area, 'and')
+            ->where('act_unit', '=', ActUnitEnum::LOAD->value, 'and')
+            ->where('type', '=', WorkTripTypeEnum::ACTUAL->value)
+            ->groupBy('type', 'date', 'act_unit', 'user_actual', 'status')
+            ->paginate();
+    }
+
+    public function addTrip(array $workTripTrip): void
+    {
+        WorkTrip::query()->create($workTripTrip);
+    }
+
+    public function updateTrip(array $workTripTrip): void
+    {
+        WorkTrip::query()
+            ->find($workTripTrip['id'])
+            ->update($workTripTrip);
+    }
+
+    public function removeTripById(string $id): void
+    {
+        WorkTrip::query()->find($id)->delete();
+    }
+
+    public function getTripByDate(string $date): array
+    {
+        return WorkTrip::query()
+            ->where('date', $date)->get()->toArray();
+    }
+
+    public function sumTripByArea(string $area): LengthAwarePaginator
+    {
+        return WorkTrip::query()
+            ->selectRaw('date, act_unit, users.name AS user, SUM(act_value) AS act_value_sum')
+            ->leftJoin('users', 'users.id', '=', 'work_trips.user_id')
+            ->where('work_trips.area_name', '=', $area, 'and')
+            ->where('act_unit', '=', ActUnitEnum::LOAD->value)
+            ->groupBy('date', 'act_unit', 'user')
+            ->paginate();
+    }
+    public function getTrips(): LengthAwarePaginator
+    {
+        return WorkTrip::query()->paginate();
+    }
+    public function areTripsExistBy(string $date): bool
+    {
+        return WorkTrip::query()->where('date', '=', $date)->exists();
+    }
+
     public function addInfo(array $workTripInfo): void
     {
         WorkTripInfo::query()->create($workTripInfo);
@@ -114,7 +176,7 @@ class WorkTripRepository implements IWorkTripRepository
             ->where('date', $date)->get()->toArray();
     }
 
-    public function getInfoByArea(string $area): LengthAwarePaginator
+    public function sumInfoByArea(string $area): LengthAwarePaginator
     {
         return WorkTripInfo::query()
         ->selectRaw('date, act_unit, users.name AS user, SUM(act_value) AS act_value_sum')

@@ -71,7 +71,7 @@ class WellService implements IWellService
         $post = null;
         $this->postRepository->async();
         try {
-            $postOrNull = $this->postRepository->updatePost($postRequest['id'], $postRequest);
+            $postOrNull = $this->postRepository->updatePost($postRequest);
 
             if (is_null($postOrNull)) return null;
             $postId = $postRequest['id']; //$postOrNull->id;

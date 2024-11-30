@@ -7,9 +7,11 @@ use App\Models\Activity;
 use App\Models\Area;
 use App\Models\WorkTripInfo;
 use App\Repositories\Contracts\IDBRepository;
+use App\Repositories\Contracts\IPostRepository;
 use App\Repositories\Contracts\IUserRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\ActNameEnum;
+use App\Utils\AreaNameEnum;
 use App\Utils\Contracts\IUtility;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
@@ -29,13 +31,14 @@ class Create extends Component
     protected IDBRepository $dbRepos;
     protected IUtility $util;
     protected IUserRepository $usrRepos;
+    protected IPostRepository $pstRepos;
     protected IWorkTripRepository $wtRepos;
 
     public WorkTripInfoForm $form;
     public array
         $authUsr, $infoState, $locations,
         $dateOptions, $timeOptions, $delInfoQueue = [];
-    public string $focusedDate;
+    public ?string $postId, $focusedDate;
     public bool $isEditMode = false;
 
     public function mount(
@@ -43,6 +46,7 @@ class Create extends Component
         IDBRepository $dbRepos,
         IUtility $util,
         IUserRepository $usrRepos,
+        IPostRepository $pstRepos,
         IWorkTripRepository $wtRepos): void
     {
         $date = $this->dateParam;
@@ -51,20 +55,22 @@ class Create extends Component
         $this->dbRepos = $dbRepos;
         $this->util = $util;
         $this->usrRepos = $usrRepos;
+        $this->pstRepos = $pstRepos;
         $this->wtRepos = $wtRepos;
 
         $this->form->setWorkTripInfoModel($workTripInfo);
         $this->initAuthUser();
         $this->initDateOptions($date);
-        $this->initTimeOptions($date);
+        $this->initTimeOptions(/*$date*/);
         $this->initLocOptions();
         $this->checkInfoState($date);
     }
 
     public function hydrate(
-        IDBRepository $dbRepos, IWorkTripRepository $wtRepos): void
+        IDBRepository $dbRepos, IPostRepository $pstRepos, IWorkTripRepository $wtRepos): void
     {
         $this->dbRepos = $dbRepos;
+        $this->pstRepos = $pstRepos;
         $this->wtRepos = $wtRepos;
     }
 
@@ -75,13 +81,22 @@ class Create extends Component
             $this->getInfoState($dateParam);
             return;
         }
-        if ($this->wtRepos->areInfosExistBy($date = $this->focusedDate)) {
+        if ($this->wtRepos->areInfosExistBy($date = $this->focusedDate)) { //
             $this->isEditMode = $date;
             $this->form->date = $date;
             $this->getInfoState($date);
             return;
         }
         $this->initInfoState();
+    }
+
+    private function checkPost(): void
+    {
+        if ($this->pstRepos->arePostExistAt($this->focusedDate)){
+            $this->postId = null;
+            return;
+        }
+        $this->postId = $this->pstRepos->generatePost($this->authUsr);
     }
 
     private function initDateOptions(?string $date = null): void
@@ -96,16 +111,18 @@ class Create extends Component
         $this->form->date = $this->dateOptions[0]['value'] ?? '';
     }
 
-    private function initTimeOptions(?string $date = null): void
+    private function initTimeOptions(/*?string $date = null*/): void
     {
-        if (!is_null($date)) {
+        /*if (!is_null($date)) {
             $this->timeOptions = $this->util->getListOfTimesOptions(
                 8, 20, true
             );
             return;
-        }
+        }*/
+        $areRoleBeginAt7 = $this->authUsr['area_name'] == AreaNameEnum::HO->value;
         $this->timeOptions = $this->util->getListOfTimesOptions(
-            8, 20, true
+            $areRoleBeginAt7 ? 7 : 8,
+            $areRoleBeginAt7 ? 19 : 20, true
         );
         $this->form->time = $this->timeOptions[0]['value'] ?? '';
     }
@@ -186,6 +203,7 @@ class Create extends Component
     {
         $infoState = array_map(
             function ($info) use($time): array {
+                $info['post_id'] = $this->postId;
                 $info['date'] = $this->form->date;
                 $info['time'] = $time ?? $this->form->time;
 
@@ -220,7 +238,9 @@ class Create extends Component
     public function onInfoStateActNameSelected($idx): void
     {
         try {
-            $this->delInfoQueue[] = $this->infoState[$idx]['id'];
+            if ($this->isEditMode)
+                $this->delInfoQueue[] = $this->infoState[$idx]['id'];
+
             unset($this->infoState[$idx]);
         } catch (\Exception $e) {
             $this->addError('error', $e->getMessage());
@@ -262,7 +282,9 @@ class Create extends Component
             }
             return;
         }
-        $infoState = $this->mapInfoState($this->infoState, $time);
+        $infoState = $this->mapInfoState(
+            $this->infoState, $time
+        );
         foreach ($infoState as $info) {
             $this->wtRepos->addInfo($info);
         }
@@ -272,11 +294,12 @@ class Create extends Component
     {
         try {
             $this->dbRepos->async();
+            $this->checkPost();
             if (str_contains($this->form->time, '-')) {
                 $times = array_map(fn($opt) => $opt['value'], array_values($this->timeOptions));
                 foreach ($times as $time) { $this->savePopulated($time); }
             } else {
-                $this->savePopulated(null);
+                $this->savePopulated(null, null);
             }
             $this->dbRepos->await();
 

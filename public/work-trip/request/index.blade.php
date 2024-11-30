@@ -1,24 +1,22 @@
 <x-slot name="header">
     <div class="md:inline-flex w-full justify-between space-y-2 md:space-y-0">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Actual Request
-            {{--{{ request()->routeIs('work-trips.request.index') ? 'Load Request' : 'My Request' }}--}}
+            {{ request()->routeIs('work-trips.request.index') ? 'Load Request' : 'My Request' }}
         </h2>
         <div>
             <label for="legendStatus">Legend</label>
             <div id="legendStatus" class="flex">
-                <span
-                    class="flex items-center text-sm font-medium text-gray-900 dark:text-white me-3">
-                    <span class="flex w-2.5 h-2.5 bg-yellow-300 rounded-full me-1.5 flex-shrink-0"></span>
-                    {{ \App\Utils\WorkTripStatusEnum::PENDING->value }}
+                <span class="flex items-center text-sm font-medium text-gray-900 dark:text-white me-3"><span
+                            class="flex w-2.5 h-2.5 bg-yellow-300 rounded-full me-1.5 flex-shrink-0"></span>
+                    {{ \App\Utils\WorkOrderStatusEnum::STATUS_PENDING->value }}
                 </span>
                 <span class="flex items-center text-sm font-medium text-gray-900 dark:text-white me-3"><span
                             class="flex w-2.5 h-2.5 bg-red-500 rounded-full me-1.5 flex-shrink-0"></span>
-                    {{ \App\Utils\WorkTripStatusEnum::REJECTED->value }}
+                    {{ \App\Utils\WorkOrderStatusEnum::STATUS_REJECTED->value }}
                 </span>
                 <span class="flex items-center text-sm font-medium text-gray-900 dark:text-white me-3"><span
                             class="flex w-2.5 h-2.5 bg-green-500 rounded-full me-1.5 flex-shrink-0"></span>
-                    {{ \App\Utils\WorkTripStatusEnum::APPROVED->value }}
+                    {{ \App\Utils\WorkOrderStatusEnum::STATUS_ACCEPTED->value }}
                 </span>
             </div>
         </div>
@@ -38,12 +36,13 @@
                 @endif
                 <div class="flex flex-col">
                     <h1 class="font-semibold leading-6 text-gray-900">
-                        <a wire:navigate href="{{ route('work-trips.requests.show', $post->id) }}">{{$post->title}}</a>
+                        <a wire:navigate
+                           href="{{ route('work-trips.requests.show', $post->id) }}">{{ $post->title }}</a>
                     </h1>
-                    <p class="mt-2 text-sm text-gray-700">{{$post->description}}</p>
+                    <p class="mt-2 text-sm text-gray-700">{{ $post->desc }}</p>
                     <p class="mt-2 text-xs text-gray-700">{{ $post->timeAgo }}</p>
                     <dl class="divide-y mt-6 divide-gray-100">
-                        {{--<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <dt class="text-sm font-medium leading-6 text-gray-900">Evidence</dt>
                             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                 <div class="flex h-40 w-40 overflow-clip rounded border">
@@ -52,7 +51,7 @@
                                          alt="evidence">
                                 </div>
                             </dd>
-                        </div>--}}
+                        </div>
                         <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <dt class="text-sm font-medium leading-6 text-gray-900">Transporter</dt>
                             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
@@ -60,34 +59,42 @@
                             </dd>
                         </div>
                         <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                            <dt class="text-sm font-medium leading-6 text-gray-900">Facility Reps</dt>
+                            <dt class="text-sm font-medium leading-6 text-gray-900">Requester</dt>
                             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {{ $post->user->name ?? 'deleted account' }}
+                                {{ $post->user->email ?? 'deleted account' }}
                             </dd>
                         </div>
-                        @if($post->workTrips)
+                        @if($post->workOrders)
                             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt class="text-sm font-medium leading-6 text-gray-900">Total request</dt>
-                                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ count($post->workTrips) }}x</dd>
+                                <dt class="text-sm font-medium leading-6 text-gray-900">Total load</dt>
+                                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ count($post->workOrders) }}
+                                    x
+                                </dd>
                             </div>
                             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt class="text-sm font-medium leading-6 text-gray-900"></dt>
+                                <dt class="text-sm font-medium leading-6 text-gray-900">Request Status</dt>
                                 <dd class="space-y-3 items-center mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                    @foreach($post->workTrips as $idx => $trip)
+                                    @foreach($post->workOrders as $idx => $wo)
                                         @if($idx == 2)
-                                            <a class="flex" href="{{ route('work-trips.requests.show', $post->id) }}">More detail..</a>
+                                            <a class="flex" href="{{ route('work-trips.show', $post->id) }}">More
+                                                detail..</a>
                                             @break
                                         @endif
-                                        <span class="flex items-center text-sm font-medium text-gray-900 dark:text-white me-3">
-                                        @if($trip['status'] == \App\Utils\WorkTripStatusEnum::PENDING->value)
-                                            <span class="flex w-2.5 h-2.5 bg-yellow-300 rounded-full me-1.5 flex-shrink-0"></span>
-                                        @elseif($trip['status'] == \App\Utils\WorkTripStatusEnum::REJECTED->value)
-                                            <span class="flex w-2.5 h-2.5 bg-red-600 rounded-full me-1.5 flex-shrink-0"></span>
-                                        @else
-                                            <span class="flex w-2.5 h-2.5 bg-green-600 rounded-full me-1.5 flex-shrink-0"></span>
-                                        @endif
-                                        Request {{$idx +1}}
-                                        </span>
+                                        <span
+                                                class="flex items-center text-sm font-medium text-gray-900 dark:text-white me-3">
+                                        @if($wo['status'] == \App\Utils\WorkOrderStatusEnum::STATUS_PENDING->value)
+                                                <span
+                                                        class="flex w-2.5 h-2.5 bg-yellow-300 rounded-full me-1.5 flex-shrink-0"></span>
+                                            @elseif($wo['status'] == \App\Utils\WorkOrderStatusEnum::STATUS_REJECTED->value)
+                                                <span
+                                                        class="flex w-2.5 h-2.5 bg-red-600 rounded-full me-1.5 flex-shrink-0"></span>
+                                            @else
+                                                <span
+                                                        class="flex w-2.5 h-2.5 bg-green-600 rounded-full me-1.5 flex-shrink-0"></span>
+                                            @endif
+
+                                    Load {{$idx +1}}
+                                    </span>
                                     @endforeach
                                 </dd>
                             </div>

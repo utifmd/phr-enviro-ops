@@ -21,6 +21,7 @@ class WorkTripForm extends Form
     public $area_name = '';
     public $area_loc = '';
     public $post_id = '';
+    public $user_id = '';
 
     public function rules(): array
     {
@@ -35,6 +36,7 @@ class WorkTripForm extends Form
 			'area_name' => 'required|string',
 			'area_loc' => 'required|string',
 			'post_id' => 'required|string',
+			'user_id' => 'required|string',
         ];
     }
 
