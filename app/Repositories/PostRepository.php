@@ -37,7 +37,7 @@ class PostRepository implements IPostRepository
 
     public function arePostExistAt(string $date): bool
     {
-        return Post::query()->where('date', $date)->exists();
+        return Post::query()->where('created_at', $date)->exists();
     }
 
     function addPost(array $request): ?Post

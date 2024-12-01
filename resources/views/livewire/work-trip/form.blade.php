@@ -19,13 +19,13 @@
         <x-input-error class="mt-2" :messages="$message"/>
         @enderror
     </div>--}}
-    {{--<div>
+    <div>
         <x-input-label for="time" value="Time"/>
-        <x-select-option wire:model="form.time" --}}{{--wire:change.prevent="onTimeOptionChange"--}}{{-- :cases="$timeOptions" :isIdle="false" id="time" name="time"/>
+        <x-select-option wire:model="form.time" wire:change.prevent="onTimeOptionChange" :cases="$timeOptions" :isIdle="false" id="time" name="time"/>
         @error('form.time')
         <x-input-error class="mt-2" :messages="$message"/>
         @enderror
-    </div>--}}
+    </div>
     <div>
         <x-input-label for="act_value" :value="__('Quota (Actual)')"/>
         <x-text-input wire:model="form.act_value" id="act_value" name="act_value" type="number" min="0" max="999" class="mt-1 block w-full" autocomplete="act_value" placeholder="Quota"/>
@@ -48,6 +48,6 @@
     <x-input-error class="mt-2" :messages="$message"/>
     @enderror
     <div class="flex items-center gap-4">
-        <x-primary-button :disabled="count($tripState) == 0">Send</x-primary-button>
+        <x-primary-button :disabled="count($tripState) == 0">{{$isEditMode ? 'Update' : 'Send'}}</x-primary-button>
     </div>
 </div>

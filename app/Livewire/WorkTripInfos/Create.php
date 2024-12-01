@@ -119,10 +119,13 @@ class Create extends Component
             );
             return;
         }*/
-        $areRoleBeginAt7 = $this->authUsr['area_name'] == AreaNameEnum::HO->value;
+        /*$areRoleBeginAt7 = $this->authUsr['area_name'] == AreaNameEnum::HO->value;
         $this->timeOptions = $this->util->getListOfTimesOptions(
             $areRoleBeginAt7 ? 7 : 8,
             $areRoleBeginAt7 ? 19 : 20, true
+        );*/
+        $this->timeOptions = $this->util->getListOfTimesOptions(
+            0, 22, true
         );
         $this->form->time = $this->timeOptions[0]['value'] ?? '';
     }
@@ -146,7 +149,8 @@ class Create extends Component
     {
         if (!$this->isEditMode) {
             $this->infoState = array();
-            $this->form->act_value = 0;
+            $this->form->act_value = empty($this->form->act_value)
+                ? 0 : $this->form->act_value;
         }
         $this->form->user_id = $this->authUsr['id'];
         $acts = Activity::all();

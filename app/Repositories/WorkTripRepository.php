@@ -134,6 +134,14 @@ class WorkTripRepository implements IWorkTripRepository
             ->where('date', $date)->get()->toArray();
     }
 
+    public function getTripByDatetime(string $date, string $time): array
+    {
+        return WorkTrip::query()
+            ->where('date', '=', $date, 'and')
+            ->where('time', $time)
+            ->get()->toArray();
+    }
+
     public function sumTripByArea(string $area): LengthAwarePaginator
     {
         return WorkTrip::query()
@@ -148,9 +156,19 @@ class WorkTripRepository implements IWorkTripRepository
     {
         return WorkTrip::query()->paginate();
     }
-    public function areTripsExistBy(string $date): bool
+
+    public function areTripsExistByDate(string $date): bool
     {
-        return WorkTrip::query()->where('date', '=', $date)->exists();
+        return WorkTrip::query()
+            ->where('date', $date)->exists();
+    }
+
+    public function areTripsExistByDatetime(string $date, string $time): bool
+    {
+        return WorkTrip::query()
+            ->where('date', '=', $date, 'and')
+            ->where('time', $time)
+            ->exists();
     }
 
     public function addInfo(array $workTripInfo): void
@@ -176,6 +194,14 @@ class WorkTripRepository implements IWorkTripRepository
             ->where('date', $date)->get()->toArray();
     }
 
+    public function getInfoByDatetime(string $date, string $time): array
+    {
+        return WorkTripInfo::query()
+            ->where('date', '=', $date, 'and')
+            ->where('time', $time)
+            ->get()->toArray();
+    }
+
     public function sumInfoByArea(string $area): LengthAwarePaginator
     {
         return WorkTripInfo::query()
@@ -194,5 +220,44 @@ class WorkTripRepository implements IWorkTripRepository
     public function areInfosExistBy(string $date): bool
     {
         return WorkTripInfo::query()->where('date', '=', $date)->exists();
+    }
+
+    public function mapTripPairActualValue(array $tripState): array
+    {
+        $actualTrips = [];
+        $planTrips = [];
+        foreach ($tripState as $trip) {
+            if($trip['type'] != WorkTripTypeEnum::PLAN->value) continue;
+            $planTrips[] = $trip;
+        }
+        foreach ($tripState as $i => $trip) {
+            if($trip['type'] != WorkTripTypeEnum::ACTUAL->value) continue;
+            $trip['act_value'] = $trip['act_value'].'/'.$planTrips[$i]['act_value'];
+            $actualTrips[] = $trip;
+        }
+        return $actualTrips;
+    }
+    public function mapTripUnpairActualValue(array $tripState): array
+    {
+        $trips = [];
+        foreach ($tripState as $trip) {
+            $trip['act_value'] = explode('/', $trip['act_value'])[0];
+            $trips[] = $trip;
+        }
+        return $trips;
+    }
+    public function sumActualByAreaAndDate(mixed $areaName, mixed $date): int
+    {
+        $collection = WorkTrip::query()
+            ->selectRaw('SUM(act_value) AS act_value_sum')
+            ->where('type', '=', WorkTripTypeEnum::ACTUAL->value, 'and')
+            ->where('area_name', '=', $areaName, 'and')
+            ->where('act_unit', '=', ActUnitEnum::LOAD->value, 'and')
+            ->where('date', $date)
+            ->get();
+
+        return $collection
+            ->first()
+            ->act_value_sum;
     }
 }

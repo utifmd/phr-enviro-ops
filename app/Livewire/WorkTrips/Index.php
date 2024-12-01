@@ -39,9 +39,8 @@ class Index extends Component
 
     private function initInfoState(): void
     {
-        $this->groupedInfoState = $this->workTripRepos->sumInfoAndTripByArea(
-            $this->authUsr['area_name']
-        );
+        $this->groupedInfoState = $this->workTripRepos
+            ->sumInfoAndTripByArea($this->authUsr['area_name']);
     }
 
     private function initAuthUser(): void

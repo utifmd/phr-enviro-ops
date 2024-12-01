@@ -35,7 +35,7 @@ class Create extends Component
     protected IWorkTripRepository $wtRepos;
 
     public WorkTripForm $form;
-    public array $authUsr, $tripState;
+    public array $authUsr, $tripState, $timeOptions;
     public string $currentDate;
     public bool $isEditMode = false;
 
@@ -56,6 +56,7 @@ class Create extends Component
         $this->form->setWorkTripModel($workTrip);
         $this->initAuthUser();
         $this->initDateOptions();
+        $this->initTimeOptions();
         $this->initLocOptions();
         $this->checkTripState();
     }
@@ -72,7 +73,8 @@ class Create extends Component
 
     private function checkTripState(): void
     {
-        if ($this->wtRepos->areTripsExistBy($date = $this->currentDate)) {
+        $this->isEditMode = false;
+        if ($this->wtRepos->areTripsExistByDatetime($date = $this->currentDate, $this->form->time)) {
             $this->isEditMode = true;
             $this->form->date = $date;
             $this->getTripState($date);
@@ -85,6 +87,12 @@ class Create extends Component
     {
         $this->currentDate = is_null($this->dateParam)
             ? date('Y-m-d') : $this->dateParam;
+    }
+
+    private function initTimeOptions(): void
+    {
+        $this->timeOptions = $this->util->getListOfTimesOptions(0, 22);
+        $this->form->time = $this->timeOptions[0]['value'] ?? '';
     }
 
     private function initAuthUser(): void
@@ -105,7 +113,7 @@ class Create extends Component
         $this->form->act_value = empty($this->form->act_value)
             ? 0 : $this->form->act_value;
         try {
-            $infoState = $this->wtRepos->getInfoByDate($this->currentDate);
+            $infoState = $this->wtRepos->getInfoByDatetime($this->currentDate, $this->form->time);
             $this->tripState = $this->mapInfoToPlanTripState($infoState);
 
         } catch (\Exception $e) {
@@ -115,43 +123,39 @@ class Create extends Component
 
     private function getTripState(string $date): void
     {
-        $this->tripState = $this->wtRepos->getTripByDate($date);
+        $tripState = $this->wtRepos->getTripByDatetime($date, $this->form->time);
+        $this->tripState = $this->wtRepos->mapTripPairActualValue($tripState);
+    }
+
+    private function assignPost(array $tripState): void
+    {
+        $operator = $this->authUsr['operator'];
+        $actValSum = $this->wtRepos
+            ->sumActualByAreaAndDate($this->authUsr['area_name'], $this->form->date);
+        $patch = [
+            'id' => $tripState[0]['post_id'],
+            'title' => trim($operator['prefix'] .' '. $operator['name'] .' '. $operator['postfix']),
+            'description' => 'Total Actual at '.$this->form->date.' is '.$actValSum. ' Load',
+        ];
+        $this->pstRepos->updatePost($patch);
     }
 
     private function mapInfoToPlanTripState(array $infos): array
     {
         $trips = [];
-        $this->form->post_id = $infos[0]['post_id'];
         foreach ($infos as $trip) {
             $trip['type'] = WorkTripTypeEnum::PLAN->value;
             $trip['status'] = WorkTripStatusEnum::APPROVED->value;
             $trip['act_value'] = $this->form->act_value .'/'. $trip['act_value'];
             $trips[] = $trip;
-        }
+        } // usort($trips, fn ($a, $b) => $b['act_process'] < $a['act_process']);
         return $trips;
     }
 
-    private function assignPost(): void
-    {
-        $operator = $this->authUsr['operator'];
-        $tripLoadState = array_filter($this->tripState, fn($trip) =>
-            $trip['act_unit'] == ActUnitEnum::LOAD->value
-        );
-        $actValState = array_map(fn($trip) =>
-            explode('/', $trip['act_value'])[0], $tripLoadState
-        );
-        $patch = [
-            'id' => $this->form->post_id,
-            'title' => trim($operator['prefix'] .' '. $operator['name'] .' '. $operator['postfix']),
-            'description' => 'Total Actual at '.$this->form->date.' is '.array_sum($actValState). ' Load',
-        ];
-        $this->pstRepos->updatePost($patch);
-    }
-
-    private function mapTripState(array $planTripState): array
+    private function mapTripState(array $tripState): array
     {
         $trips = [];
-        foreach ($planTripState as $trip) {
+        foreach ($tripState as $trip) {
             $actPlanVal = explode('/', $trip['act_value']);
 
             $trip['type'] = WorkTripTypeEnum::ACTUAL->value;
@@ -160,13 +164,13 @@ class Create extends Component
             $trip['user_id'] = $this->authUsr['id'];
             $trips[] = $trip;
         }
-        foreach ($planTripState as $i => $trip) {
+        foreach ($tripState as $i => $trip) {
             if ($trip['type'] != WorkTripTypeEnum::PLAN->value) continue;
 
             $actPlanVal = explode('/', $trip['act_value']);
-            $planTripState[$i]['act_value'] = $actPlanVal[1];
+            $tripState[$i]['act_value'] = $actPlanVal[1];
         }
-        return array_merge($trips, $planTripState);
+        return array_merge($trips, $tripState);
     }
 
     /**
@@ -193,7 +197,7 @@ class Create extends Component
     public function onStateTripPressed(): void
     {
         $this->form->validate();
-        $this->initTripState();
+        $this->checkTripState();
     }
 
     /**
@@ -203,6 +207,11 @@ class Create extends Component
     {
         $this->form->validate(['date' => 'required|string']);
         $this->currentDate = $this->form->date;
+        $this->checkTripState();
+    }
+
+    public function onTimeOptionChange(): void
+    {
         $this->checkTripState();
     }
 
@@ -224,16 +233,14 @@ class Create extends Component
     private function savePopulated(): void
     {
         if ($this->isEditMode) {
-            foreach ($this->tripState as $trip) {
-                $this->wtRepos->updateTrip($trip);
-            }
-            return;
-        }
-        $actualTripState = $this->mapTripState($this->tripState);
+            $tripState = $this->wtRepos->mapTripUnpairActualValue($this->tripState);
+            foreach ($tripState as $trip){ $this->wtRepos->updateTrip($trip); }
+        } else {
 
-        foreach ($actualTripState as $trip) {
-            $this->wtRepos->addTrip($trip);
+            $tripState = $this->mapTripState($this->tripState);
+            foreach ($tripState as $trip){ $this->wtRepos->addTrip($trip); }
         }
+        $this->assignPost($tripState);
     }
 
     /**
@@ -250,7 +257,6 @@ class Create extends Component
         try {
             $this->dbRepos->async();
             $this->savePopulated();
-            $this->assignPost();
             $this->redirectRoute('work-trips.index', navigate: true);
 
             $this->dbRepos->await();

@@ -25,7 +25,7 @@ return new class extends Migration
             $table->enum('trip_type', $tripType);
 
             $table->enum('status', $statusAllowed)
-                ->default(WorkTripTypeEnum::PLAN->value)->change();
+                ->default(WorkTripTypeEnum::PLAN->value);
 
             $table->timestamps();
             $table->foreignUuid('post_id')

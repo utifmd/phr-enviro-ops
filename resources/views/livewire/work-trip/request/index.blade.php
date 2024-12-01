@@ -40,7 +40,7 @@
                     <h1 class="font-semibold leading-6 text-gray-900">
                         <a wire:navigate href="{{ route('work-trips.requests.show', $post->id) }}">{{$post->title}}</a>
                     </h1>
-                    <p class="mt-2 text-sm text-gray-700">{{$post->description}}</p>
+                    <p class="mt-2 text-sm text-gray-700">{{ $post->description }}</p>
                     <p class="mt-2 text-xs text-gray-700">{{ $post->timeAgo }}</p>
                     <dl class="divide-y mt-6 divide-gray-100">
                         {{--<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
