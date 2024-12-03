@@ -27,11 +27,11 @@ class UserRepository implements IUserRepository
     function login(array $request, bool $isRemembering = false): ?string
     {
         $login1 = [
-            "username" => $request['username'],
+            "username" => $request['email'],
             "password" => $request['password']
         ];
         $login2 = [
-            "email" => $request['username'],
+            "email" => $request['email'],
             "password" => $request['password']
         ];
         if(!(Auth::attempt($login1) || Auth::attempt($login2))) return null;

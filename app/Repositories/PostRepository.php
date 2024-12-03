@@ -24,14 +24,17 @@ class PostRepository implements IPostRepository
         $this->utility = $utility;
     }
 
-    public function generatePost(array $user): ?string
+    public function generatePost(array $user, ?array $data = null): ?string
     {
         $post = [
             'type' => PostTypeEnum::POST_WELL_TYPE->value,
             'operator_id' => $user['operator_id'],
             'user_id' => $user['id'],
         ];
-        $posted = Post::factory()->create($post);
+        if (!is_null($data)) {
+            $post = array_merge($post, $data);
+        }
+        $posted = Post::query()->create($post);
         return $posted->id;
     }
 

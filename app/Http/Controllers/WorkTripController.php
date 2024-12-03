@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\WorkTripResource;
+use App\Repositories\Contracts\IUserRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Service\WorkTripService;
+use App\Utils\AreaNameEnum;
 use App\Utils\WorkTripStatusEnum;
 use Illuminate\Http\JsonResponse;
 
@@ -15,14 +17,25 @@ class WorkTripController extends Controller
     public function __construct(IWorkTripRepository $workTripRepos)
     {
         $this->workTripRepos = $workTripRepos;
+
+        $this->initAuthUser();
     }
+
+    private function initAuthUser(): void
+    {
+        // $this->authUsr = $this->usrRepos->authenticatedUser()->toArray();
+    }
+
     public function index(): JsonResponse
     {
         $data = $this->workTripRepos->indexByStatus(
             WorkTripStatusEnum::APPROVED->value
         );
+        $message = 'Refreshed at ';
+        $message .= date('d/m/y H:i:s');
+
         return WorkTripService::sendResponse(
-            WorkTripResource::collection($data)
+            WorkTripResource::collection($data), $message
         );
     }
 }

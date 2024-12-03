@@ -4,19 +4,14 @@ namespace App\Livewire\WorkTripInfos;
 
 use App\Livewire\Forms\WorkTripInfoForm;
 use App\Models\Activity;
-use App\Models\Area;
 use App\Models\WorkTripInfo;
 use App\Repositories\Contracts\IDBRepository;
 use App\Repositories\Contracts\IPostRepository;
 use App\Repositories\Contracts\IUserRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\ActNameEnum;
-use App\Utils\AreaNameEnum;
 use App\Utils\Contracts\IUtility;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
@@ -96,7 +91,9 @@ class Create extends Component
             $this->postId = null;
             return;
         }
-        $this->postId = $this->pstRepos->generatePost($this->authUsr);
+        $this->postId = $this->pstRepos->generatePost(
+            $this->authUsr, ['created_at' => $this->focusedDate]
+        );
     }
 
     private function initDateOptions(?string $date = null): void
@@ -277,18 +274,18 @@ class Create extends Component
 
     private function savePopulated($time): void
     {
-        if (!empty($this->delInfoQueue)) foreach ($this->delInfoQueue as $infoId) {
-            $this->wtRepos->removeInfoById($infoId);
-        }
         if ($this->isEditMode) {
+            if (!empty($this->delInfoQueue)) foreach ($this->delInfoQueue as $infoId) {
+                $this->wtRepos->removeInfoById($infoId);
+            }
             foreach ($this->infoState as $info) {
                 $this->wtRepos->updateInfo($info);
             }
             return;
         }
-        $infoState = $this->mapInfoState(
-            $this->infoState, $time
-        );
+        $infoState = $this
+            ->mapInfoState($this->infoState, $time);
+
         foreach ($infoState as $info) {
             $this->wtRepos->addInfo($info);
         }
@@ -303,7 +300,7 @@ class Create extends Component
                 $times = array_map(fn($opt) => $opt['value'], array_values($this->timeOptions));
                 foreach ($times as $time) { $this->savePopulated($time); }
             } else {
-                $this->savePopulated(null, null);
+                $this->savePopulated(null);
             }
             $this->dbRepos->await();
 

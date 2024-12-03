@@ -3,6 +3,7 @@
 namespace App\Livewire\WorkTripInfos;
 
 use App\Models\WorkTripInfo;
+use App\Repositories\Contracts\IUserRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\ActUnitEnum;
 use App\Utils\AreaNameEnum;
@@ -17,21 +18,32 @@ class Index extends Component
 {
     use WithPagination;
     protected IWorkTripRepository $workTripRepos;
-    protected string $authId;
+    protected IUserRepository $usrRepos;
+    public array $authUsr;
 
     protected LengthAwarePaginator $groupedInfoState;
 
-    public function mount(IWorkTripRepository $workTripRepos): void
+    public function mount(
+        IWorkTripRepository $workTripRepos, IUserRepository $usrRepos): void
     {
-        $this->authId = auth()->id();
         $this->workTripRepos = $workTripRepos;
+        $this->usrRepos = $usrRepos;
+
+        $this->initAuthUser();
         $this->initInfoState();
     }
 
-    public function hydrate(IWorkTripRepository $workTripRepos): void
+    public function hydrate(
+        IWorkTripRepository $workTripRepos, IUserRepository $usrRepos): void
     {
         $this->workTripRepos = $workTripRepos;
-        $this->initInfoState();
+        $this->usrRepos = $usrRepos;
+        //$this->initInfoState();
+    }
+
+    private function initAuthUser(): void
+    {
+        $this->authUsr = $this->usrRepos->authenticatedUser()->toArray();
     }
 
     private function initInfoState(): void

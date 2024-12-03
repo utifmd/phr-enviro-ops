@@ -48,7 +48,7 @@ class Post extends Model
     protected $table = 'posts';
 
     protected $fillable = [
-        'title', 'description', 'type', 'user_id'
+        'title', 'description', 'type', 'user_id', 'operator_id', 'created_at'
     ];
     protected $perPage = 20;
 

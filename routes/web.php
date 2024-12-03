@@ -3,10 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
-Route::get('/', fn () => view('welcome'))
-    ->name('welcome');
-
-Route::view('dashboard', 'dashboard')
+Route::view('/', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 

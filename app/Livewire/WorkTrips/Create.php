@@ -3,20 +3,14 @@
 namespace App\Livewire\WorkTrips;
 
 use App\Livewire\Forms\WorkTripForm;
-use App\Models\Activity;
 use App\Models\WorkTrip;
 use App\Repositories\Contracts\IDBRepository;
 use App\Repositories\Contracts\IPostRepository;
 use App\Repositories\Contracts\IUserRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
-use App\Utils\ActNameEnum;
-use App\Utils\ActUnitEnum;
-use App\Utils\AreaNameEnum;
 use App\Utils\Contracts\IUtility;
 use App\Utils\WorkTripStatusEnum;
 use App\Utils\WorkTripTypeEnum;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
@@ -74,7 +68,8 @@ class Create extends Component
     private function checkTripState(): void
     {
         $this->isEditMode = false;
-        if ($this->wtRepos->areTripsExistByDatetime($date = $this->currentDate, $this->form->time)) {
+        if ($this->wtRepos->areTripsExistByDatetime(
+            $date = $this->currentDate, $this->form->time)) {
             $this->isEditMode = true;
             $this->form->date = $date;
             $this->getTripState($date);
@@ -123,7 +118,9 @@ class Create extends Component
 
     private function getTripState(string $date): void
     {
-        $tripState = $this->wtRepos->getTripByDatetime($date, $this->form->time);
+        $tripState = $this->wtRepos->getTripByDatetime(
+            $date, $this->form->time
+        );
         $this->tripState = $this->wtRepos->mapTripPairActualValue($tripState);
     }
 
@@ -234,11 +231,15 @@ class Create extends Component
     {
         if ($this->isEditMode) {
             $tripState = $this->wtRepos->mapTripUnpairActualValue($this->tripState);
-            foreach ($tripState as $trip){ $this->wtRepos->updateTrip($trip); }
+            foreach ($tripState as $trip){
+                $this->wtRepos->updateTrip($trip);
+            }
         } else {
 
             $tripState = $this->mapTripState($this->tripState);
-            foreach ($tripState as $trip){ $this->wtRepos->addTrip($trip); }
+            foreach ($tripState as $trip){
+                $this->wtRepos->addTrip($trip);
+            }
         }
         $this->assignPost($tripState);
     }

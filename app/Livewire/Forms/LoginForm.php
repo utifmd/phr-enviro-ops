@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Forms;
 
+use App\Repositories\Contracts\IUserRepository;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Validate;
@@ -12,7 +14,9 @@ use Livewire\Form;
 
 class LoginForm extends Form
 {
-    #[Validate('required|string|email')]
+    private IUserRepository $userRepository;
+
+    #[Validate('required|string')]
     public string $email = '';
 
     #[Validate('required|string')]
@@ -21,12 +25,33 @@ class LoginForm extends Form
     #[Validate('boolean')]
     public bool $remember = false;
 
+    public function boot(IUserRepository $repository): void
+    {
+        $this->userRepository = $repository;
+    }
     /**
      * Attempt to authenticate the request's credentials.
      *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function authenticate(): void
+    {
+        // $this->ensureIsNotRateLimited();
+
+        $request = $this->only(['email', 'password']);
+        $login = $this->userRepository->login($request, $this->remember);
+        if (is_null($login)) {
+            // RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'form.email' => trans('auth.failed'),
+            ]);
+        }
+        // RateLimiter::clear($this->throttleKey());
+        Session::regenerate();
+    }
+
+    /*public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
 
@@ -39,7 +64,7 @@ class LoginForm extends Form
         }
 
         RateLimiter::clear($this->throttleKey());
-    }
+    }*/
 
     /**
      * Ensure the authentication request is not rate limited.

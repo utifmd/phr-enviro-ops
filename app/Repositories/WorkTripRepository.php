@@ -9,8 +9,6 @@ use App\Models\WorkTripInfo;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\ActNameEnum;
 use App\Utils\ActUnitEnum;
-use App\Utils\AreaNameEnum;
-use App\Utils\WorkTripStatusEnum;
 use App\Utils\WorkTripTypeEnum;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -108,6 +106,7 @@ class WorkTripRepository implements IWorkTripRepository
             ->where('act_unit', '=', ActUnitEnum::LOAD->value, 'and')
             ->where('type', '=', WorkTripTypeEnum::ACTUAL->value)
             ->groupBy('type', 'date', 'act_unit', 'user_actual', 'status')
+            ->orderByDesc('date')
             ->paginate();
     }
 
@@ -150,6 +149,7 @@ class WorkTripRepository implements IWorkTripRepository
             ->where('work_trips.area_name', '=', $area, 'and')
             ->where('act_unit', '=', ActUnitEnum::LOAD->value)
             ->groupBy('date', 'act_unit', 'user')
+            ->orderByDesc('date')
             ->paginate();
     }
     public function getTrips(): LengthAwarePaginator
@@ -211,6 +211,7 @@ class WorkTripRepository implements IWorkTripRepository
         ->where('work_trip_infos.area_name', '=', $area, 'and')
         ->where('act_unit', '=', ActUnitEnum::LOAD->value)
         ->groupBy('date', 'act_unit', 'user')
+        ->orderByDesc('date')
         ->paginate();
     }
     public function getInfos(): LengthAwarePaginator

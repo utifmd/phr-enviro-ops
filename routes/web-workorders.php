@@ -10,6 +10,18 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
 
+    // Route::get('/image-urls', \App\Livewire\ImageUrls\Index::class)->name('image-urls.index');
+
+    Route::get('/image-urls/create', \App\Livewire\ImageUrls\Create::class)
+        ->name('image-urls.create');
+
+    Route::get('/image-urls/show/{imageUrl}', \App\Livewire\ImageUrls\Show::class)
+        ->name('image-urls.show');
+
+    Route::get('/image-urls/update/{imageUrl}', \App\Livewire\ImageUrls\Edit::class)
+        ->name('image-urls.edit');
+
+
     Route::get('/plan-orders', \App\Livewire\PlanOrders\Index::class)
         ->name('plan-orders.index')
         ->can(UserPolicy::IS_USER_IS_PLANNER);
@@ -59,19 +71,6 @@ Route::middleware('auth')->group(function () {
 
     /*Route::get('/information/update/{information}', Edit::class)
         ->name('information.edit');*/
-
-
-    // Route::get('/image-urls', \App\Livewire\ImageUrls\Index::class)->name('image-urls.index');
-
-    Route::get('/image-urls/create', \App\Livewire\ImageUrls\Create::class)
-        ->name('image-urls.create');
-
-    Route::get('/image-urls/show/{imageUrl}', \App\Livewire\ImageUrls\Show::class)
-        ->name('image-urls.show');
-
-    Route::get('/image-urls/update/{imageUrl}', \App\Livewire\ImageUrls\Edit::class)
-        ->name('image-urls.edit');
-
 
     Route::get('/'. WorkOrder::ROUTE_NAME.'/blueprint/{post}', \App\Livewire\Workorders\Blueprint::class)
         ->name(WorkOrder::ROUTE_NAME.'.blueprint')

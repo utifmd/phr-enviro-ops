@@ -19,9 +19,9 @@ abstract class Service
         throw new HttpResponseException(response()->json(["message"=> $message], 500));
     }
 
-    public static function sendResponse($result, $message='WorkTrips retrieved successfully.', $code=200): JsonResponse
+    public static function sendResponse($result, $message='WorkTrips retrieved successfully.', $code = 200): JsonResponse
     {
-        $message = date('D, d M Y H:i:s'); // Carbon::createFromDate(Carbon::now()->year)->diffForHumans(); date('d M y H:m');
+        // Carbon::createFromDate(Carbon::now()->year)->diffForHumans(); date('d M y H:m');
         $response = [
             'success' => true,
             'data'    => $result

@@ -31,9 +31,23 @@ new class extends Component {
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    {{--<x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
+                        <x-nav-link :href="route('work-trip-infos.index')" :active="request()->routeIs('dashboard')" wire:navigate>
+                            {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Plan') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('work-trips.requests.index')" :active="request()->routeIs('dashboard')" wire:navigate>
+                            {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Verify') }}
+                        </x-nav-link>
+                    @endcan
+                    @can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
+                        <x-nav-link :href="route('work-trips.index')" :active="request()->routeIs('dashboard')" wire:navigate>
+                            {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Actual') }}
+                        </x-nav-link>
+                    @endcan
+                    {{--  :href="route('work-trip-infos.index')"
 
                     @can(\App\Policies\UserPolicy::IS_PHR_ROLE)
                         <x-nav-link :href="route('departments.index')"
@@ -99,7 +113,7 @@ new class extends Component {
                         <x-dropdown-link :href="route('profile')" wire:navigate>
                             {{ __('Profile') }}
                         </x-dropdown-link>
-                        @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
+                        {{--@can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
                             <x-dropdown-link :href="route('work-trip-infos.index')" wire:navigate>
                                 {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Plan') }}
                             </x-dropdown-link>
@@ -111,7 +125,7 @@ new class extends Component {
                             <x-dropdown-link :href="route('work-trips.index')" wire:navigate>
                                 {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Actual') }}
                             </x-dropdown-link>
-                        @endcan
+                        @endcan--}}
 
                         {{--@can(\App\Policies\UserPolicy::IS_PHR_ROLE)
                         <x-dropdown-link :href="route('users.index')" wire:navigate>
@@ -153,9 +167,24 @@ new class extends Component {
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            {{--<x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
+                <x-responsive-nav-link :href="route('work-trip-infos.index')" :active="request()->routeIs('work-trip-infos.index')" wire:navigate>
+                    {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Plan') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('work-trips.requests.index')" :active="request()->routeIs('work-trips.requests.index')" wire:navigate>
+                    {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Verify') }}
+                </x-responsive-nav-link>
+            @endcan
+            @can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
+                <x-responsive-nav-link :href="route('work-trips.index')" :active="request()->routeIs('work-trips.index')" wire:navigate>
+                    {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Actual') }}
+                </x-responsive-nav-link>
+            @endcan
+            {{--
             @can(\App\Policies\UserPolicy::IS_DEV_ROLE)
                 <x-responsive-nav-link :href="route('departments.index')" :active="request()->routeIs('departments.*')" wire:navigate>
                     <div class="relative">
@@ -209,7 +238,7 @@ new class extends Component {
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 
-                @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
+                {{--@can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
                 <x-responsive-nav-link :href="route('work-trip-infos.index')" wire:navigate>
                     {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Plan') }}
                 </x-responsive-nav-link>
@@ -221,7 +250,7 @@ new class extends Component {
                 <x-responsive-nav-link :href="route('work-trips.index')" wire:navigate>
                     {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Actual') }}
                 </x-responsive-nav-link>
-                @endcan
+                @endcan--}}
                 <!-- Authentication -->
                 <button wire:click="logout" class="w-full text-start">
                     <x-responsive-nav-link>

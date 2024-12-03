@@ -8,7 +8,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 interface IPostRepository
 {
-    function generatePost(array $user): ?string;
+    function generatePost(array $user, ?array $data): ?string;
     function arePostExistAt(string $date): bool;
     function addPost(array $request): ?Post;
     function getPostById(string $postId): ?Post;

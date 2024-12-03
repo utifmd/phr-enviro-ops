@@ -1,5 +1,5 @@
 @props(['area' => $authUsr['area_name'] ?? null])
-@props(['tile' => $area ? ' Area '.$area : ''])
+@props(['tile' => $area ? ' Area '.ucfirst(strtolower($area)) : ''])
 
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
