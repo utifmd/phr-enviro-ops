@@ -44,7 +44,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="border border-gray-300 px-4 py-2 text-center">Today's plans have not been set</td>
+                            <td colspan="5" class="border border-gray-300 px-4 py-2 text-center">Today's plans have not been set</td>
                         </tr>
                     @endforelse
                     </tbody>

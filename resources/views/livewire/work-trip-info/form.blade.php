@@ -1,17 +1,28 @@
 <div class="space-y-6">
-    <div>
-        <x-input-label for="date" value="Date"/>
-        <x-radio-button
-            :cases="$dateOptions"
-            wire:model="form.date"
-            wire:change.prevent="onDateOptionChange"
-            id="date" name="date"/>
-
-        @error('form.date')
-        <x-input-error class="mt-2" :messages="$message"/>
-        @enderror
-    </div>
-    <div class="block md:grid md:grid-cols-4 space-y-4 md:space-y-0 gap-8   ">
+    @if(is_null($dateParam))
+        <div>
+            <x-input-label for="date" value="Date"/>
+            <x-radio-button
+                :cases="$dateOptions"
+                wire:model="form.date"
+                wire:change.prevent="onDateOptionChange"
+                id="date" name="date"/>
+            @error('form.date')
+                <x-input-error class="mt-2" :messages="$message"/>
+            @enderror
+        </div>
+    @endif
+    <div class="block md:grid md:grid-cols-4 space-y-4 md:space-y-0 gap-8">
+        @if(!is_null($dateParam))
+            <div>
+                <x-input-label for="date" value="Date"/>
+                <x-text-input
+                    class="mt-1 block w-full"
+                    :disabled="true"
+                    wire:model="form.date"
+                    id="date" name="date"/>
+            </div>
+        @endif
         {{--<div>
             <x-input-label for="area_loc" :value="__('Location')"/>
             <x-select-option :cases="$locationOptions" wire:model="form.area_loc" id="area_loc" name="area_loc"/>
@@ -21,7 +32,7 @@
         </div>--}}
         <div>
             <x-input-label for="time" value="Time"/>
-            <x-select-option wire:model="form.time" class="mt-1 block w-full" {{--wire:change.prevent="onTimeOptionChange"--}} :cases="$timeOptions" :isIdle="false" id="time" name="time"/>
+            <x-select-option wire:model="form.time" class="mt-1 block w-full" wire:change.prevent="onTimeOptionChange" :cases="$timeOptions" :isIdle="false" id="time" name="time"/>
             @error('form.time')
             <x-input-error class="mt-2" :messages="$message"/>
             @enderror

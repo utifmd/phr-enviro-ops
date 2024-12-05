@@ -144,4 +144,12 @@ class Utility implements IUtility
             })
             ->count();
     }
+    public function countWtPendingRequest(Post $post): int
+    {
+        return collect($post->workTrips)
+            ->filter(function ($wt){
+                return $wt->status == WorkTripStatusEnum::PENDING->value;
+            })
+            ->count();
+    }
 }

@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use Livewire\Volt\Component;
 
-new class extends Component
-{
+new class extends Component {
     public string $name = '';
+    public string $operator_name = '';
     public string $email = '';
 
     /**
@@ -16,8 +16,10 @@ new class extends Component
      */
     public function mount(): void
     {
-        $this->name = Auth::user()->name;
-        $this->email = Auth::user()->email;
+        $authenticated = Auth::user();
+        $this->name = $authenticated->name;
+        $this->operator_name = $authenticated->operator->name ?? 'NA';
+        $this->email = $authenticated->email;
     }
 
     /**
@@ -76,27 +78,38 @@ new class extends Component
 
     <form wire:submit="updateProfileInformation" class="mt-6 space-y-6">
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input wire:model="name" id="name" name="name" type="text" class="mt-1 block w-full" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            <x-input-label for="operator_name" :value="__('Company')"/>
+            <x-text-input wire:model="operator_name" disabled="disabled" id="operator_name"
+                          operator_name="operator_name" type="text" class="mt-1 block w-full" required autofocus
+                          autocomplete="operator_name"/>
+            <x-input-error class="mt-2" :messages="$errors->get('operator_name')"/>
         </div>
         <div>
-            <x-input-label for="username" :value="__('Username')" />
-            <x-text-input wire:model="username" id="username" username="username" type="text" class="mt-1 block w-full" required autofocus autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('username')" />
+            <x-input-label for="name" :value="__('Name')"/>
+            <x-text-input wire:model="name" id="name" name="name" type="text" class="mt-1 block w-full" required
+                          autofocus autocomplete="name"/>
+            <x-input-error class="mt-2" :messages="$errors->get('name')"/>
+        </div>
+        <div>
+            <x-input-label for="username" :value="__('Username')"/>
+            <x-text-input wire:model="username" id="username" username="username" type="text" class="mt-1 block w-full"
+                          required autofocus autocomplete="username"/>
+            <x-input-error class="mt-2" :messages="$errors->get('username')"/>
         </div>
 
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" name="email" type="email" class="mt-1 block w-full" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
+            <x-input-label for="email" :value="__('Email')"/>
+            <x-text-input wire:model="email" id="email" name="email" type="email" class="mt-1 block w-full" required
+                          autocomplete="username"/>
+            <x-input-error class="mt-2" :messages="$errors->get('email')"/>
 
             @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! auth()->user()->hasVerifiedEmail())
                 <div>
                     <p class="text-sm mt-2 text-gray-800">
                         {{ __('Your email address is unverified.') }}
 
-                        <button wire:click.prevent="sendVerification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <button wire:click.prevent="sendVerification"
+                                class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             {{ __('Click here to re-send the verification email.') }}
                         </button>
                     </p>

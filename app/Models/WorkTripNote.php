@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
-class workTripNote extends Model
+class WorkTripNote extends Model
 {
     use HasUuids;
 
@@ -14,11 +15,18 @@ class workTripNote extends Model
 
     protected $table = 'work_trip_notes';
 
+    public $timestamps = false;
+
     public $incrementing = false;
 
     protected $fillable = [
         'message', 'post_id'
     ];
+
+    public function post(): BelongsTo
+    {
+        return $this->belongsTo(Post::class);
+    }
 
     protected static function booted(): void
     {

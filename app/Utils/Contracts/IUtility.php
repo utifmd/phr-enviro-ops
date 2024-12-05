@@ -20,4 +20,5 @@ interface IUtility
     function combineDashboardArrays(array $loads, array $days): array;
 
     function countWoPendingRequest(Post $post): int;
+    function countWtPendingRequest(Post $post): int;
 }

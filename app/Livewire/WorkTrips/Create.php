@@ -2,12 +2,14 @@
 
 namespace App\Livewire\WorkTrips;
 
+use App\Livewire\BaseComponent;
 use App\Livewire\Forms\WorkTripForm;
 use App\Models\WorkTrip;
 use App\Repositories\Contracts\IDBRepository;
 use App\Repositories\Contracts\IPostRepository;
 use App\Repositories\Contracts\IUserRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
+use App\Utils\Constants;
 use App\Utils\Contracts\IUtility;
 use App\Utils\WorkTripStatusEnum;
 use App\Utils\WorkTripTypeEnum;
@@ -15,9 +17,8 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
-use Livewire\Component;
 
-class Create extends Component
+class Create extends BaseComponent
 {
     #[Url]
     public ?string $dateParam = null;
@@ -30,7 +31,7 @@ class Create extends Component
 
     public WorkTripForm $form;
     public array $authUsr, $tripState, $timeOptions;
-    public string $currentDate;
+    public string $currentDate, $remarks;
     public bool $isEditMode = false;
 
     public function mount(
@@ -53,6 +54,7 @@ class Create extends Component
         $this->initTimeOptions();
         $this->initLocOptions();
         $this->checkTripState();
+        $this->checkRemarks();
     }
 
     public function hydrate(
@@ -68,14 +70,23 @@ class Create extends Component
     private function checkTripState(): void
     {
         $this->isEditMode = false;
-        if ($this->wtRepos->areTripsExistByDatetime(
-            $date = $this->currentDate, $this->form->time)) {
+        if ($this->wtRepos->areTripsExistByDatetimeAndArea(
+            $date = $this->currentDate, $this->form->time, $this->authUsr['area_name'])) {
             $this->isEditMode = true;
             $this->form->date = $date;
             $this->getTripState($date);
             return;
         }
         $this->initTripState();
+    }
+
+    private function checkRemarks(): void
+    {
+        $this->remarks = Constants::EMPTY_STRING;
+        $postId = $this->tripState[0]['post_id'] ?? Constants::EMPTY_STRING;
+        if (empty($postId)) return;
+
+        $this->wtRepos->getNotesByPostId($postId);
     }
 
     private function initDateOptions(): void
@@ -108,7 +119,9 @@ class Create extends Component
         $this->form->act_value = empty($this->form->act_value)
             ? 0 : $this->form->act_value;
         try {
-            $infoState = $this->wtRepos->getInfoByDatetime($this->currentDate, $this->form->time);
+            $infoState = $this->wtRepos->getInfoByDatetimeAndArea(
+                $this->currentDate, $this->form->time, $this->authUsr['area_name']
+            );
             $this->tripState = $this->mapInfoToPlanTripState($infoState);
 
         } catch (\Exception $e) {
@@ -118,23 +131,34 @@ class Create extends Component
 
     private function getTripState(string $date): void
     {
-        $tripState = $this->wtRepos->getTripByDatetime(
-            $date, $this->form->time
+        $tripState = $this->wtRepos->getTripByDatetimeAndArea(
+            $date, $this->form->time, $this->authUsr['area_name']
         );
         $this->tripState = $this->wtRepos->mapTripPairActualValue($tripState);
     }
 
-    private function assignPost(array $tripState): void
+    private function assignPost(string $postId): void
     {
         $operator = $this->authUsr['operator'];
         $actValSum = $this->wtRepos
             ->sumActualByAreaAndDate($this->authUsr['area_name'], $this->form->date);
         $patch = [
-            'id' => $tripState[0]['post_id'],
+            'id' => $postId,
             'title' => trim($operator['prefix'] .' '. $operator['name'] .' '. $operator['postfix']),
             'description' => 'Total Actual at '.$this->form->date.' is '.$actValSum. ' Load',
         ];
         $this->pstRepos->updatePost($patch);
+    }
+
+    private function assignNotes(string $postId): void
+    {
+        if ($this->isEditMode) {
+            $this->wtRepos->updateNotesByPostId($postId, $this->remarks);
+            return;
+        }
+        $this->wtRepos->generateNotes(
+            $postId, $this->remarks
+        );
     }
 
     private function mapInfoToPlanTripState(array $infos): array
@@ -210,6 +234,7 @@ class Create extends Component
     public function onTimeOptionChange(): void
     {
         $this->checkTripState();
+        $this->scrollToBottom();
     }
 
     /**
@@ -237,11 +262,14 @@ class Create extends Component
         } else {
 
             $tripState = $this->mapTripState($this->tripState);
-            foreach ($tripState as $trip){
+            foreach ($tripState as $trip) {
                 $this->wtRepos->addTrip($trip);
             }
         }
-        $this->assignPost($tripState);
+        if (!empty($postId = $tripState[0]['post_id'])) {
+            $this->assignPost($postId);
+            $this->assignNotes($postId);
+        }
     }
 
     /**
@@ -258,8 +286,10 @@ class Create extends Component
         try {
             $this->dbRepos->async();
             $this->savePopulated();
-            $this->redirectRoute('work-trips.index', navigate: true);
-
+            session()->flash(
+                'message', 'Your change successfully updated.'
+            );
+            $this->scrollToTop();
             $this->dbRepos->await();
         } catch (\Throwable $t) {
 

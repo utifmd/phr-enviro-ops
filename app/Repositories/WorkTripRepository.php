@@ -6,12 +6,16 @@ use App\Models\Activity;
 use App\Models\Area;
 use App\Models\WorkTrip;
 use App\Models\WorkTripInfo;
+use App\Models\WorkTripNote;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\ActNameEnum;
 use App\Utils\ActUnitEnum;
+use App\Utils\Constants;
+use App\Utils\WorkOrderStatusEnum;
 use App\Utils\WorkTripTypeEnum;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class WorkTripRepository implements IWorkTripRepository
 {
@@ -50,7 +54,10 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function delete($id): ?bool
     {
-        return WorkTrip::query()->find($id)->delete();
+        $workTrip = WorkTrip::query()->find($id);
+        if (!$workTrip) return false;
+
+        return $workTrip->delete();
     }
 
     public function getByPostId($id): Collection
@@ -124,7 +131,10 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function removeTripById(string $id): void
     {
-        WorkTrip::query()->find($id)->delete();
+        $workTrip = WorkTrip::query()->find($id);
+        if (!$workTrip) return;
+
+        $workTrip->delete();
     }
 
     public function getTripByDate(string $date): array
@@ -133,9 +143,26 @@ class WorkTripRepository implements IWorkTripRepository
             ->where('date', $date)->get()->toArray();
     }
 
+    public function getTripByDateAndArea(string $date, string $area): array
+    {
+        return WorkTrip::query()
+            ->where('area_name', '=', $area, 'and')
+            ->where('date', $date)
+            ->get()->toArray();
+    }
+
     public function getTripByDatetime(string $date, string $time): array
     {
         return WorkTrip::query()
+            ->where('date', '=', $date, 'and')
+            ->where('time', $time)
+            ->get()->toArray();
+    }
+
+    public function getTripByDatetimeAndArea(string $date, string $time, string $area): array
+    {
+        return WorkTrip::query()
+            ->where('area_name', '=', $area, 'and')
             ->where('date', '=', $date, 'and')
             ->where('time', $time)
             ->get()->toArray();
@@ -163,9 +190,25 @@ class WorkTripRepository implements IWorkTripRepository
             ->where('date', $date)->exists();
     }
 
+    public function areTripsExistByDateAndArea(string $date, string $area): bool
+    {
+        return WorkTrip::query()
+            ->where('area_name', '=', $area, 'and')
+            ->where('date', $date)->exists();
+    }
+
     public function areTripsExistByDatetime(string $date, string $time): bool
     {
         return WorkTrip::query()
+            ->where('date', '=', $date, 'and')
+            ->where('time', $time)
+            ->exists();
+    }
+
+    public function areTripsExistByDatetimeAndArea(string $date, string $time, string $area): bool
+    {
+        return WorkTrip::query()
+            ->where('area_name', '=', $area, 'and')
             ->where('date', '=', $date, 'and')
             ->where('time', $time)
             ->exists();
@@ -185,7 +228,10 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function removeInfoById(string $id): void
     {
-        WorkTripInfo::query()->find($id)->delete();
+        $info = WorkTripInfo::query()->find($id);
+        if(!$info) return;
+
+        $info->delete();
     }
 
     public function getInfoByDate(string $date): array
@@ -194,9 +240,25 @@ class WorkTripRepository implements IWorkTripRepository
             ->where('date', $date)->get()->toArray();
     }
 
+    public function getInfoByDateAndArea(string $date, string $area): array
+    {
+        return WorkTripInfo::query()
+            ->where('area_name', '=', $area, 'and')
+            ->where('date', $date)->get()->toArray();
+    }
+
     public function getInfoByDatetime(string $date, string $time): array
     {
         return WorkTripInfo::query()
+            ->where('date', '=', $date, 'and')
+            ->where('time', $time)
+            ->get()->toArray();
+    }
+
+    public function getInfoByDatetimeAndArea(string $date, string $time, string $area): array
+    {
+        return WorkTripInfo::query()
+            ->where('area_name', '=', $area, 'and')
             ->where('date', '=', $date, 'and')
             ->where('time', $time)
             ->get()->toArray();
@@ -218,22 +280,50 @@ class WorkTripRepository implements IWorkTripRepository
     {
         return WorkTripInfo::query()->paginate();
     }
-    public function areInfosExistBy(string $date): bool
+    public function areInfosExistByDate(string $date): bool
     {
-        return WorkTripInfo::query()->where('date', '=', $date)->exists();
+        return WorkTripInfo::query()
+            ->where('date', $date)
+            ->exists();
+    }
+
+    public function areInfosExistByDateAndArea(string $date, string $area): bool
+    {
+        return WorkTripInfo::query()
+            ->where('area_name', '=', $area, 'and')
+            ->where('date', $date)
+            ->exists();
+    }
+
+    public function areInfosExistByDatetime(string $date, string $time): bool
+    {
+        return WorkTripInfo::query()
+            ->where('date', '=', $date, 'and')
+            ->where('time', $time)
+            ->exists();
+    }
+
+    public function areInfosExistByDatetimeAndArea(string $date, string $time, string $area): bool
+    {
+        return WorkTripInfo::query()
+            ->where('area_name', '=', $area, 'and')
+            ->where('date', '=', $date, 'and')
+            ->where('time', $time)
+            ->exists();
     }
 
     public function mapTripPairActualValue(array $tripState): array
     {
         $actualTrips = [];
         $planTrips = [];
+        usort($tripState, fn($a, $b) => $b['id'] > $a['id']);
         foreach ($tripState as $trip) {
             if($trip['type'] != WorkTripTypeEnum::PLAN->value) continue;
             $planTrips[] = $trip;
         }
         foreach ($tripState as $i => $trip) {
             if($trip['type'] != WorkTripTypeEnum::ACTUAL->value) continue;
-            $trip['act_value'] = $trip['act_value'].'/'.$planTrips[$i]['act_value'];
+            $trip['act_value'] = ($trip['act_value'] ?? 0).'/'.($planTrips[$i]['act_value'] ?? 0);
             $actualTrips[] = $trip;
         }
         return $actualTrips;
@@ -242,7 +332,7 @@ class WorkTripRepository implements IWorkTripRepository
     {
         $trips = [];
         foreach ($tripState as $trip) {
-            $trip['act_value'] = explode('/', $trip['act_value'])[0];
+            $trip['act_value'] = explode('/', $trip['act_value'])[0] ?? 0;
             $trips[] = $trip;
         }
         return $trips;
@@ -260,5 +350,39 @@ class WorkTripRepository implements IWorkTripRepository
         return $collection
             ->first()
             ->act_value_sum;
+    }
+
+    public function generateNotes(string $postId, string $message): void
+    {
+        WorkTripNote::query()->create([
+            'post_id' => $postId, 'message' => $message,
+        ]);
+    }
+
+    public function updateNotesById(string $id, string $message): void
+    {
+        WorkTripNote::query()->find($id)->update(['message' => $message]);
+    }
+
+    public function updateNotesByPostId(string $id, string $message): void
+    {
+        WorkTripNote::query()->where('post_id', $id)->update(['message' => $message]);
+    }
+
+    public function getNotesByPostId(mixed $postId): string
+    {
+        $builder = WorkTripNote::query()
+            ->where('post_id', $postId);
+        if (!$builder->exists())
+            return Constants::EMPTY_STRING;
+        return $builder->get()->first()->message ?? Constants::EMPTY_STRING;
+    }
+
+    public function countPendingWorkTrip(array $workTrips): int
+    {
+        return collect($workTrips)
+            ->filter(fn ($wt) =>
+                $wt->status == WorkOrderStatusEnum::STATUS_PENDING->value)
+            ->count();
     }
 }

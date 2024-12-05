@@ -26,5 +26,20 @@
                 {{ $slot }}
             </div>
         </div>
+        <!-- Listener Alpine.js -->
+        <script>
+            document.addEventListener('scroll-to-section', (event) => {
+                const id = event.detail.id;
+                //const element = document.getElementById(id);
+                console.log('event trigger')
+                window.scrollTo({'behavior': 'smooth', top: 0})
+                /*if (element) {
+                    element.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start',
+                    });
+                }*/
+            });
+        </script>
     </body>
 </html>

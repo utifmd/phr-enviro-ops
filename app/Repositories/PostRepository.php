@@ -43,6 +43,21 @@ class PostRepository implements IPostRepository
         return Post::query()->where('created_at', $date)->exists();
     }
 
+    public function arePostExistByAndArea(string $date, string $area): bool
+    {
+        return Post::query()->whereHas('user', function ($query) use ($area) {
+            $query->where('area_name', $area);
+        })
+            ->whereDate('created_at', $date)
+            ->exists();
+
+        /*return Post::query()
+            ->join('users', 'users.id', '=', 'posts.user_id')
+            ->where('users.area_name', '=', $area)
+            ->whereDate('posts.created_at', $date)
+            ->exists();*/
+    }
+
     function addPost(array $request): ?Post
     {
         $createdPost = Post::query()->create($request);
@@ -98,8 +113,8 @@ class PostRepository implements IPostRepository
 
         return $builder->through(function ($post){
             $post->timeAgo = $this->utility->timeAgo($post->created_at);
-            $post->transporter = trim(('('.($post->operator->department->short_name ?? 'NA').') '.$post->operator->prefix.' '.$post->operator->name.' '.$post->operator->postfix) ?? 'NA');
-            $post->woPendingReqCount = $this->utility->countWoPendingRequest($post);
+            // $post->transporter = trim(('('.($post->operator->department->short_name ?? 'NA').') '.$post->operator->prefix.' '.$post->operator->name.' '.$post->operator->postfix) ?? 'NA');
+            $post->pendingCount = $this->utility->countWoPendingRequest($post);
             $post->desc = str_replace(';', ' ', $post->desc);
             return $post;
         });
@@ -115,8 +130,8 @@ class PostRepository implements IPostRepository
 
         return $builder->through(function ($post){
             $post->timeAgo = $this->utility->timeAgo($post->created_at);
-            $post->transporter = $this->utility->transporter($post->operator);
-            $post->woPendingReqCount = $this->utility->countWoPendingRequest($post);
+            // $post->transporter = $this->utility->transporter($post->operator);
+            $post->pendingCount = $this->utility->countWtPendingRequest($post);
             $post->desc = str_replace(';', ' ', $post->desc);
             return $post;
         });

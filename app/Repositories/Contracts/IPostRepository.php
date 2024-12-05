@@ -10,6 +10,7 @@ interface IPostRepository
 {
     function generatePost(array $user, ?array $data): ?string;
     function arePostExistAt(string $date): bool;
+    function arePostExistByAndArea(string $date, string $area): bool;
     function addPost(array $request): ?Post;
     function getPostById(string $postId): ?Post;
     function getPostByIdRaw(string $postId);

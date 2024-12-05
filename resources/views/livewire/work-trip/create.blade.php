@@ -8,6 +8,16 @@
     <div class="max-w-full mx-auto sm:px-6 lg:px-8 space-y-6">
         <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
             <div class="w-full">
+                @if(session()->has('message'))
+                    <div class="flex">
+                        <div class="alert alert-success">
+                            <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+                                 role="alert">
+                                <span class="font-medium">Notification!</span> {{ session('message') }}
+                            </div>
+                        </div>
+                    </div>
+                @endif
                 <div class="sm:flex sm:items-center">
                     <div class="sm:flex-auto">
                         <h1 class="text-base font-semibold leading-6 text-gray-900">Actual Quota Area {{ ucfirst(strtolower($authUsr['area_name'])) ?? 'NA' }}</h1>

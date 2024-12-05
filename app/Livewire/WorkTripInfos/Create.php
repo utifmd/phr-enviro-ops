@@ -2,6 +2,7 @@
 
 namespace App\Livewire\WorkTripInfos;
 
+use App\Livewire\BaseComponent;
 use App\Livewire\Forms\WorkTripInfoForm;
 use App\Models\Activity;
 use App\Models\WorkTripInfo;
@@ -12,13 +13,13 @@ use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\ActNameEnum;
 use App\Utils\Contracts\IUtility;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
-use Livewire\Component;
 
-class Create extends Component
+class Create extends BaseComponent
 {
     #[Url]
     public ?string $dateParam = null;
@@ -76,9 +77,14 @@ class Create extends Component
             $this->getInfoState($dateParam);
             return;
         }
-        if ($this->wtRepos->areInfosExistBy($date = $this->focusedDate)) { //
-            $this->isEditMode = $date;
-            $this->form->date = $date;
+        $date = $this->focusedDate;
+        $areaName = $this->authUsr['area_name'];
+        $areInfosExists = str_contains($this->form->time, '-')
+            ? $this->wtRepos->areInfosExistByDateAndArea($date, $areaName)
+            : $this->wtRepos->areInfosExistByDatetimeAndArea($date, $this->form->time, $areaName);
+
+        if ($areInfosExists) {
+            $this->isEditMode = true;
             $this->getInfoState($date);
             return;
         }
@@ -87,13 +93,35 @@ class Create extends Component
 
     private function checkPost(): void
     {
-        if ($this->pstRepos->arePostExistAt($this->focusedDate)){
+        $arePostExistByAndArea = $this->pstRepos->arePostExistByAndArea(
+            $this->focusedDate, $this->authUsr['area_name']
+        );
+        if ($arePostExistByAndArea){
             $this->postId = null;
             return;
         }
         $this->postId = $this->pstRepos->generatePost(
             $this->authUsr, ['created_at' => $this->focusedDate]
         );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function checkInfoDeletion(): void
+    {
+        if (empty($this->delInfoQueue)) return;
+        $info = $this->delInfoQueue[0];
+
+        $areTripsAlreadyExist = $this->wtRepos->areTripsExistByDatetimeAndArea(
+            $info['date'], $info['time'], $info['area_name']
+        );
+        if ($areTripsAlreadyExist) {
+            throw new \Exception('Failed, the plan already used by contractor.');
+        }
+        foreach ($this->delInfoQueue as $info) {
+            $this->wtRepos->removeInfoById($info['id']);
+        }
     }
 
     private function initDateOptions(?string $date = null): void
@@ -158,7 +186,16 @@ class Create extends Component
 
     private function getInfoState(string $date): void
     {
-        $this->infoState = $this->wtRepos->getInfoByDate($date);
+        $areaName = $this->authUsr['area_name'];
+        $this->form->date = $date;
+        $this->form->act_value = 20;
+        if (str_contains($this->form->time, '-')) {
+            $this->infoState = $this->wtRepos->getInfoByDateAndArea($date, $areaName);
+            return;
+        }
+        $this->infoState = $this->wtRepos->getInfoByDatetimeAndArea(
+            $date, $this->form->time, $areaName
+        );
     }
 
     private function populateByGS(Collection $acts): void
@@ -239,9 +276,9 @@ class Create extends Component
     public function onInfoStateActNameSelected($idx): void
     {
         try {
-            if ($this->isEditMode)
-                $this->delInfoQueue[] = $this->infoState[$idx]['id'];
-
+            if ($this->isEditMode && $info = $this->infoState[$idx]) {
+                $this->delInfoQueue[] = $info;
+            }
             unset($this->infoState[$idx]);
         } catch (\Exception $e) {
             $this->addError('error', $e->getMessage());
@@ -255,6 +292,7 @@ class Create extends Component
     {
         $this->form->validate();
         $this->initInfoState();
+        $this->scrollToBottom();
     }
 
     /**
@@ -265,26 +303,30 @@ class Create extends Component
         $this->form->validate(['date' => 'required|string']);
         $this->focusedDate = $this->form->date;
         $this->checkInfoState(null);
+        $this->scrollToBottom();
     }
 
-    /*public function onTimeOptionChange(): void
+    /**
+     * @throws ValidationException
+     */
+    public function onTimeOptionChange(): void
     {
-        Log::debug('selected time: '. $this->form->time);
-    }*/
+        if ($this->isEditMode) {
+            $this->form->validate(['date' => 'required|string']);
+        }
+        $this->checkInfoState(null);
+        $this->scrollToBottom();
+    }
 
     private function savePopulated($time): void
     {
         if ($this->isEditMode) {
-            if (!empty($this->delInfoQueue)) foreach ($this->delInfoQueue as $infoId) {
-                $this->wtRepos->removeInfoById($infoId);
-            }
             foreach ($this->infoState as $info) {
                 $this->wtRepos->updateInfo($info);
             }
             return;
         }
-        $infoState = $this
-            ->mapInfoState($this->infoState, $time);
+        $infoState = $this->mapInfoState($this->infoState, $time);
 
         foreach ($infoState as $info) {
             $this->wtRepos->addInfo($info);
@@ -296,6 +338,7 @@ class Create extends Component
         try {
             $this->dbRepos->async();
             $this->checkPost();
+            $this->checkInfoDeletion();
             if (str_contains($this->form->time, '-')) {
                 $times = array_map(fn($opt) => $opt['value'], array_values($this->timeOptions));
                 foreach ($times as $time) { $this->savePopulated($time); }
@@ -304,7 +347,11 @@ class Create extends Component
             }
             $this->dbRepos->await();
 
-            $this->redirectRoute('work-trip-infos.index', navigate: true);
+            session()->flash(
+                'message', 'Your change successfully saved.'
+            );
+            $this->isEditMode = true;
+            $this->scrollToTop();
         } catch (\Throwable $t) {
             $this->dbRepos->cancel();
 

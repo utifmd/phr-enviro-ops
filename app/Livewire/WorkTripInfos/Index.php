@@ -48,7 +48,9 @@ class Index extends Component
 
     private function initInfoState(): void
     {
-        $this->groupedInfoState = $this->workTripRepos->sumInfoByArea(AreaNameEnum::MINAS->value);
+        $this->groupedInfoState = $this->workTripRepos->sumInfoByArea(
+            $this->authUsr['area_name']
+        );
     }
 
     public function delete(string $date): void

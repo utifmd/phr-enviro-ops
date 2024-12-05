@@ -29,12 +29,10 @@
     <div class="flex flex-wrap gap-3 grid-cols-3">
         @foreach($posts as $i => $post)
             <div class="relative p-4 sm:p-8 shadow sm:rounded-lg bg-white">
-                @if($post->woPendingReqCount > 0)
-                    @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
-                        <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-yellow-300 border-2 border-white rounded-full -top-2 -start-2 dark:border-gray-900">
-                            {{ $post->woPendingReqCount }}
-                        </div>
-                    @endcan
+                @if($post->pendingCount > 0)
+                    <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-yellow-300 border-2 border-white rounded-full -top-2 -start-2 dark:border-gray-900">
+                        {{ $post->pendingCount }}
+                    </div>
                 @endif
                 <div class="flex flex-col">
                     <h1 class="font-semibold leading-6 text-gray-900">
@@ -43,6 +41,7 @@
                     <p class="mt-2 text-sm text-gray-700">{{ $post->description }}</p>
                     <p class="mt-2 text-xs text-gray-700">{{ $post->timeAgo }}</p>
                     <dl class="divide-y mt-6 divide-gray-100">
+
                         {{--<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <dt class="text-sm font-medium leading-6 text-gray-900">Evidence</dt>
                             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
@@ -53,12 +52,12 @@
                                 </div>
                             </dd>
                         </div>--}}
-                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                        {{--<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <dt class="text-sm font-medium leading-6 text-gray-900">Transporter</dt>
                             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                 {{ $post->transporter }}
                             </dd>
-                        </div>
+                        </div>--}}
                         <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <dt class="text-sm font-medium leading-6 text-gray-900">Facility Reps</dt>
                             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">

@@ -31,6 +31,7 @@ use Illuminate\Support\Str;
  * @property $imageUrl
  * @property $imageUrls
  * @property $user
+ * @property $remarks
  *
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -56,6 +57,13 @@ class Post extends Model
     {
         return $this->hasOne(
             ImageUrl::class, 'post_id', 'id'
+        );
+    }
+
+    function remarks(): HasOne
+    {
+        return $this->hasOne(
+            WorkTripNote::class, 'post_id', 'id'
         );
     }
 

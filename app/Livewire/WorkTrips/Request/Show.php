@@ -41,6 +41,8 @@ class Show extends Component
             $this->tripIdsQueue[] = $actualTrip->id;
             $this->workTrips[] = $actualTrip;
         }
+        // $this->wtPendingReqCount = $this->countWoPendingRequest($post);
+
         /*foreach ($workTrips as $i => $planTrip) {
             //if ($actualTrip->type != WorkTripTypeEnum::PLAN->value) continue;
             if ($actualTrip->time != $planTrip->time) continue;
