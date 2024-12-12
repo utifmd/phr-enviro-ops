@@ -8,6 +8,10 @@ use Carbon\Carbon;
 
 class Utility implements IUtility
 {
+    const DATE_COUNT = 7;
+    const TIME_START = 0;
+    const TIME_END = 22;
+
     private Carbon $datetime;
     public function __construct()
     {
@@ -40,12 +44,15 @@ class Utility implements IUtility
         return $result;
     }
 
-    public function getListOfDates(int $nextDayCount): array
+    public function getListOfDates(int $nextDayCount, ?string $startDate = null): array
     {
         $list = [];
+        $startDate = $startDate ?? date('Y-m-d');
+
         for ($i = 0; $i < $nextDayCount; $i++) {
-            $list[] = date('Y-m-d', strtotime('+' . $i . ' day'));
+            $list[] = date('Y-m-d', strtotime($startDate . ' +' . $i . ' day'));
         }
+
         return $list;
     }
 
@@ -67,7 +74,7 @@ class Utility implements IUtility
         $result = $this->getListOfTimes($startHour, $endHour);
 
         if($isWholeTime) array_unshift(
-            $result, $result[0]." - ".$result[count($result) - 1]
+            $result, $result[0]." ~ ".$result[count($result) - 1]
         );
 
         return array_map(fn ($time)  => [
@@ -77,9 +84,14 @@ class Utility implements IUtility
         ], array_values($result));
     }
 
-    public function getListOfDatesOptions(int $nextDayCount): array
+    public function getListOfDatesOptions(
+        int $nextDayCount, ?string $startDate, ?bool $isWholeDate = false): array
     {
-        $dates = $this->getListOfDates($nextDayCount);
+        $dates = $this->getListOfDates($nextDayCount, $startDate);
+
+        if($isWholeDate) array_unshift(
+            $dates, $dates[0]." ~ ".$dates[count($dates) - 1]
+        );
         $result = array();
 
         for ($i = 0; $i < count($dates); $i++) {
@@ -87,7 +99,7 @@ class Utility implements IUtility
             $result[$i]['value'] = $dates[$i];
 
             if ($nextDayCount != 2) continue;
-            $result[$i]['name'] .= (' '.($i == 0 ? '(Today)' : '(Next Day)'));
+            $result[$i]['name'] .= (' '.($i == 0 ? '(Today)' : '(This Week)'));
         }
         return $result;
     }

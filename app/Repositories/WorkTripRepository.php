@@ -14,6 +14,7 @@ use App\Utils\Constants;
 use App\Utils\WorkOrderStatusEnum;
 use App\Utils\WorkTripTypeEnum;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -143,6 +144,16 @@ class WorkTripRepository implements IWorkTripRepository
             ->where('date', $date)->get()->toArray();
     }
 
+
+    private function workTripsBuilderBy(
+        string $area, $dateOrDates, $timeOrTimes = null): Builder
+    {
+        $builder = WorkTrip::query()
+            ->where('area_name', '=', $area, 'and');
+
+        return $this->buildConditionalBy($builder, $dateOrDates, $timeOrTimes);
+    }
+
     public function getTripByDateAndArea(string $date, string $area): array
     {
         return WorkTrip::query()
@@ -214,6 +225,12 @@ class WorkTripRepository implements IWorkTripRepository
             ->exists();
     }
 
+    public function areTripsExistByDatetimeOrDatesTimeAndArea(
+        $dateOrDates, $timeOrTimes, string $area): bool
+    {
+        return $this->workTripsBuilderBy($area, $dateOrDates, $timeOrTimes)->exists();
+    }
+
     public function addInfo(array $workTripInfo): void
     {
         WorkTripInfo::query()->create($workTripInfo);
@@ -247,6 +264,21 @@ class WorkTripRepository implements IWorkTripRepository
             ->where('date', $date)->get()->toArray();
     }
 
+
+    private function workTripInfosBuilderBy(
+        string $area, $dateOrDates, $timeOrTimes = null): Builder
+    {
+        $builder = WorkTripInfo::query()
+            ->where('area_name', '=', $area, 'and');
+
+        return $this->buildConditionalBy($builder, $dateOrDates, $timeOrTimes);
+    }
+
+    public function getInfoByDateOrDatesAndArea($dateOrDates, string $area): array
+    {
+        return $this->workTripInfosBuilderBy($area, $dateOrDates)->get()->toArray();
+    }
+
     public function getInfoByDatetime(string $date, string $time): array
     {
         return WorkTripInfo::query()
@@ -262,6 +294,12 @@ class WorkTripRepository implements IWorkTripRepository
             ->where('date', '=', $date, 'and')
             ->where('time', $time)
             ->get()->toArray();
+    }
+    public function getInfoByDatetimeOrDatesTimeAndArea(
+        $dateOrDates, $timeOrTimes, string $area): array
+    {
+        return $this->workTripInfosBuilderBy(
+            $area, $dateOrDates, $timeOrTimes)->get()->toArray();
     }
 
     public function sumInfoByArea(string $area): LengthAwarePaginator
@@ -295,6 +333,18 @@ class WorkTripRepository implements IWorkTripRepository
             ->exists();
     }
 
+    public function areInfosExistByDateOrDatesAndArea($dateOrDates, string $area): bool
+    {
+        return $this->workTripInfosBuilderBy($area, $dateOrDates)->exists();
+    }
+
+    public function areInfosExistByArea(string $area): bool
+    {
+        return WorkTripInfo::query()
+            ->where('area_name', $area)
+            ->exists();
+    }
+
     public function areInfosExistByDatetime(string $date, string $time): bool
     {
         return WorkTripInfo::query()
@@ -310,6 +360,20 @@ class WorkTripRepository implements IWorkTripRepository
             ->where('date', '=', $date, 'and')
             ->where('time', $time)
             ->exists();
+    }
+
+    public function areInfosExistByDatetimeOrDatesTimeAndArea(
+        $dateOrDates, $timeOrTimes, string $area): bool
+    {
+        return $this->workTripInfosBuilderBy(
+            $area, $dateOrDates, $timeOrTimes)->exists();
+    }
+
+    public function getLatestInfosDateByDateOrDatesAndArea($dateOrDates, string $area): ?string
+    {
+        return $this->workTripInfosBuilderBy($area, $dateOrDates)
+            ->select('date')
+            ->orderBy('date', 'desc')->first()->date;
     }
 
     public function mapTripPairActualValue(array $tripState): array
@@ -384,5 +448,23 @@ class WorkTripRepository implements IWorkTripRepository
             ->filter(fn ($wt) =>
                 $wt->status == WorkOrderStatusEnum::STATUS_PENDING->value)
             ->count();
+    }
+
+    private function buildConditionalBy(
+        Builder $builder, $dateOrDates, $timeOrTimes): Builder
+    {
+        if (is_array($dateOrDates)) {
+            $builder->whereIn('date', $dateOrDates);
+        } else {
+            $builder->whereDate('date', $dateOrDates);
+        }
+        if (is_null($timeOrTimes)) return $builder;
+
+        if (is_array($timeOrTimes)) {
+            $builder->whereIn('time', $timeOrTimes);
+        } else {
+            $builder->whereTime('time', $timeOrTimes);
+        }
+        return $builder;
     }
 }

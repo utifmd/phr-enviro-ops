@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Mapper\Contracts\IPostMapper;
 use App\Models\Post;
 use App\Repositories\Contracts\IPostRepository;
+use App\Utils\Constants;
 use App\Utils\PostTypeEnum;
 use App\Utils\WorkOrderStatusEnum;
 use App\Utils\Contracts\IUtility;
@@ -43,7 +44,7 @@ class PostRepository implements IPostRepository
         return Post::query()->where('created_at', $date)->exists();
     }
 
-    public function arePostExistByAndArea(string $date, string $area): bool
+    public function arePostExistByDateAndArea(string $date, string $area): bool
     {
         return Post::query()->whereHas('user', function ($query) use ($area) {
             $query->where('area_name', $area);
@@ -56,6 +57,21 @@ class PostRepository implements IPostRepository
             ->where('users.area_name', '=', $area)
             ->whereDate('posts.created_at', $date)
             ->exists();*/
+    }
+
+    public function arePostExistByDateOrDatesAndArea($dateOrDates, string $area): bool
+    {
+        $builder = Post::query()->whereHas('user', function ($query) use ($area) {
+            $query->where('area_name', $area);
+        });
+        if (is_array($dateOrDates)) {
+            $builder
+                ->whereDate('created_at', '<=', $dateOrDates[0], 'and')
+                ->whereDate('created_at', '>=', $dateOrDates[count($dateOrDates) -1]);
+        } else {
+            $builder->whereDate('created_at', $dateOrDates);
+        }
+        return $builder->exists();
     }
 
     function addPost(array $request): ?Post
@@ -123,6 +139,7 @@ class PostRepository implements IPostRepository
     public function pagedPostByUserId(string $userId): LengthAwarePaginator
     {
         $builder = Post::query()
+            ->where('title', '<>', Constants::EMPTY_STRING, 'and')
             ->where('user_id', '=', $userId, 'and')
             ->where('type', '=', PostTypeEnum::POST_WELL_TYPE->value)
             ->orderBy('created_at', 'desc')

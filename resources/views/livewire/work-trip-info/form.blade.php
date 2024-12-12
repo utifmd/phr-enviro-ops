@@ -1,26 +1,36 @@
 <div class="space-y-6">
-    @if(is_null($dateParam))
-        <div>
-            <x-input-label for="date" value="Date"/>
-            <x-radio-button
-                :cases="$dateOptions"
-                wire:model="form.date"
-                wire:change.prevent="onDateOptionChange"
-                id="date" name="date"/>
-            @error('form.date')
+    <div x-data="{ open: false }" class="block md:grid md:grid-cols-5 space-y-4 md:space-y-0 gap-8">
+        @if(is_null($dateParam))
+            <div x-show="open">
+                <x-input-label @click="open = !open" class="cursor-pointer text-green-800" for="date" value="Another Date"/>
+                <x-text-input
+                    class="mt-1 block w-full" type="date"
+                    wire:model="form.date"
+                    wire:change.prevent="onDateOptionChange"
+                    id="date" name="date"/>
+                @error('form.date')
                 <x-input-error class="mt-2" :messages="$message"/>
-            @enderror
-        </div>
-    @endif
-    <div class="block md:grid md:grid-cols-4 space-y-4 md:space-y-0 gap-8">
-        @if(!is_null($dateParam))
+                @enderror
+            </div>
+            <div x-show="!open">
+                <x-input-label @click="open = !open" class="cursor-pointer text-green-800" for="date" value="Dates"/>
+                <x-select-option
+                    class="mt-1 block w-full"
+                    :cases="$dateOptions"
+                    :isIdle="false"
+                    wire:model="form.date"
+                    wire:change.prevent="onDateOptionChange"
+                    id="date" name="date"/>
+                @error('form.date')
+                <x-input-error class="mt-2" :messages="$message"/>
+                @enderror
+            </div>
+        @else
             <div>
                 <x-input-label for="date" value="Date"/>
                 <x-text-input
                     class="mt-1 block w-full"
-                    :disabled="true"
-                    wire:model="form.date"
-                    id="date" name="date"/>
+                    :disabled="true" wire:model="form.date" id="date" name="date"/>
             </div>
         @endif
         {{--<div>

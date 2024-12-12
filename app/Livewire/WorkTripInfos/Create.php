@@ -12,6 +12,8 @@ use App\Repositories\Contracts\IUserRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\ActNameEnum;
 use App\Utils\Contracts\IUtility;
+use App\Utils\Utility;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
@@ -33,7 +35,8 @@ class Create extends BaseComponent
     public WorkTripInfoForm $form;
     public array
         $authUsr, $infoState, $locations,
-        $dateOptions, $timeOptions, $delInfoQueue = [];
+        $dateOptions, $timeOptions,
+        $datesRaw, $timesRaw, $delInfoQueue = [];
     public ?string $postId, $focusedDate;
     public bool $isEditMode = false;
 
@@ -56,16 +59,20 @@ class Create extends BaseComponent
 
         $this->form->setWorkTripInfoModel($workTripInfo);
         $this->initAuthUser();
-        $this->initDateOptions($date);
+        $this->initDate($date);
         $this->initTimeOptions(/*$date*/);
         $this->initLocOptions();
         $this->checkInfoState($date);
     }
 
     public function hydrate(
-        IDBRepository $dbRepos, IPostRepository $pstRepos, IWorkTripRepository $wtRepos): void
+        IDBRepository $dbRepos,
+        IUtility $util,
+        IPostRepository $pstRepos,
+        IWorkTripRepository $wtRepos): void
     {
         $this->dbRepos = $dbRepos;
+        $this->util = $util;
         $this->pstRepos = $pstRepos;
         $this->wtRepos = $wtRepos;
     }
@@ -73,32 +80,59 @@ class Create extends BaseComponent
     private function checkInfoState($dateParam): void
     {
         $this->isEditMode = !is_null($dateParam);
+
         if ($this->isEditMode) {
             $this->getInfoState($dateParam);
             return;
         }
-        $date = $this->focusedDate;
-        $areaName = $this->authUsr['area_name'];
-        $areInfosExists = str_contains($this->form->time, '-')
-            ? $this->wtRepos->areInfosExistByDateAndArea($date, $areaName)
-            : $this->wtRepos->areInfosExistByDatetimeAndArea($date, $this->form->time, $areaName);
+        $dateOrDates = str_contains($this->form->date, '~')
+            ? $this->datesRaw : $this->form->date;
 
+        $timeOrTimes = str_contains($this->form->time, '~')
+            ? $this->timesRaw : $this->form->time;
+
+        $areaName = $this->authUsr['area_name'];
+
+        $areInfosExists = str_contains($this->form->time, '~')
+            ? $this->wtRepos->areInfosExistByDateOrDatesAndArea($dateOrDates, $areaName)
+            : $this->wtRepos->areInfosExistByDatetimeOrDatesTimeAndArea(
+                $dateOrDates, $timeOrTimes, $areaName
+            );
         if ($areInfosExists) {
-            $this->isEditMode = true;
-            $this->getInfoState($date);
+
+            if (is_string($dateOrDates)) {
+                $this->getInfoState($dateOrDates);
+                return;
+            }
+            $latestDate = $this->wtRepos
+                ->getLatestInfosDateByDateOrDatesAndArea($dateOrDates, $areaName);
+
+            $carbon = Carbon::parse($latestDate);
+            $startDate = $carbon->addDays();
+
+            $this->initDate(null, $startDate);
+            $this->initInfoState();
             return;
         }
         $this->initInfoState();
     }
 
-    private function checkPost(): void
+    private function arePostAlreadyExist(): bool
     {
-        $arePostExistByAndArea = $this->pstRepos->arePostExistByAndArea(
-            $this->focusedDate, $this->authUsr['area_name']
+        $dateOrDates = str_contains($this->focusedDate, '~')
+            ? $this->datesRaw : $this->focusedDate;
+
+        return $this->pstRepos->arePostExistByDateOrDatesAndArea(
+            $dateOrDates, $this->authUsr['area_name']
         );
-        if ($arePostExistByAndArea){
-            $this->postId = null;
-            return;
+    }
+    /**
+     * @throws \Exception
+     */
+    private function checkPostThenGenerate(): void
+    {
+        if ($this->arePostAlreadyExist()) {
+            throw new \Exception('Failed, the plan already registered.');
         }
         $this->postId = $this->pstRepos->generatePost(
             $this->authUsr, ['created_at' => $this->focusedDate]
@@ -113,6 +147,9 @@ class Create extends BaseComponent
         if (empty($this->delInfoQueue)) return;
         $info = $this->delInfoQueue[0];
 
+        if (str_contains($info['date'], '~')) {
+            $info['date'] = $this->datesRaw;
+        }
         $areTripsAlreadyExist = $this->wtRepos->areTripsExistByDatetimeAndArea(
             $info['date'], $info['time'], $info['area_name']
         );
@@ -124,34 +161,27 @@ class Create extends BaseComponent
         }
     }
 
-    private function initDateOptions(?string $date = null): void
+    private function initDate(?string $initDate = null, ?string $startDate = null): void
     {
-        $this->focusedDate = date('Y-m-d');
+        $this->focusedDate = $startDate ?? date('Y-m-d');
 
-        if (!is_null($date)) {
-            $this->dateOptions[] = ['name' => $date, 'value', $date];
+        if (!is_null($initDate)) {
+            $this->dateOptions[] = ['name' => $initDate, 'value', $initDate];
             return;
         }
-        $this->dateOptions = $this->util->getListOfDatesOptions(2);
+        $this->dateOptions = $this->util->getListOfDatesOptions(
+            Utility::DATE_COUNT, $startDate, true
+        );
+        $this->datesRaw = $this->util->getListOfDates(
+            Utility::DATE_COUNT, $startDate
+        );
         $this->form->date = $this->dateOptions[0]['value'] ?? '';
     }
 
-    private function initTimeOptions(/*?string $date = null*/): void
+    private function initTimeOptions(): void
     {
-        /*if (!is_null($date)) {
-            $this->timeOptions = $this->util->getListOfTimesOptions(
-                8, 20, true
-            );
-            return;
-        }*/
-        /*$areRoleBeginAt7 = $this->authUsr['area_name'] == AreaNameEnum::HO->value;
-        $this->timeOptions = $this->util->getListOfTimesOptions(
-            $areRoleBeginAt7 ? 7 : 8,
-            $areRoleBeginAt7 ? 19 : 20, true
-        );*/
-        $this->timeOptions = $this->util->getListOfTimesOptions(
-            0, 22, true
-        );
+        $this->timesRaw = $this->util->getListOfTimes(Utility::TIME_START, Utility::TIME_END);
+        $this->timeOptions = $this->util->getListOfTimesOptions(Utility::TIME_START, Utility::TIME_END, true);
         $this->form->time = $this->timeOptions[0]['value'] ?? '';
     }
 
@@ -184,12 +214,13 @@ class Create extends BaseComponent
         $this->populateByGS($acts);
     }
 
-    private function getInfoState(string $date): void
+    private function getInfoState($date): void
     {
         $areaName = $this->authUsr['area_name'];
+
         $this->form->date = $date;
-        $this->form->act_value = 20;
-        if (str_contains($this->form->time, '-')) {
+        $this->form->act_value = 0;
+        if (str_contains($this->form->time, '~')) {
             $this->infoState = $this->wtRepos->getInfoByDateAndArea($date, $areaName);
             return;
         }
@@ -237,21 +268,18 @@ class Create extends BaseComponent
         }
     }
 
-    private function mapInfoState(array $infoState, $time): array
+    private function mapInfoState(array $infoState, $date, $time): array
     {
-        $infoState = array_map(
-            function ($info) use($time): array {
+        return array_map(
+            function ($info) use($date, $time): array {
                 $info['post_id'] = $this->postId;
-                $info['date'] = $this->form->date;
+                $info['date'] = $date ?? $this->form->date;
                 $info['time'] = $time ?? $this->form->time;
 
                 unset($info['workTripInfoModel']);
                 return $info;
             },
             array_values($infoState)
-        );
-        return array_filter(
-            $infoState, fn ($info) => !str_contains($info['time'], '-')
         );
     }
 
@@ -301,7 +329,7 @@ class Create extends BaseComponent
     public function onDateOptionChange(): void
     {
         $this->form->validate(['date' => 'required|string']);
-        $this->focusedDate = $this->form->date;
+        // $this->focusedDate = $this->form->date;
         $this->checkInfoState(null);
         $this->scrollToBottom();
     }
@@ -318,7 +346,26 @@ class Create extends BaseComponent
         $this->scrollToBottom();
     }
 
-    private function savePopulated($time): void
+    private function savePopulatedByDatesOrDate(): void
+    {
+        $dateOrDates = $this->form->date;
+        if (str_contains($dateOrDates, '~')) {
+            foreach ($this->datesRaw as $date) { $this->savePopulatedByTimesOrTime($date); }
+        } else {
+            $this->savePopulatedByTimesOrTime($dateOrDates);
+        }
+    }
+
+    private function savePopulatedByTimesOrTime($date): void
+    {
+        if (str_contains($this->form->time, '~')) {
+            foreach ($this->timesRaw as $time) { $this->savePopulated($date, $time); }
+        } else {
+            $this->savePopulated($date, null);
+        }
+    }
+
+    private function savePopulated($date, $time): void
     {
         if ($this->isEditMode) {
             foreach ($this->infoState as $info) {
@@ -326,8 +373,7 @@ class Create extends BaseComponent
             }
             return;
         }
-        $infoState = $this->mapInfoState($this->infoState, $time);
-
+        $infoState = $this->mapInfoState($this->infoState, $date, $time);
         foreach ($infoState as $info) {
             $this->wtRepos->addInfo($info);
         }
@@ -337,24 +383,22 @@ class Create extends BaseComponent
     {
         try {
             $this->dbRepos->async();
-            $this->checkPost();
+            $this->checkPostThenGenerate();
             $this->checkInfoDeletion();
-            if (str_contains($this->form->time, '-')) {
-                $times = array_map(fn($opt) => $opt['value'], array_values($this->timeOptions));
-                foreach ($times as $time) { $this->savePopulated($time); }
-            } else {
-                $this->savePopulated(null);
-            }
+            $this->savePopulatedByDatesOrDate();
             $this->dbRepos->await();
 
-            session()->flash(
+            /*session()->flash(
                 'message', 'Your change successfully saved.'
             );
             $this->isEditMode = true;
-            $this->scrollToTop();
+            $this->scrollToTop();*/
+
+            $this->redirectRoute('work-trip-infos.index', navigate: true);
         } catch (\Throwable $t) {
             $this->dbRepos->cancel();
-
+            Log::debug($t->getMessage());
+            session()->flash('error', $t->getMessage());
             $this->addError('error', $t->getMessage());
         }
     }

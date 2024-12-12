@@ -286,11 +286,13 @@ class Create extends BaseComponent
         try {
             $this->dbRepos->async();
             $this->savePopulated();
-            session()->flash(
+            /*session()->flash(
                 'message', 'Your change successfully updated.'
             );
-            $this->scrollToTop();
+            $this->scrollToTop();*/
             $this->dbRepos->await();
+
+            $this->redirectRoute('work-trips.index', navigate: true);
         } catch (\Throwable $t) {
 
             $this->dbRepos->cancel();

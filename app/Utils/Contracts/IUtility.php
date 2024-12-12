@@ -10,9 +10,9 @@ interface IUtility
     function datesOfTheMonthBy(int $daysOfMonthLength): array;
     function datesOfTheMonth(?int $count): array;
     function getListOfTimes(int $startHour, int $endHour): array;
-    function getListOfDates(int $nextDayCount): array;
+    function getListOfDates(int $nextDayCount, ?string $startDate): array;
     function getListOfTimesOptions(int $startHour, int $endHour, ?bool $isWholeTime): array;
-    function getListOfDatesOptions(int $nextDayCount): array;
+    function getListOfDatesOptions(int $nextDayCount, ?string $startDate, ?bool $isWholeDate): array;
 
     function timeAgo(string $datetime): string;
     function transporter(mixed $operator): string;

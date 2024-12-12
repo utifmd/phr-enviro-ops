@@ -38,12 +38,12 @@ new class extends Component {
                         <x-nav-link :href="route('work-trip-infos.index')" :active="request()->routeIs('work-trip-infos.index') || request()->routeIs('work-trip-infos.create')" wire:navigate>
                             {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Plan') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('work-trips.requests.index')" :active="request()->routeIs('work-trips.requests.index') || request()->routeIs('work-trips.requests.create')" wire:navigate>
+                        <x-nav-link :href="route('work-trips.requests.index')" :active="request()->routeIs('work-trips.requests.index') || request()->routeIs('work-trips.requests.create') || request()->routeIs('work-trips.requests.show')" wire:navigate>
                             {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Verify') }}
                         </x-nav-link>
                     @endcan
                     @can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
-                        <x-nav-link :href="route('work-trips.index')" :active="request()->routeIs('work-trips.index') || request()->routeIs('work-trips.create')" wire:navigate>
+                        <x-nav-link :href="route('work-trips.index')" :active="request()->routeIs('work-trips.index') || request()->routeIs('work-trips.create') || request()->routeIs('work-trips.requests.show')" wire:navigate>
                             {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Actual') }}
                         </x-nav-link>
                     @endcan
