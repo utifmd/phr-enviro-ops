@@ -30,8 +30,8 @@ class Create extends BaseComponent
     protected IWorkTripRepository $wtRepos;
 
     public WorkTripForm $form;
-    public array $authUsr, $tripState, $timeOptions;
-    public string $currentDate, $remarks;
+    public array $authUsr, $tripState, $timeOptions, $notes;
+    public string $currentDate, $remarks, $remarksAt;
     public bool $isEditMode = false;
 
     public function mount(
@@ -82,11 +82,18 @@ class Create extends BaseComponent
 
     private function checkRemarks(): void
     {
-        $this->remarks = Constants::EMPTY_STRING;
-        $postId = $this->tripState[0]['post_id'] ?? Constants::EMPTY_STRING;
-        if (empty($postId)) return;
+        $this->notes = $this->wtRepos->getNotesByDateAndUserId(
+            $this->currentDate, $this->authUsr['id']
+        );
+        $this->initRemarks();
+    }
 
-        $this->wtRepos->getNotesByPostId($postId);
+    private function initRemarks(): void
+    {
+        $this->remarks = implode(', ', array_map(fn ($note) => $note['message'], $this->notes));
+        $this->remarksAt = empty($this->notes)
+            ? 'Remarks'
+            : 'Remarked since '.$this->util->timeAgo($this->notes[count($this->notes) -1]['updated_at']);
     }
 
     private function initDateOptions(): void
@@ -134,7 +141,10 @@ class Create extends BaseComponent
         $tripState = $this->wtRepos->getTripByDatetimeAndArea(
             $date, $this->form->time, $this->authUsr['area_name']
         );
-        $this->tripState = $this->wtRepos->mapTripPairActualValue($tripState);
+        $infos = $this->wtRepos->getInfoByDatetimeAndArea(
+            $date, $this->form->time, $this->authUsr['area_name']
+        );
+        $this->tripState = $this->wtRepos->mapPairInfoAndTripActualValue($infos, $tripState);
     }
 
     private function assignPost(string $postId): void
@@ -152,12 +162,15 @@ class Create extends BaseComponent
 
     private function assignNotes(string $postId): void
     {
-        if ($this->isEditMode) {
-            $this->wtRepos->updateNotesByPostId($postId, $this->remarks);
+        $userId = $this->authUsr['id'];
+        if ($this->isEditMode && !empty($this->notes)) {
+            $this->wtRepos->updateNotesByDateAndUserId(
+                $userId, $this->currentDate, $this->remarks
+            );
             return;
         }
         $this->wtRepos->generateNotes(
-            $postId, $this->remarks
+            $postId, $userId, $this->remarks
         );
     }
 

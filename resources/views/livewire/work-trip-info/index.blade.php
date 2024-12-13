@@ -45,15 +45,15 @@
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $info->user }}</td>
 
                                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
-                                            <a wire:navigate href="{{ route('work-trip-infos.create-by', $info->date) }}" class="text-gray-600 font-bold hover:text-gray-900 mr-2">{{ __('Show & Edit') }}</a>
-                                            <button
+                                            <a wire:navigate href="{{ route('work-trip-infos.create-by', $info->date) }}" class="text-yellow-500 font-bold hover:text-yellow-800 mr-2">{{ __('Show & Edit') }}</a>
+                                            {{--<button
                                                 class="text-red-600 font-bold hover:text-red-900"
                                                 type="button"
                                                 wire:click="delete({{ $info->date }})"
                                                 wire:confirm="Are you sure you want to delete?"
                                             >
                                                 {{ __('Delete') }}
-                                            </button>
+                                            </button>--}}
                                         </td>
                                     </tr>
                                 @endforeach

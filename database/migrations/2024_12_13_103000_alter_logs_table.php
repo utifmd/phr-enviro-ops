@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::dropIfExists('logs');
         Schema::create('logs', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-
-            $table->string('event')->nullable();
-            $table->string('highlight')->nullable(false);
-
             $allowedArea = collect(\App\Utils\AreaNameEnum::cases())
                 ->map(fn($case) => $case->value)->toArray();
 
+            $table->uuid('id')->primary();
+            $table->string('event')->nullable();
+            $table->string('highlight')->nullable(false);
+            $table->string('notification_count')->nullable(false);
             $table->enum('area', $allowedArea);
             $table->string('refer_to_table')->nullable();
             $table->foreignUuid('refer_to_table_id')->nullable();

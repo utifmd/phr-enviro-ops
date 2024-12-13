@@ -44,7 +44,7 @@
     @include('livewire.work-trip.tabled')
 
     <div>
-        <x-input-label for="remarks" :value="__('Remarks')"/>
+        <x-input-label for="remarks" :value="$remarksAt"/>
         <x-textarea wire:model="remarks" id="remarks" name="remarks" class="mt-1 block w-full" placeholder="Notes"/>
         @error('remarks')
         <x-input-error class="mt-2" :messages="$message"/>

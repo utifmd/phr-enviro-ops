@@ -6,13 +6,16 @@
                     <thead>
                     <tr>
                         <th scope="col"
-                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">No
+                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">No.
                         </th>
                         <th scope="col"
-                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">{{ 'Activity' }}
+                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">{{ 'Date' }}
                         </th>
                         <th scope="col"
                             class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">{{ 'Time' }}
+                        </th>
+                        <th scope="col"
+                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">{{ 'Activity' }}
                         </th>
                         <th scope="col"
                             class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">To
@@ -29,11 +32,14 @@
                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
                                 {{ ++$num }}.
                             </td>
-                            <td wire:click="onInfoStateActNameSelected({{$i}})" class="cursor-pointer whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900 hover:line-through hover:font-semibold hover:text-red-600">
-                                {{ $info['act_name'].' '.$info['act_process'] }}
+                            <td class="cursor-pointer whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
+                                {{ $info['date'] }}
                             </td>
                             <td {{--wire:click="onInfoStateTimeSelected({{$i}})"--}} class="cursor-pointer whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
                                 {{ $info['time'] }}
+                            </td>
+                            <td wire:click="onInfoStateActNameSelected({{$i}})" class="cursor-pointer whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900 hover:line-through hover:font-semibold hover:text-red-600">
+                                {{ $info['act_name'].' '.$info['act_process'] }}
                             </td>
                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
                                 {{ $info['area_loc'] }}
@@ -44,7 +50,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="border border-gray-300 px-4 py-2 text-center">Please complete the table record.</td>
+                            <td colspan="6" class="border border-gray-300 px-4 py-2 text-center">Please complete the table record.</td>
                         </tr>
                     @endforelse
                     </tbody>

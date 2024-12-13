@@ -35,7 +35,7 @@ class Log extends Model
     protected $table = 'work_trip_infos';
 
     protected $fillable = [
-        'area', 'influence_table', 'influence_table_id', 'user_id',
+        'event', 'highlight', 'notification_count', 'area', 'refer_to_table', 'refer_to_table_id', 'user_id'
     ];
     protected static function booted(): void
     {

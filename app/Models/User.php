@@ -32,6 +32,8 @@ use Illuminate\Support\Str;
  * @property $currentPost
  * @property $operator
  * @property $posts
+ * @property $workTrips
+ * @property $workTripNotes
  *
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -112,6 +114,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(
             WorkTripInfo::class, 'user_id', 'id'
+        );
+    }
+    public function workTripNotes(): HasMany
+    {
+        return $this->hasMany(
+            WorkTripNote::class, 'user_id', 'id'
         );
     }
 

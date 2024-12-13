@@ -11,6 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::dropIfExists('work_trip_notes');
+
         Schema::create('work_trip_notes', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('message');

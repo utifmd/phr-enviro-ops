@@ -9,10 +9,10 @@
                             class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">No
                         </th>
                         <th scope="col"
-                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Activity
+                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Time
                         </th>
                         <th scope="col"
-                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Time
+                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Activity
                         </th>
                         <th scope="col"
                             class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">To
@@ -29,11 +29,11 @@
                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
                                 {{ ++$num }}.
                             </td>
-                            <td {{--wire:click="onInfoStateActNameSelected({{$i}})"--}} class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
-                                {{ $trip['act_name'].' '.$trip['act_process'] }}
-                            </td>
                             <td {{--wire:click="onInfoStateTimeSelected({{$i}})"--}} class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
                                 {{ $trip['time'] }}
+                            </td>
+                            <td {{--wire:click="onInfoStateActNameSelected({{$i}})"--}} class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
+                                {{ $trip['act_name'].' '.$trip['act_process'] }}
                             </td>
                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
                                 {{ $trip['area_loc'] }}

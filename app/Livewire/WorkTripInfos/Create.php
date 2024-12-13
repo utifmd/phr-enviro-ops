@@ -11,8 +11,8 @@ use App\Repositories\Contracts\IPostRepository;
 use App\Repositories\Contracts\IUserRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\ActNameEnum;
+use App\Utils\Constants;
 use App\Utils\Contracts\IUtility;
-use App\Utils\Utility;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -98,41 +98,39 @@ class Create extends BaseComponent
             : $this->wtRepos->areInfosExistByDatetimeOrDatesTimeAndArea(
                 $dateOrDates, $timeOrTimes, $areaName
             );
-        if ($areInfosExists) {
-
-            if (is_string($dateOrDates)) {
-                $this->getInfoState($dateOrDates);
-                return;
-            }
-            $latestDate = $this->wtRepos
-                ->getLatestInfosDateByDateOrDatesAndArea($dateOrDates, $areaName);
-
-            $carbon = Carbon::parse($latestDate);
-            $startDate = $carbon->addDays();
-
-            $this->initDate(null, $startDate);
+        if (!$areInfosExists) {
             $this->initInfoState();
             return;
         }
+        if (is_string($dateOrDates)) {
+            $this->getInfoState($dateOrDates);
+            return;
+        }
+        $latestDate = $this->wtRepos
+            ->getLatestInfosDateByDateOrDatesAndArea($dateOrDates, $areaName);
+
+        $startDate = $this->util->addDaysOfParse($latestDate);
+
+        $this->initDate(null, $startDate);
         $this->initInfoState();
     }
 
-    private function arePostAlreadyExist(): bool
-    {
-        $dateOrDates = str_contains($this->focusedDate, '~')
-            ? $this->datesRaw : $this->focusedDate;
-
-        return $this->pstRepos->arePostExistByDateOrDatesAndArea(
-            $dateOrDates, $this->authUsr['area_name']
-        );
-    }
     /**
      * @throws \Exception
      */
     private function checkPostThenGenerate(): void
     {
-        if ($this->arePostAlreadyExist()) {
-            throw new \Exception('Failed, the plan already registered.');
+        $dateOrDates = str_contains($this->form->date, '~')
+            ? $this->datesRaw : $this->form->date;
+
+        $timeOrTimes = str_contains($this->form->time, '~')
+            ? $this->timesRaw : $this->form->time;
+
+        $areActualTripsSubmitted = $this->wtRepos->areTripsExistByDatetimeOrDatesTimeAndArea(
+            $dateOrDates, $timeOrTimes, $this->authUsr['area_name']
+        );
+        if ($areActualTripsSubmitted) {
+            throw new \Exception('Sorry, your plan already used.');
         }
         $this->postId = $this->pstRepos->generatePost(
             $this->authUsr, ['created_at' => $this->focusedDate]
@@ -170,18 +168,18 @@ class Create extends BaseComponent
             return;
         }
         $this->dateOptions = $this->util->getListOfDatesOptions(
-            Utility::DATE_COUNT, $startDate, true
+            Constants::DATE_COUNT, $startDate, true
         );
         $this->datesRaw = $this->util->getListOfDates(
-            Utility::DATE_COUNT, $startDate
+            Constants::DATE_COUNT, $startDate
         );
         $this->form->date = $this->dateOptions[0]['value'] ?? '';
     }
 
     private function initTimeOptions(): void
     {
-        $this->timesRaw = $this->util->getListOfTimes(Utility::TIME_START, Utility::TIME_END);
-        $this->timeOptions = $this->util->getListOfTimesOptions(Utility::TIME_START, Utility::TIME_END, true);
+        $this->timesRaw = $this->util->getListOfTimes(Constants::TIME_START, Constants::TIME_END);
+        $this->timeOptions = $this->util->getListOfTimesOptions(Constants::TIME_START, Constants::TIME_END, true);
         $this->form->time = $this->timeOptions[0]['value'] ?? '';
     }
 
@@ -342,7 +340,7 @@ class Create extends BaseComponent
         if ($this->isEditMode) {
             $this->form->validate(['date' => 'required|string']);
         }
-        $this->checkInfoState(null);
+        $this->checkInfoState($this->dateParam);
         $this->scrollToBottom();
     }
 

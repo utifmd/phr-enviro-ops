@@ -21,4 +21,6 @@ interface IUtility
 
     function countWoPendingRequest(Post $post): int;
     function countWtPendingRequest(Post $post): int;
+
+    function addDaysOfParse(?string $latestDate, ?int $dayCount): ?string;
 }

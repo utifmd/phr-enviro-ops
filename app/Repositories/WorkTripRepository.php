@@ -13,6 +13,7 @@ use App\Utils\ActUnitEnum;
 use App\Utils\Constants;
 use App\Utils\WorkOrderStatusEnum;
 use App\Utils\WorkTripTypeEnum;
+use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -380,7 +381,7 @@ class WorkTripRepository implements IWorkTripRepository
     {
         $actualTrips = [];
         $planTrips = [];
-        usort($tripState, fn($a, $b) => $b['id'] > $a['id']);
+        // usort($tripState, fn($a, $b) => $b['id'] > $a['id']);
         foreach ($tripState as $trip) {
             if($trip['type'] != WorkTripTypeEnum::PLAN->value) continue;
             $planTrips[] = $trip;
@@ -392,6 +393,28 @@ class WorkTripRepository implements IWorkTripRepository
         }
         return $actualTrips;
     }
+
+    public function mapPairInfoAndTripActualValue(array $infos, array $tripState): array
+    {
+        $actualTrips = [];
+        foreach ($tripState as $trip) {
+            if($trip['type'] != WorkTripTypeEnum::ACTUAL->value) continue;
+            // $trip['act_value'] = ($trip['act_value'] ?? 0).'/'.($planTrips[$i]['act_value'] ?? 0);
+            $trip['act_value'] = ($trip['act_value'] ?? 0).'/';
+
+            foreach ($infos as $info) {
+                if ($trip['act_name'] == $info['act_name'] &&
+                    $trip['act_process'] == $info['act_process'] &&
+                    $trip['act_unit'] == $info['act_unit'] &&
+                    $trip['area_loc'] == $info['area_loc']) {
+                    $trip['act_value'] .= $info['act_value'];
+                }
+            }
+            $actualTrips[] = $trip;
+        }
+        return $actualTrips;
+    }
+
     public function mapTripUnpairActualValue(array $tripState): array
     {
         $trips = [];
@@ -416,16 +439,21 @@ class WorkTripRepository implements IWorkTripRepository
             ->act_value_sum;
     }
 
-    public function generateNotes(string $postId, string $message): void
+    public function generateNotes(
+        string $postId, string $userId, string $message): void
     {
         WorkTripNote::query()->create([
-            'post_id' => $postId, 'message' => $message,
+            'post_id' => $postId, 'user_id' => $userId, 'message' => $message,
         ]);
     }
 
-    public function updateNotesById(string $id, string $message): void
+    public function updateNotesByDateAndUserId(
+        string $userId, string $date, string $message): void
     {
-        WorkTripNote::query()->find($id)->update(['message' => $message]);
+        WorkTripNote::query()
+            ->where('user_id', '=', $userId, 'and')
+            ->wheredate('date', $date)
+            ->update(['message' => $message]);
     }
 
     public function updateNotesByPostId(string $id, string $message): void
@@ -433,13 +461,16 @@ class WorkTripRepository implements IWorkTripRepository
         WorkTripNote::query()->where('post_id', $id)->update(['message' => $message]);
     }
 
-    public function getNotesByPostId(mixed $postId): string
+    public function getNotesByDateAndUserId(string $date, string $userId): array
     {
         $builder = WorkTripNote::query()
-            ->where('post_id', $postId);
-        if (!$builder->exists())
-            return Constants::EMPTY_STRING;
-        return $builder->get()->first()->message ?? Constants::EMPTY_STRING;
+            ->where('user_id', '=', $userId, 'and')
+            ->whereBetween('created_at', [
+                Carbon::parse($date)->startOfDay(),
+                Carbon::parse($date)->endOfDay(),
+            ]);
+
+        return $builder->get()->toArray();
     }
 
     public function countPendingWorkTrip(array $workTrips): int

@@ -9,6 +9,7 @@ use App\Utils\Constants;
 use App\Utils\PostTypeEnum;
 use App\Utils\WorkOrderStatusEnum;
 use App\Utils\Contracts\IUtility;
+use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -49,7 +50,10 @@ class PostRepository implements IPostRepository
         return Post::query()->whereHas('user', function ($query) use ($area) {
             $query->where('area_name', $area);
         })
-            ->whereDate('created_at', $date)
+            ->whereBetween('created_at', [
+                Carbon::parse($date)->startOfDay(),
+                Carbon::parse($date)->endOfDay(),
+            ])
             ->exists();
 
         /*return Post::query()
@@ -66,10 +70,13 @@ class PostRepository implements IPostRepository
         });
         if (is_array($dateOrDates)) {
             $builder
-                ->whereDate('created_at', '<=', $dateOrDates[0], 'and')
-                ->whereDate('created_at', '>=', $dateOrDates[count($dateOrDates) -1]);
+                ->whereDate('created_at', '>=', $dateOrDates[0], 'and')
+                ->whereDate('created_at', '<=', $dateOrDates[count($dateOrDates) -1]);
         } else {
-            $builder->whereDate('created_at', $dateOrDates);
+            $builder->whereBetween('created_at', [
+                Carbon::parse($dateOrDates)->startOfDay(),
+                Carbon::parse($dateOrDates)->endOfDay(),
+            ]);
         }
         return $builder->exists();
     }

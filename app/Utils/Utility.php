@@ -8,10 +8,6 @@ use Carbon\Carbon;
 
 class Utility implements IUtility
 {
-    const DATE_COUNT = 7;
-    const TIME_START = 0;
-    const TIME_END = 22;
-
     private Carbon $datetime;
     public function __construct()
     {
@@ -163,5 +159,12 @@ class Utility implements IUtility
                 return $wt->status == WorkTripStatusEnum::PENDING->value;
             })
             ->count();
+    }
+
+    function addDaysOfParse(
+        ?string $latestDate, ?int $dayCount = 1): ?string
+    {
+        $carbon = Carbon::parse($latestDate);
+        return $carbon->addDays($dayCount);
     }
 }
