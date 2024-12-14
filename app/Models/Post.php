@@ -116,10 +116,9 @@ class Post extends Model
 
     function workTrips(): HasMany
     {
-        return $this->hasMany(
-            WorkTrip::class, 'post_id', 'id'
-
-        )->where('type', WorkTripTypeEnum::ACTUAL->value);
+        return $this->hasMany(WorkTrip::class, 'post_id', 'id')
+            ->where('type', WorkTripTypeEnum::ACTUAL->value)
+            ->orderByDesc('time');
     }
 
     function user(): BelongsTo

@@ -17,7 +17,12 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
-
+/*
+ * TODO:
+ * 1. get LOG
+ * 2. fix relation of remarks by user
+ * 3. check powerBi for mobile for remarks marquee
+ * */
 class Create extends BaseComponent
 {
     #[Url]
@@ -90,22 +95,25 @@ class Create extends BaseComponent
 
     private function initRemarks(): void
     {
-        $this->remarks = implode(', ', array_map(fn ($note) => $note['message'], $this->notes));
+        $this->remarks = implode(', ', array_map(fn ($note) => $note['message'] ?? 'NA', $this->notes));
         $this->remarksAt = empty($this->notes)
-            ? 'Remarks'
-            : 'Remarked since '.$this->util->timeAgo($this->notes[count($this->notes) -1]['updated_at']);
+            ? 'Remarks' : 'Remarked by '.($this->notes[0]['user']['email'] ?? 'NA').', since '.$this->util->timeAgo($this->notes[count($this->notes) -1]['updated_at']);
     }
 
     private function initDateOptions(): void
     {
         $this->currentDate = is_null($this->dateParam)
             ? date('Y-m-d') : $this->dateParam;
+        $this->form->date = $this->currentDate;
     }
 
     private function initTimeOptions(): void
     {
         $this->timeOptions = $this->util->getListOfTimesOptions(0, 22);
-        $this->form->time = $this->timeOptions[0]['value'] ?? '';
+
+        $formTimeSession = session('form_time');
+        $this->form->time = $formTimeSession
+            ?? $this->timeOptions[0]['value'] ?? Constants::EMPTY_STRING;
     }
 
     private function initAuthUser(): void
@@ -162,10 +170,12 @@ class Create extends BaseComponent
 
     private function assignNotes(string $postId): void
     {
-        $userId = $this->authUsr['id'];
-        if ($this->isEditMode && !empty($this->notes)) {
+        if (empty($this->notes)) return;
+        if ($this->wtRepos->areNotesByDateAndUserIdExist(
+            $userId = $this->authUsr['id'], $date = $this->currentDate)) {
+
             $this->wtRepos->updateNotesByDateAndUserId(
-                $userId, $this->currentDate, $this->remarks
+                $userId, $date, $this->remarks
             );
             return;
         }
@@ -299,12 +309,9 @@ class Create extends BaseComponent
         try {
             $this->dbRepos->async();
             $this->savePopulated();
-            /*session()->flash(
-                'message', 'Your change successfully updated.'
-            );
-            $this->scrollToTop();*/
             $this->dbRepos->await();
 
+            session(['form_time' => $this->form->time]);
             $this->redirectRoute('work-trips.index', navigate: true);
         } catch (\Throwable $t) {
 

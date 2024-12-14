@@ -5,7 +5,6 @@ namespace App\Livewire\Forms;
 use App\Models\WorkTrip;
 use App\Utils\AreaNameEnum;
 use App\Utils\WorkTripTypeEnum;
-use Livewire\Attributes\Session;
 use Livewire\Form;
 
 class WorkTripForm extends Form
@@ -14,7 +13,6 @@ class WorkTripForm extends Form
 
     public $type = '';
     public $date = '';
-    #[Session]
     public $time = '';
     public $act_name = '';
     public $act_process = '';

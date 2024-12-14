@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('work_trip_notes', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('message');
+            $table->text('message');
 
             $table->foreignUuid('post_id')
                 ->references('id')

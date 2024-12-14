@@ -3,6 +3,7 @@
 namespace App\Repositories\Contracts;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 interface IWorkTripRepository
@@ -25,6 +26,8 @@ interface IWorkTripRepository
     public function removeTripById(string $id): void;
     public function getTripByDate(string $date): array;
     public function getTripByDateAndArea(string $date, string $area): array;
+    public function getActualTripByPostId(string $postId): array;
+    public function getActualTripByTimeAndPostId(string $time, string $postId): array;
     public function getTripByDatetime(string $date, string $time): array;
     public function getTripByDatetimeAndArea(string $date, string $time, string $area): array;
     public function sumTripByArea(string $area): LengthAwarePaginator;
@@ -65,6 +68,7 @@ interface IWorkTripRepository
 
     public function generateNotes(string $postId, string $userId, string $message): void;
     public function getNotesByDateAndUserId(string $date, string $userId): array;
+    public function areNotesByDateAndUserIdExist(string $userId, string $date): bool;
     public function updateNotesByDateAndUserId(string $userId, string $date, string $message): void;
     public function updateNotesByPostId(string $id, string $message): void;
 

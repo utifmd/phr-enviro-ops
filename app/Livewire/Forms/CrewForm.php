@@ -18,7 +18,7 @@ class CrewForm extends Form
         return [
 			'name' => 'required|string',
 			'role' => 'required',
-			'operator_id' => 'required',
+			'operator_id' => 'required|uuid',
         ];
     }
 

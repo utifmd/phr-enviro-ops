@@ -163,6 +163,24 @@ class WorkTripRepository implements IWorkTripRepository
             ->get()->toArray();
     }
 
+    public function getActualTripByPostId(string $postId): array
+    {
+        return WorkTrip::with('user')
+            ->where('type', '=', WorkTripTypeEnum::ACTUAL->value, 'and')
+            ->where('post_id', '=', $postId, 'and')
+            ->orderByDesc('time')
+            ->get()->toArray();
+    }
+
+    public function getActualTripByTimeAndPostId(string $time, string $postId): array
+    {
+        return WorkTrip::with('user')
+            ->where('type', '=', WorkTripTypeEnum::ACTUAL->value, 'and')
+            ->where('post_id', '=', $postId, 'and')
+            ->where('time', $time)
+            ->get()->toArray();
+    }
+
     public function getTripByDatetime(string $date, string $time): array
     {
         return WorkTrip::query()
@@ -447,12 +465,26 @@ class WorkTripRepository implements IWorkTripRepository
         ]);
     }
 
+    private function notesByDateAndUserIdBuilder(
+        string $userId, string $date): Builder
+    {
+        return WorkTripNote::with('user')
+            ->where('user_id', '=', $userId, 'and')
+            ->whereBetween('created_at', [
+                Carbon::parse($date)->startOfDay(),
+                Carbon::parse($date)->endOfDay(),
+            ]);
+    }
+
+    public function areNotesByDateAndUserIdExist(string $userId, string $date): bool
+    {
+        return $this->notesByDateAndUserIdBuilder($userId, $date)->exists();
+    }
+
     public function updateNotesByDateAndUserId(
         string $userId, string $date, string $message): void
     {
-        WorkTripNote::query()
-            ->where('user_id', '=', $userId, 'and')
-            ->wheredate('date', $date)
+        $this->notesByDateAndUserIdBuilder($userId, $date)
             ->update(['message' => $message]);
     }
 
@@ -463,7 +495,7 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function getNotesByDateAndUserId(string $date, string $userId): array
     {
-        $builder = WorkTripNote::query()
+        $builder = WorkTripNote::with('user')
             ->where('user_id', '=', $userId, 'and')
             ->whereBetween('created_at', [
                 Carbon::parse($date)->startOfDay(),
@@ -487,7 +519,12 @@ class WorkTripRepository implements IWorkTripRepository
         if (is_array($dateOrDates)) {
             $builder->whereIn('date', $dateOrDates);
         } else {
-            $builder->whereDate('date', $dateOrDates);
+            //$builder->whereDate('date', $dateOrDates);
+
+            $builder->whereBetween('date', [
+                Carbon::parse($dateOrDates)->startOfDay(),
+                Carbon::parse($dateOrDates)->endOfDay(),
+            ]);
         }
         if (is_null($timeOrTimes)) return $builder;
 

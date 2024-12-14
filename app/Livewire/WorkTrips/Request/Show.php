@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Policies\UserPolicy;
 use App\Repositories\Contracts\IPostRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
+use App\Utils\Contracts\IUtility;
 use App\Utils\WorkTripStatusEnum;
 use App\Utils\WorkTripTypeEnum;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -18,37 +19,43 @@ use Livewire\Component;
 class Show extends Component
 {
     private IWorkTripRepository $wtRepos;
+    protected IUtility $util;
     public PostForm $form;
-    public array $workTrips, $tripIdsQueue = [];
+    public array $workTrips, $timeOptions, $tripIdsQueue = [];
+    public string $time;
 
-    public function mount(Post $post): void
+    public function mount(
+        Post $post, IWorkTripRepository $wtRepos, IUtility $util): void
     {
+        $this->wtRepos = $wtRepos;
+        $this->util = $util;
+
         $this->form->setPostModel($post);
+        $this->initTimeOptions();
         $this->initWorkTrips($post->workTrips);
     }
 
-    public function booted(IWorkTripRepository $wtRepos): void
+    public function hydrate(
+        IWorkTripRepository $wtRepos, IUtility $util): void
     {
         $this->wtRepos = $wtRepos;
+        $this->util = $util;
     }
 
-    private function initWorkTrips(Collection $workTrips): void
+    private function initWorkTrips(Collection|array $workTrips): void
     {
         $this->workTrips = array();
-        // $this->workTrips = $workTrips->toArray();
+        $this->tripIdsQueue = array();
         foreach ($workTrips as $actualTrip) {
-            // if ($actualTrip->type != WorkTripTypeEnum::ACTUAL->value) continue;
-            $this->tripIdsQueue[] = $actualTrip->id;
+            $this->tripIdsQueue[] = $actualTrip->id ?? $actualTrip['id'];
             $this->workTrips[] = $actualTrip;
         }
-        // $this->wtPendingReqCount = $this->countWoPendingRequest($post);
+    }
 
-        /*foreach ($workTrips as $i => $planTrip) {
-            //if ($actualTrip->type != WorkTripTypeEnum::PLAN->value) continue;
-            if ($actualTrip->time != $planTrip->time) continue;
-            $actPlanVal = $actualTrip->act_value . '/' . $planTrip->act_value;
-            break;
-        }*/
+    private function initTimeOptions(): void
+    {
+        $this->timeOptions = $this->util->getListOfTimesOptions(0, 22, true);
+        $this->time = $this->timeOptions[0]['value'] ?? '';
     }
 
     private function mapWorkTrip(
@@ -98,6 +105,18 @@ class Show extends Component
             $this->tripIdsQueue,
             WorkTripStatusEnum::REJECTED->value
         );
+    }
+
+    public function onTimeOptionChange(): void
+    {
+        $this->validate(['time' => 'required|string']);
+
+        $postId = $this->form->postModel->id;
+        $trips = str_contains($this->time, '~')
+            ? $this->wtRepos->getActualTripByPostId($postId)
+            : $this->wtRepos->getActualTripByTimeAndPostId($this->time, $postId);
+
+        $this->initWorkTrips($trips);
     }
     /*public function onDeletePressed(string $postId): void
     {

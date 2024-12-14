@@ -22,6 +22,25 @@ Route::middleware('auth')->group(function () {
         ->can(UserPolicy::IS_DEV_ROLE);
 
 
+
+    Route::get('/crews', \App\Livewire\Crews\Index::class)
+        ->name('crews.index')
+        ->can(UserPolicy::IS_DEV_ROLE);
+
+    Route::get('/crews/create', \App\Livewire\Crews\Create::class)
+        ->name('crews.create')
+        ->can(UserPolicy::IS_DEV_ROLE);
+
+    Route::get('/crews/show/{crew}', \App\Livewire\Crews\Show::class)
+        ->name('crews.show')
+        ->can(UserPolicy::IS_DEV_ROLE);
+
+    Route::get('/crews/update/{crew}', \App\Livewire\Crews\Edit::class)
+        ->name('crews.edit')
+        ->can(UserPolicy::IS_DEV_ROLE);
+
+
+
     Route::get('/vehicles', \App\Livewire\Vehicles\Index::class)
         ->name('vehicles.index')
         ->can(UserPolicy::IS_DEV_ROLE);
@@ -37,6 +56,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/vehicles/update/{vehicle}', \App\Livewire\Vehicles\Edit::class)
         ->name('vehicles.edit')
         ->can(UserPolicy::IS_DEV_ROLE);
+
 
     Route::get('/operators', \App\Livewire\Operators\Index::class)
         ->name('operators.index')

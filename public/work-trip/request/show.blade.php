@@ -26,73 +26,54 @@
                     </div>
 
                     <!-- Settings Dropdown -->
-                    <div class="min-w-md md:mx-2">
-                        <x-input-label for="options" :value="__('Options')"/>
-                        <x-dropdown id="options" align="right" width="48">
-                            <x-slot name="trigger">
-                                <button
-                                        class="px-2.5 bg-gray-50 text-gray-900 border border-gray-300 shadow-sm rounded focus:outline-none hover:opacity-50">
-                                    <div x-data="Option" x-text="name"
-                                         x-on:profile-updated.window="name = $event.detail.name"></div>
+                    <x-dropdown-button>
+                        @foreach($form->postModel->imageUrls as $uploaded)
+                            <x-dropdown-link target="__blank" :href="$uploaded->url ?? '#'">
+                                <!--wire:navigate>-->
+                                {{ __('Evidence') }}
+                            </x-dropdown-link>
+                        @endforeach
 
-                                    <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                         width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-width="4"
-                                              d="M6 12h.01m6 0h.01m5.99 0h.01"/>
-                                    </svg>
-                                </button>
-                            </x-slot>
-
-                            <x-slot name="content">
-                                @foreach($form->postModel->imageUrls as $uploaded)
-                                    <x-dropdown-link target="__blank" :href="$uploaded->url ?? '#'">
-                                        <!--wire:navigate>-->
-                                        {{ __('Evidence') }}
-                                    </x-dropdown-link>
-                                @endforeach
-
-                                @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
-                                    <div class="w-full h-3.5"></div>
-                                    <!-- Authentication -->
-                                    <button wire:loading.attr="disabled"
-                                            wire:click.prevent="onAllowAllRequestPressed"
-                                            wire:confirm="Are you sure to accept this Well Loads Request?"
-                                            class="w-full text-start">
-                                        <x-dropdown-link class="text-green-600">
-                                            {{ __('Allowed All Request') }}
-                                        </x-dropdown-link>
-                                    </button>
-                                    <button wire:loading.attr="disabled"
-                                            wire:click.prevent="onDeniedAllRequestPressed"
-                                            wire:confirm="Are you sure to reject this Well Loads Request?"
-                                            class="w-full text-start">
-                                        <x-dropdown-link class="text-red-600">
-                                            {{ __('Denied All Request') }}
-                                        </x-dropdown-link>
-                                    </button>
-                                @endcan
-                                @canany([\App\Policies\UserPolicy::IS_USER_IS_FAC_REP, \App\Policies\PostPolicy::IS_THE_POST_STILL_PENDING], $form->postModel)
-                                    <div class="w-full h-3.5"></div>
-                                    <x-dropdown-link
-                                            wire:navigate
-                                            type="button"
-                                            href="{{ route('work-trips.edit', $form->postModel->id) }}"
-                                            wire:loading.attr="disabled" class="text-yellow-300 font-bold">
-                                        {{ __('Update Request') }}
-                                    </x-dropdown-link>
-                                    <button
-                                            wire:loading.attr="disabled"
-                                            wire:click.prevent="onDeletePressed('{{$form->postModel->id}}')"
-                                            wire:confirm="Are you sure to delete this Well Loads?"
-                                            class="w-full text-start">
-                                        <x-dropdown-link class="text-red-600 font-bold">
-                                            {{ __('Delete Permanently') }}
-                                        </x-dropdown-link>
-                                    </button>
-                                @endcanany
-                            </x-slot>
-                        </x-dropdown>
-                    </div>
+                        @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
+                            <div class="w-full h-3.5"></div>
+                            <!-- Authentication -->
+                            <button wire:loading.attr="disabled"
+                                    wire:click.prevent="onAllowAllRequestPressed"
+                                    wire:confirm="Are you sure to accept this Well Loads Request?"
+                                    class="w-full text-start">
+                                <x-dropdown-link class="text-green-600">
+                                    {{ __('Allowed All Request') }}
+                                </x-dropdown-link>
+                            </button>
+                            <button wire:loading.attr="disabled"
+                                    wire:click.prevent="onDeniedAllRequestPressed"
+                                    wire:confirm="Are you sure to reject this Well Loads Request?"
+                                    class="w-full text-start">
+                                <x-dropdown-link class="text-red-600">
+                                    {{ __('Denied All Request') }}
+                                </x-dropdown-link>
+                            </button>
+                        @endcan
+                        @canany([\App\Policies\UserPolicy::IS_USER_IS_FAC_REP, \App\Policies\PostPolicy::IS_THE_POST_STILL_PENDING], $form->postModel)
+                            <div class="w-full h-3.5"></div>
+                            <x-dropdown-link
+                                wire:navigate
+                                type="button"
+                                href="{{ route('work-trips.edit', $form->postModel->id) }}"
+                                wire:loading.attr="disabled" class="text-yellow-300 font-bold">
+                                {{ __('Update Request') }}
+                            </x-dropdown-link>
+                            <button
+                                wire:loading.attr="disabled"
+                                wire:click.prevent="onDeletePressed('{{$form->postModel->id}}')"
+                                wire:confirm="Are you sure to delete this Well Loads?"
+                                class="w-full text-start">
+                                <x-dropdown-link class="text-red-600 font-bold">
+                                    {{ __('Delete Permanently') }}
+                                </x-dropdown-link>
+                            </button>
+                        @endcanany
+                    </x-dropdown-button>
                 </div>
                 @if($form->postModel->workOrders)
                     <div class="flow-root">

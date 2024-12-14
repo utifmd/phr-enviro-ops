@@ -3,10 +3,8 @@
 namespace App\Livewire\Operators;
 
 use App\Livewire\Forms\OperatorForm;
-use App\Models\Crew;
 use App\Models\Operator;
-use App\Utils\Enums\CrewRoleEnum;
-use App\Utils\Enums\VehicleTypeEnum;
+use App\Utils\CrewRoleEnum;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
