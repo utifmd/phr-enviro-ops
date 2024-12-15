@@ -10,6 +10,7 @@ use App\Models\WorkTripNote;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\ActNameEnum;
 use App\Utils\ActUnitEnum;
+use App\Utils\AreaNameEnum;
 use App\Utils\Constants;
 use App\Utils\WorkOrderStatusEnum;
 use App\Utils\WorkTripTypeEnum;
@@ -504,6 +505,19 @@ class WorkTripRepository implements IWorkTripRepository
 
         return $builder->get()->toArray();
     }
+
+    public function getNotesByArea(string $areaName): Collection
+    {
+        $builder = WorkTripNote::query();
+
+        if ($areaName != AreaNameEnum::AllArea->value) {
+            $builder->whereHas('user', function ($query) use ($areaName) {
+                $query->where('area_name', '=', $areaName);
+            });
+        }
+        return $builder->get();
+    }
+
 
     public function countPendingWorkTrip(array $workTrips): int
     {

@@ -123,6 +123,13 @@ class User extends Authenticatable
         );
     }
 
+    public function logs(): HasMany
+    {
+        return $this->hasMany(
+            Log::class, 'user_id', 'id'
+        );
+    }
+
     protected static function booted(): void
     {
         self::creating(function ($model) {

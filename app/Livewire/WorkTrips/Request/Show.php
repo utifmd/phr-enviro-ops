@@ -5,24 +5,36 @@ namespace App\Livewire\WorkTrips\Request;
 use App\Livewire\Forms\PostForm;
 use App\Models\Post;
 use App\Policies\UserPolicy;
-use App\Repositories\Contracts\IPostRepository;
+use App\Repositories\Contracts\IDBRepository;
+use App\Repositories\Contracts\ILogRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\Contracts\IUtility;
 use App\Utils\WorkTripStatusEnum;
-use App\Utils\WorkTripTypeEnum;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class Show extends Component
 {
-    private IWorkTripRepository $wtRepos;
+    protected ILogRepository $logRepos;
+    protected IDBRepository $dbRepos;
+    protected IWorkTripRepository $wtRepos;
     protected IUtility $util;
     public PostForm $form;
     public array $workTrips, $timeOptions, $tripIdsQueue = [];
     public string $time;
+
+    public function boot(
+        ILogRepository $logRepos, IDBRepository $dbRepos, IWorkTripRepository $wtRepos, IUtility $util): void
+    {
+        $this->dbRepos = $dbRepos;
+        $this->wtRepos = $wtRepos;
+        $this->util = $util;
+        $this->logRepos = $logRepos;
+    }
 
     public function mount(
         Post $post, IWorkTripRepository $wtRepos, IUtility $util): void
@@ -33,13 +45,6 @@ class Show extends Component
         $this->form->setPostModel($post);
         $this->initTimeOptions();
         $this->initWorkTrips($post->workTrips);
-    }
-
-    public function hydrate(
-        IWorkTripRepository $wtRepos, IUtility $util): void
-    {
-        $this->wtRepos = $wtRepos;
-        $this->util = $util;
     }
 
     private function initWorkTrips(Collection|array $workTrips): void
@@ -69,21 +74,47 @@ class Show extends Component
         return $current;
     }
 
+    private function assignLog(string $urlPath, string $highlight): void
+    {
+        $this->logRepos->addLogs($urlPath, $highlight);
+    }
+
     /**
      * @throws AuthorizationException
      */
     public function onChangeStatus(string|array $idOrIds, string $request): void
     {
         $this->authorize(UserPolicy::IS_USER_IS_FAC_REP, $this->form->postModel);
+        try {
+            $this->dbRepos->async();
+            $onComplete = function ($id) use ($request) {
+                $request = ['id' => $id, 'status' => $request];
+                $this->workTrips = $this->mapWorkTrip($id, $this->workTrips, $request);
+                $this->wtRepos->updateTrip($request);
+            };
+            if (is_string($id = $idOrIds)) {
+                $onComplete($id);
 
-        $onComplete = function ($id) use ($request) {
-            $request = ['id' => $id, 'status' => $request];
-            $this->workTrips = $this->mapWorkTrip($id, $this->workTrips, $request);
-            $this->wtRepos->updateTrip($request);
-        };
-        if (is_string($id = $idOrIds)) $onComplete($id);
-        if (!is_array($idOrIds)) return;
-        foreach ($idOrIds as $id) { $onComplete($id); }
+                $this->assignLog(
+                    'work-trips/requests/show/'.$id, $request.' actual '.$id
+                );
+            }
+            if (!is_array($idOrIds)) {
+                $this->dbRepos->await();
+                return;
+            }
+            foreach ($idOrIds as $id) { $onComplete($id); }
+            $this->assignLog(
+                'work-trips/requests', $request.' actual ('.count($idOrIds).')'
+            );
+            $this->dbRepos->await();
+
+        } catch (\Throwable $throwable) {
+            $this->dbRepos->cancel();
+            $this->addError('error', $throwable->getMessage());
+
+            Log::error($throwable->getMessage());;
+        }
     }
 
     /**

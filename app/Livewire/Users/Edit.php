@@ -4,6 +4,7 @@ namespace App\Livewire\Users;
 
 use App\Livewire\Forms\UserForm;
 use App\Models\User;
+use App\Repositories\Contracts\ILogRepository;
 use App\Repositories\Contracts\IOperatorRepository;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -13,8 +14,16 @@ use Livewire\Component;
 class Edit extends Component
 {
     protected IOperatorRepository $opRepos;
+    protected ILogRepository $logRepos;
     public UserForm $form;
     public array $operatorOptions;
+
+    public function boot(
+        ILogRepository $logRepos, IOperatorRepository $opRepos): void
+    {
+        $this->logRepos = $logRepos;
+        $this->opRepos = $opRepos;
+    }
 
     public function mount(User $user): void
     {
@@ -23,14 +32,16 @@ class Edit extends Component
         $this->initOperators();
     }
 
-    public function boot(IOperatorRepository $opRepos): void
-    {
-        $this->opRepos = $opRepos;
-    }
-
     private function initOperators(): void
     {
         $this->operatorOptions = $this->opRepos->getOperatorsOptions();
+    }
+
+    private function assignLog(): void
+    {
+        $this->logRepos->addLogs(
+            'users', 'updated user '.$this->form->name
+        );
     }
 
     /**
@@ -39,6 +50,7 @@ class Edit extends Component
     public function save(): void
     {
         $this->form->update();
+        $this->assignLog();
 
         $this->redirectRoute('users.index', navigate: true);
     }

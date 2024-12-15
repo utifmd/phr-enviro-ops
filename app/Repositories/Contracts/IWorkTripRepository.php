@@ -73,4 +73,6 @@ interface IWorkTripRepository
     public function updateNotesByPostId(string $id, string $message): void;
 
     public function countPendingWorkTrip(array $workTrips): int;
+
+    public function getNotesByArea(string $areaName): Collection;
 }

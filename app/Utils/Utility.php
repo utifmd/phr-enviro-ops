@@ -5,13 +5,17 @@ namespace App\Utils;
 use App\Models\Post;
 use App\Utils\Contracts\IUtility;
 use Carbon\Carbon;
+use Symfony\Component\Mime\HtmlToTextConverter\DefaultHtmlToTextConverter;
 
 class Utility implements IUtility
 {
     private Carbon $datetime;
+    private DefaultHtmlToTextConverter $htmlToText;
+
     public function __construct()
     {
         $this->datetime = Carbon::now();
+        $this->htmlToText = new DefaultHtmlToTextConverter();
     }
 
     function daysOfMonthLength(?int $month = null): int|false
@@ -166,5 +170,24 @@ class Utility implements IUtility
     {
         $carbon = Carbon::parse($latestDate);
         return $carbon->addDays($dayCount);
+    }
+
+    public function convertHtml(string $html): string
+    {
+        // Mengubah teks dari Windows-1252 ke UTF-8
+        /*$teks_windows1252 = "Teks dengan karakter khusus seperti é, à, ü";
+        $teks_utf8 = mb_convert_encoding($teks_windows1252, 'UTF-8', 'Windows-1252');*/
+
+        // Mengubah teks dari UTF-16BE ke UTF-8
+        /*return mb_convert_encoding($html, 'UTF-8', 'UTF-16BE');*/
+
+        /*return mb_convert_encoding($html, 'UTF-8', 'ISO-8859-1');*/
+
+        $converted = $this->htmlToText->convert($html, 'UTF-8');
+        return trim($converted);
+        /*$pattern = '"{\*?\\\\.+(;})|\\s?\\\[A-Za-z0-9]+|\\s?{\\s?\\\[A-Za-z0-9‹]+\\s?|\\s?}\\s?"';
+        return preg_replace(
+            $pattern, Constants::EMPTY_STRING, $html
+        );*/
     }
 }

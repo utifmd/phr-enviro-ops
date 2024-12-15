@@ -23,4 +23,6 @@ interface IUtility
     function countWtPendingRequest(Post $post): int;
 
     function addDaysOfParse(?string $latestDate, ?int $dayCount): ?string;
+
+    function convertHtml(string $html): string;
 }

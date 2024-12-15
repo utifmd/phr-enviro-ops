@@ -140,12 +140,13 @@ new class extends Component {
                         </button>
                     </x-slot>
                 </x-dropdown>
-                {{--<button
-                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                    <div class="ms-1">
-                        <img class="fill-current h-4 w-4" src="{{ asset('/csv/notifications_unread.svg') }}" alt="Notification">
-                    </div>
-                </button>--}}
+                @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
+                    <x-nav-link type="button" :href="route('logs.index')" :active="request()->routeIs('logs.index')" wire:navigate class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white">
+                        <div class="ms-1">
+                            <img class="fill-current h-4 w-4" src="{{ asset('/csv/notifications_unread.svg') }}" alt="Notification">
+                        </div>
+                    </x-nav-link>
+                @endcan
             </div>
 
             <!-- Hamburger -->
@@ -237,6 +238,11 @@ new class extends Component {
                     </div>--}}
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
+                @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
+                    <x-responsive-nav-link :href="route('logs.index')" :active="request()->routeIs('logs.index')" wire:navigate>
+                        {{ __('Notification') }}
+                    </x-responsive-nav-link>
+                @endcan
 
                 {{--@can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
                 <x-responsive-nav-link :href="route('work-trip-infos.index')" wire:navigate>

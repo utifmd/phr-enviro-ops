@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Repositories\Contracts\ICrewRepository;
 use App\Repositories\Contracts\IDBRepository;
+use App\Repositories\Contracts\ILogRepository;
 use App\Repositories\Contracts\IOperatorRepository;
 use App\Repositories\Contracts\IPostRepository;
 use App\Repositories\Contracts\IUserCurrentPostRepository;
@@ -14,6 +15,7 @@ use App\Repositories\Contracts\IWorkOrderRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Repositories\CrewRepository;
 use App\Repositories\DBRepository;
+use App\Repositories\LogRepository;
 use App\Repositories\OperatorRepository;
 use App\Repositories\PostRepository;
 use App\Repositories\UserCurrentPostRepository;
@@ -41,6 +43,7 @@ class PhrRepositoryProvider extends ServiceProvider
         $this->app->bind(IOperatorRepository::class, OperatorRepository::class);
         $this->app->bind(IVehicleRepository::class, VehicleRepository::class);
         $this->app->bind(ICrewRepository::class, CrewRepository::class);
+        $this->app->bind(ILogRepository::class, LogRepository::class);
     }
 
     /**

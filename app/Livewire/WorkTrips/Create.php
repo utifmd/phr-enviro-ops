@@ -6,6 +6,7 @@ use App\Livewire\BaseComponent;
 use App\Livewire\Forms\WorkTripForm;
 use App\Models\WorkTrip;
 use App\Repositories\Contracts\IDBRepository;
+use App\Repositories\Contracts\ILogRepository;
 use App\Repositories\Contracts\IPostRepository;
 use App\Repositories\Contracts\IUserRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
@@ -13,22 +14,21 @@ use App\Utils\Constants;
 use App\Utils\Contracts\IUtility;
 use App\Utils\WorkTripStatusEnum;
 use App\Utils\WorkTripTypeEnum;
+use Exception;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
-/*
- * TODO:
- * 1. get LOG
- * 2. fix relation of remarks by user
- * 3. check powerBi for mobile for remarks marquee
- * */
+use Symfony\Component\Mime\HtmlToTextConverter\DefaultHtmlToTextConverter;
+use Throwable;
+
 class Create extends BaseComponent
 {
     #[Url]
     public ?string $dateParam = null;
 
     protected IDBRepository $dbRepos;
+    protected ILogRepository $logRepos;
     protected IUtility $util;
     protected IUserRepository $usrRepos;
     protected IPostRepository $pstRepos;
@@ -39,20 +39,25 @@ class Create extends BaseComponent
     public string $currentDate, $remarks, $remarksAt;
     public bool $isEditMode = false;
 
-    public function mount(
-        WorkTrip $workTrip,
+
+    public function boot(
         IDBRepository $dbRepos,
+        ILogRepository $logRepos,
         IUtility $util,
         IUserRepository $usrRepos,
         IPostRepository $pstRepos,
         IWorkTripRepository $wtRepos): void
     {
         $this->dbRepos = $dbRepos;
+        $this->logRepos = $logRepos;
         $this->util = $util;
         $this->usrRepos = $usrRepos;
         $this->wtRepos = $wtRepos;
         $this->pstRepos = $pstRepos;
+    }
 
+    public function mount(WorkTrip $workTrip): void
+    {
         $this->form->setWorkTripModel($workTrip);
         $this->initAuthUser();
         $this->initDateOptions();
@@ -60,16 +65,6 @@ class Create extends BaseComponent
         $this->initLocOptions();
         $this->checkTripState();
         $this->checkRemarks();
-    }
-
-    public function hydrate(
-        IDBRepository $dbRepos,
-        IPostRepository $pstRepos,
-        IWorkTripRepository $wtRepos): void
-    {
-        $this->dbRepos = $dbRepos;
-        $this->wtRepos = $wtRepos;
-        $this->pstRepos = $pstRepos;
     }
 
     private function checkTripState(): void
@@ -139,7 +134,7 @@ class Create extends BaseComponent
             );
             $this->tripState = $this->mapInfoToPlanTripState($infoState);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             session()->flash('error', $e->getMessage());
         }
     }
@@ -170,7 +165,7 @@ class Create extends BaseComponent
 
     private function assignNotes(string $postId): void
     {
-        if (empty($this->notes)) return;
+        if (empty($this->remarks)) return;
         if ($this->wtRepos->areNotesByDateAndUserIdExist(
             $userId = $this->authUsr['id'], $date = $this->currentDate)) {
 
@@ -181,6 +176,21 @@ class Create extends BaseComponent
         }
         $this->wtRepos->generateNotes(
             $postId, $userId, $this->remarks
+        );
+    }
+
+    private function assignLog(string $postId): void
+    {
+        $highlight = $this->isEditMode
+            ? 'change request' : 'send request';
+        $event = null;
+
+        if (empty($this->remarks)) {
+            $highlight .= ' with remarks';
+            $event = $this->remarks;
+        }
+        $this->logRepos->addLogs(
+            '/work-trips/requests/'.$postId, $highlight, $event
         );
     }
 
@@ -270,7 +280,7 @@ class Create extends BaseComponent
             $actPlanVal = explode('/', $this->tripState[$idx]['act_value']);
 
             $this->tripState[$idx]['act_value'] = $this->form->act_value . '/' . $actPlanVal[1];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->addError('error', $e->getMessage());
         }
     }
@@ -292,6 +302,7 @@ class Create extends BaseComponent
         if (!empty($postId = $tripState[0]['post_id'])) {
             $this->assignPost($postId);
             $this->assignNotes($postId);
+            $this->assignLog($postId);
         }
     }
 
@@ -313,7 +324,7 @@ class Create extends BaseComponent
 
             session(['form_time' => $this->form->time]);
             $this->redirectRoute('work-trips.index', navigate: true);
-        } catch (\Throwable $t) {
+        } catch (Throwable $t) {
 
             $this->dbRepos->cancel();
             $this->addError('error', $t->getMessage());

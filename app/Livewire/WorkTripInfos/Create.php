@@ -7,6 +7,7 @@ use App\Livewire\Forms\WorkTripInfoForm;
 use App\Models\Activity;
 use App\Models\WorkTripInfo;
 use App\Repositories\Contracts\IDBRepository;
+use App\Repositories\Contracts\ILogRepository;
 use App\Repositories\Contracts\IPostRepository;
 use App\Repositories\Contracts\IUserRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
@@ -26,12 +27,13 @@ class Create extends BaseComponent
     #[Url]
     public ?string $dateParam = null;
 
+    protected ILogRepository $logRepos;
     protected IDBRepository $dbRepos;
     protected IUtility $util;
     protected IUserRepository $usrRepos;
     protected IPostRepository $pstRepos;
-    protected IWorkTripRepository $wtRepos;
 
+    protected IWorkTripRepository $wtRepos;
     public WorkTripInfoForm $form;
     public array
         $authUsr, $infoState, $locations,
@@ -40,22 +42,10 @@ class Create extends BaseComponent
     public ?string $postId, $focusedDate;
     public bool $isEditMode = false;
 
-    public function mount(
-        WorkTripInfo $workTripInfo,
-        IDBRepository $dbRepos,
-        IUtility $util,
-        IUserRepository $usrRepos,
-        IPostRepository $pstRepos,
-        IWorkTripRepository $wtRepos): void
+    public function mount(WorkTripInfo $workTripInfo): void
     {
         $date = $this->dateParam;
         $this->isEditMode = !is_null($date);
-
-        $this->dbRepos = $dbRepos;
-        $this->util = $util;
-        $this->usrRepos = $usrRepos;
-        $this->pstRepos = $pstRepos;
-        $this->wtRepos = $wtRepos;
 
         $this->form->setWorkTripInfoModel($workTripInfo);
         $this->initAuthUser();
@@ -65,16 +55,25 @@ class Create extends BaseComponent
         $this->checkInfoState($date);
     }
 
-    public function hydrate(
+    public function boot(
         IDBRepository $dbRepos,
         IUtility $util,
+        IUserRepository $usrRepos,
         IPostRepository $pstRepos,
-        IWorkTripRepository $wtRepos): void
+        IWorkTripRepository $wtRepos,
+        ILogRepository $logRepos): void
     {
+        $this->logRepos = $logRepos;
         $this->dbRepos = $dbRepos;
         $this->util = $util;
+        $this->usrRepos = $usrRepos;
         $this->pstRepos = $pstRepos;
         $this->wtRepos = $wtRepos;
+    }
+
+    private function assignLog(string $urlPath, string $highlight): void
+    {
+        $this->logRepos->addLogs($urlPath, $highlight);
     }
 
     private function checkInfoState($dateParam): void
@@ -135,6 +134,9 @@ class Create extends BaseComponent
         $this->postId = $this->pstRepos->generatePost(
             $this->authUsr, ['created_at' => $this->focusedDate]
         );
+        $this->assignLog(
+            'posts', 'added post '.$this->postId
+        );
     }
 
     /**
@@ -157,6 +159,9 @@ class Create extends BaseComponent
         foreach ($this->delInfoQueue as $info) {
             $this->wtRepos->removeInfoById($info['id']);
         }
+        $this->assignLog(
+            'work-trip-infos', 'deleted info ('.count($this->delInfoQueue).')'
+        );
     }
 
     private function initDate(?string $initDate = null, ?string $startDate = null): void
@@ -352,6 +357,10 @@ class Create extends BaseComponent
         } else {
             $this->savePopulatedByTimesOrTime($dateOrDates);
         }
+        $highlight = $this->isEditMode ? 'updated info' : 'added info';
+        $highlight .= ' '.$dateOrDates;
+
+        $this->assignLog('work-trip-infos', $highlight);
     }
 
     private function savePopulatedByTimesOrTime($date): void
@@ -385,14 +394,8 @@ class Create extends BaseComponent
             $this->checkInfoDeletion();
             $this->savePopulatedByDatesOrDate();
             $this->dbRepos->await();
-
-            /*session()->flash(
-                'message', 'Your change successfully saved.'
-            );
-            $this->isEditMode = true;
-            $this->scrollToTop();*/
-
             $this->redirectRoute('work-trip-infos.index', navigate: true);
+
         } catch (\Throwable $t) {
             $this->dbRepos->cancel();
             Log::debug($t->getMessage());

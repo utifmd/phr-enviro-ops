@@ -31,7 +31,7 @@ class WorkTripController extends Controller
         $data = $this->workTripRepos->indexByStatus(
             WorkTripStatusEnum::APPROVED->value
         );
-        $message = 'Refreshed at ';
+        $message = 'latest update ';
         $message .= date('d/m/y H:i:s');
 
         return WorkTripService::sendResponse(

@@ -26,3 +26,4 @@ require __DIR__.'/web-well.php';
 require __DIR__.'/web-operator.php';
 require __DIR__ . '/web-workorders.php';
 require __DIR__ . '/web-worktrips.php';
+require __DIR__ . '/web-logs.php';
