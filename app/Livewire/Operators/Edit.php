@@ -6,6 +6,8 @@ use App\Livewire\Forms\OperatorForm;
 use App\Models\Department;
 use App\Models\Operator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -32,11 +34,16 @@ class Edit extends Component
         });
     }
 
-    public function save()
+    /**
+     * @throws ValidationException
+     */
+    public function save(): void
     {
+        Log::debug('Update Operator');
+        Log::debug(json_encode($this->form->toArray()));
         $this->form->update();
 
-        return $this->redirectRoute('operators.index', navigate: true);
+        $this->redirectRoute('operators.index', navigate: true);
     }
 
     #[Layout('layouts.app')]

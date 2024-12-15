@@ -8,7 +8,7 @@ use Livewire\Form;
 class DepartmentForm extends Form
 {
     public ?Department $departmentModel;
-    
+
     public $prefix = '';
     public $postfix = '';
     public $name = '';
@@ -17,8 +17,6 @@ class DepartmentForm extends Form
     public function rules(): array
     {
         return [
-			'prefix' => 'string',
-			'postfix' => 'string',
 			'name' => 'required|string',
 			'short_name' => 'required|string',
         ];
@@ -27,7 +25,7 @@ class DepartmentForm extends Form
     public function setDepartmentModel(Department $departmentModel): void
     {
         $this->departmentModel = $departmentModel;
-        
+
         $this->prefix = $this->departmentModel->prefix;
         $this->postfix = $this->departmentModel->postfix;
         $this->name = $this->departmentModel->name;

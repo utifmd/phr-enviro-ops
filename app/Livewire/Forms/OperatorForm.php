@@ -3,23 +3,27 @@
 namespace App\Livewire\Forms;
 
 use App\Models\Operator;
+use Illuminate\Validation\ValidationException;
 use Livewire\Form;
 
 class OperatorForm extends Form
 {
     public ?Operator $operatorModel;
 
-    public $prefix = '';
-    public $postfix = '';
-    public $name = '';
-    public $short_name = '';
-    public $department_id = '';
+    public ?string $prefix;
+    public ?string $postfix;
+    public ?string $name;
+    public ?string $short_name;
+    public ?string $department_id;
 
     public function rules(): array
     {
         return [
+			'prefix' => 'string|nullable',
+			'postfix' => 'string|nullable',
 			'name' => 'required|string',
 			'short_name' => 'required|string',
+			'department_id' => 'required|string',
         ];
     }
 
@@ -34,6 +38,9 @@ class OperatorForm extends Form
         $this->department_id = $this->operatorModel->department_id;
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function store(): void
     {
         $this->operatorModel->create($this->validate());
@@ -41,6 +48,9 @@ class OperatorForm extends Form
         $this->reset();
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function update(): void
     {
         $this->operatorModel->update($this->validate());

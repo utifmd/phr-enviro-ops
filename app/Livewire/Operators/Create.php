@@ -6,6 +6,9 @@ use App\Livewire\Forms\OperatorForm;
 use App\Models\Department;
 use App\Models\Operator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -32,6 +35,14 @@ class Create extends Component
         });
     }
 
+    /*public function onDepartmentChange(): void
+    {
+        $this->form->department_id =
+    }*/
+
+    /**
+     * @throws ValidationException
+     */
     public function save(): void
     {
         $this->form->store();
@@ -40,7 +51,7 @@ class Create extends Component
     }
 
     #[Layout('layouts.app')]
-    public function render()
+    public function render(): View
     {
         return view('livewire.operator.create');
     }
