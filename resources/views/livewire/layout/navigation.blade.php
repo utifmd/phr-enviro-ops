@@ -36,10 +36,10 @@ new class extends Component {
                     </x-nav-link>
                     @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
                         <x-nav-link :href="route('work-trip-infos.index')" :active="request()->routeIs('work-trip-infos.index') || request()->routeIs('work-trip-infos.create')" wire:navigate>
-                            {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Plan') }}
+                            {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Planing') }}
                         </x-nav-link>
                         <x-nav-link :href="route('work-trips.requests.index')" :active="request()->routeIs('work-trips.requests.index') || request()->routeIs('work-trips.requests.create') || request()->routeIs('work-trips.requests.show')" wire:navigate>
-                            {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Verify') }}
+                            {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Verification') }}
                         </x-nav-link>
                     @endcan
                     @can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
@@ -130,7 +130,7 @@ new class extends Component {
                         {{--@can(\App\Policies\UserPolicy::IS_PHR_ROLE)
                         <x-dropdown-link :href="route('users.index')" wire:navigate>
                             {{ __('User Management') }}
-                        </x-dropdown-link>
+                        </x-dropdown-link> bm
                         @endcan--}}
                         <!-- Authentication -->
                         <button wire:click="logout" class="w-full text-start">
@@ -141,7 +141,7 @@ new class extends Component {
                     </x-slot>
                 </x-dropdown>
                 @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
-                    <x-nav-link type="button" :href="route('logs.index')" :active="request()->routeIs('logs.index')" wire:navigate class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white">
+                    <x-nav-link class="border-none" :href="route('logs.index')" :active="request()->routeIs('logs.index')" wire:navigate>
                         <div class="ms-1">
                             <img class="fill-current h-4 w-4" src="{{ asset('/csv/notifications_unread.svg') }}" alt="Notification">
                         </div>
@@ -174,10 +174,10 @@ new class extends Component {
 
             @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
                 <x-responsive-nav-link :href="route('work-trip-infos.index')" :active="request()->routeIs('work-trip-infos.index')" wire:navigate>
-                    {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Plan') }}
+                    {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Planing') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('work-trips.requests.index')" :active="request()->routeIs('work-trips.requests.index')" wire:navigate>
-                    {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Verify') }}
+                    {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Verification') }}
                 </x-responsive-nav-link>
             @endcan
             @can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
@@ -226,7 +226,8 @@ new class extends Component {
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800"
-                     x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name"
+                     x-data="{{ json_encode(['name' => auth()->user()->email]) }}"
+                     x-text="name"
                      x-on:profile-updated.window="name = $event.detail.name"></div>
                 <div class="font-medium text-sm text-gray-500">{{ auth()->user()->email }}</div>
             </div>

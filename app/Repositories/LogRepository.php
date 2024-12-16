@@ -23,15 +23,18 @@ class LogRepository implements ILogRepository
             ->paginate();
     }
     public function addLogs(
-        string $urlPath, string $highlight, ?string $event = null): void
+        string $urlPath, string $highlight, ?string $event = null, ?string $areaName = null): void
     {
         $data = [
             'event' => $event ?? $highlight,
             'highlight' => $highlight,
             'route_name' => $urlPath,
             'url' => env('APP_URL').'/'.$urlPath,
-            'user_id' => auth()->id(),
+            'user_id' => \auth()->id(),
         ];
+        if (!is_null($area = $areaName ?? \auth()->user()->area_name)){
+            $data['area'] = $area;
+        }
         if(!is_null($event)) $data['event'] = $event;
 
         Log::factory()->create($data);

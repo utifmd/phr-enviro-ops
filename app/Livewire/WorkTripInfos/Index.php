@@ -23,22 +23,22 @@ class Index extends Component
 
     protected LengthAwarePaginator $groupedInfoState;
 
-    public function mount(
+    public function boot(
         IWorkTripRepository $workTripRepos, IUserRepository $usrRepos): void
     {
         $this->workTripRepos = $workTripRepos;
         $this->usrRepos = $usrRepos;
+    }
 
+    public function mount(): void
+    {
         $this->initAuthUser();
         $this->initInfoState();
     }
 
-    public function hydrate(
-        IWorkTripRepository $workTripRepos, IUserRepository $usrRepos): void
+    public function hydrate(): void
     {
-        $this->workTripRepos = $workTripRepos;
-        $this->usrRepos = $usrRepos;
-        //$this->initInfoState();
+        $this->initInfoState();
     }
 
     private function initAuthUser(): void

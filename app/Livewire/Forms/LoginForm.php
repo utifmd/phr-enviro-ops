@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Forms;
 
+use App\Repositories\Contracts\ILogRepository;
 use App\Repositories\Contracts\IUserRepository;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,7 @@ use Livewire\Form;
 class LoginForm extends Form
 {
     private IUserRepository $userRepository;
+    private ILogRepository $logRepos;
 
     #[Validate('required|string')]
     public string $email = '';
@@ -25,9 +27,11 @@ class LoginForm extends Form
     #[Validate('boolean')]
     public bool $remember = false;
 
-    public function boot(IUserRepository $repository): void
+    public function boot(
+        IUserRepository $repository, ILogRepository $logRepos): void
     {
         $this->userRepository = $repository;
+        $this->logRepos = $logRepos;
     }
     /**
      * Attempt to authenticate the request's credentials.
@@ -36,18 +40,21 @@ class LoginForm extends Form
      */
     public function authenticate(): void
     {
-        // $this->ensureIsNotRateLimited();
-
+        $this->ensureIsNotRateLimited();
         $request = $this->only(['email', 'password']);
+
         $login = $this->userRepository->login($request, $this->remember);
         if (is_null($login)) {
-            // RateLimiter::hit($this->throttleKey());
+            RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
                 'form.email' => trans('auth.failed'),
             ]);
         }
-        // RateLimiter::clear($this->throttleKey());
+        $this->logRepos->addLogs(
+            'work-trip-infos', 'signed in'
+        );
+        RateLimiter::clear($this->throttleKey());
         Session::regenerate();
     }
 

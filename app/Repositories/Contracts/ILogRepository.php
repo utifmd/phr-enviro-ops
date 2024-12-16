@@ -14,5 +14,6 @@ interface ILogRepository
     public function store(array $data): Collection;
     public function update(array $data,$id): bool;
     public function delete($id): ?bool;*/
-    public function addLogs(string $urlPath, string $highlight, ?string $event);
+    public function addLogs(
+        string $urlPath, string $highlight, ?string $event, ?string $areaName);
 }
