@@ -22,31 +22,20 @@
                         </th>
                     </tr>
                     </thead>
-                    @props(['num' => 0])
-                    <tbody class="divide-y divide-gray-200 bg-white">
-                    @forelse($tripState as $i => $trip)
-                        <tr wire:key="{{$i}}" class="even:bg-gray-50 hover:bg-amber-50">
-                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
-                                {{ ++$num }}.
-                            </td>
-                            <td {{--wire:click="onInfoStateTimeSelected({{$i}})"--}} class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
-                                {{ $trip['time'] }}
-                            </td>
-                            <td {{--wire:click="onInfoStateActNameSelected({{$i}})"--}} class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
-                                {{ $trip['act_name'].' '.$trip['act_process'] }}
-                            </td>
-                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
-                                {{ $trip['area_loc'] }}
-                            </td>
-                            <td wire:click="onInfoStateValueSelected({{$i}})" class="cursor-pointer whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900 hover:underline hover:font-semibold hover:text-yellow-600">
-                                {{ $trip['act_value'] }} {{ $trip['act_unit'] }} {{--m3 ~> &#13221; &#x33A5;--}}
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="border border-gray-300 px-4 py-2 text-center">Today's plans have not been set</td>
-                        </tr>
-                    @endforelse
+                    <tbody x-data="{ tripState: @entangle('tripState'), formActValue: @entangle('form.act_value') }" class="divide-y divide-gray-200 bg-white">
+                        <template x-for="(trip, i) in tripState" :key="i">
+
+                            <tr wire:key="i" class="even:bg-gray-50 hover:bg-amber-50">
+                                <td x-text="i +1" class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900"></td>
+                                <td x-text="trip.time" class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900" {{--wire:click="onInfoStateTimeSelected({{$i}})"--}}></td>
+                                <td x-text="trip.act_name+' '+trip.act_process" class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900" {{--wire:click="onInfoStateActNameSelected({{$i}})"--}}></td>
+                                <td x-text="trip.area_loc" class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900"></td>
+                                <td x-on:click="if(formActValue.length !== 0) trip.act_value = formActValue+'/'+trip.act_value.split('/')[1]" x-text="trip.act_value+' '+trip.act_unit" {{--wire:click="onInfoStateValueSelected(i)"--}} class="cursor-pointer whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900 hover:underline hover:font-semibold hover:text-yellow-600"></td>
+                            </tr>
+                        </template>
+                        <template x-if="tripState.length == 0">
+                            <tr><td colspan="5" class="border border-gray-300 px-4 py-2 text-center">Today's plans have not been set</td></tr>
+                        </template>
                     </tbody>
                 </table>
             </div>

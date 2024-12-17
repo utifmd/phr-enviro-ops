@@ -15,6 +15,7 @@ use App\Utils\Contracts\IUtility;
 use App\Utils\WorkTripStatusEnum;
 use App\Utils\WorkTripTypeEnum;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
@@ -74,6 +75,7 @@ class Create extends BaseComponent
             $date = $this->currentDate, $this->form->time, $this->authUsr['area_name'])) {
             $this->isEditMode = true;
             $this->form->date = $date;
+            $this->form->act_value = empty($value = $this->form->act_value) ? 0 : $value;
             $this->getTripState($date);
             return;
         }
@@ -126,8 +128,7 @@ class Create extends BaseComponent
 
     private function initTripState(): void
     {
-        $this->form->act_value = empty($this->form->act_value)
-            ? 0 : $this->form->act_value;
+        $this->form->act_value = empty($value = $this->form->act_value) ? 0 : $value;
         try {
             $infoState = $this->wtRepos->getInfoByDatetimeAndArea(
                 $this->currentDate, $this->form->time, $this->authUsr['area_name']

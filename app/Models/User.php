@@ -136,4 +136,5 @@ class User extends Authenticatable
             $model->id = Str::uuid()->toString();
         });
     }
+    
 }

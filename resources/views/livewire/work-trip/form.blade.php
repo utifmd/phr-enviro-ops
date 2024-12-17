@@ -1,10 +1,9 @@
 <div class="space-y-6">
-    <div x-data="{ open: false }" class="block md:grid md:grid-cols-4 space-y-4 md:space-y-0 gap-8">
+    <div x-data="{ isAnotherDateOpen: false }" class="block md:grid md:grid-cols-4 space-y-4 md:space-y-0 gap-8">
 
-        <div x-show="open">
-            <x-input-label @click="open = !open" class="cursor-pointer font-bold text-green-800" for="date" value="Another Date"/>
-            <x-text-input
-                class="mt-1 block w-full" type="date"
+        <div x-show="isAnotherDateOpen">
+            <x-input-label @click="isAnotherDateOpen = !isAnotherDateOpen" class="cursor-pointer font-bold text-green-800" for="date" value="Another Date"/>
+            <x-text-input class="mt-1 block w-full" type="date"
                 wire:model="form.date"
                 wire:change.prevent="onDateOptionChange"
                 id="date" name="date"/>
@@ -12,8 +11,8 @@
             <x-input-error class="mt-2" :messages="$message"/>
             @enderror
         </div>
-        <div x-show="!open">
-            <x-input-label @click="open = !open" class="cursor-pointer font-bold text-green-800" for="date" value="{{ 'Date'.($currentDate == date('Y-m-d') ? ' (Today)' : '') }}"/>
+        <div x-show="!isAnotherDateOpen">
+            <x-input-label @click="isAnotherDateOpen = !isAnotherDateOpen" class="cursor-pointer font-bold text-green-800" for="date" value="{{ 'Date'.($currentDate == date('Y-m-d') ? ' (Today)' : '') }}"/>
             <x-text-input
                 class="mt-1 block w-full"
                 :disabled="true"

@@ -3,6 +3,7 @@
 namespace App\Livewire\Forms;
 
 use App\Models\User;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use Livewire\Form;
 
@@ -14,6 +15,7 @@ class UserForm extends Form
     public ?string $email;
     public ?string $username;
     public ?string $password;
+    public ?string $area_name;
     public ?string $role;
     public ?string $operator_id;
 
@@ -22,7 +24,8 @@ class UserForm extends Form
         return [
 			'name' => 'required|string',
 			'email' => 'required|string|email',
-			'username' => 'required|string|regex:/^[a-z0-9_.-]{3,15}$/',
+			'username' => 'required|string|regex:/^[a-z0-9_.-]{3,27}$/',
+			'area_name' => 'required|string',
 			'role' => 'required|string',
 			'operator_id' => 'required|string',
         ];
@@ -35,6 +38,7 @@ class UserForm extends Form
         $this->name = $this->userModel->name;
         $this->email = $this->userModel->email;
         $this->username = $this->userModel->username;
+        $this->area_name = $this->userModel->area_name;
         $this->role = $this->userModel->role;
         $this->operator_id = $this->userModel->operator_id;
     }
@@ -47,8 +51,9 @@ class UserForm extends Form
         $rules = $this->rules();
         $rules['email'] = 'required|string|email|unique:users,email';
         $rules['username'] = 'required|string|unique:users,username';
-        $this->userModel->create($this->validate($rules));
+        $rules['password'] = ['required', 'string', Password::default()];
 
+        $this->userModel->create($this->validate($rules));
         $this->reset();
     }
 
@@ -57,8 +62,11 @@ class UserForm extends Form
      */
     public function update(): void
     {
-        $this->userModel->update($this->validate());
-
+        $rules = $this->rules();
+        if (!empty($this->password)) {
+            $rules['password'] = ['required', 'string', Password::default()];
+        }
+        $this->userModel->update($this->validate($rules));
         $this->reset();
     }
 }

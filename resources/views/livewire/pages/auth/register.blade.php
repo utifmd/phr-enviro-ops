@@ -12,6 +12,8 @@ new #[Layout('layouts.guest')] class extends Component
 {
     public string $name = '';
     public string $email = '';
+    public string $role = \App\Utils\UserRoleEnum::USER_GUEST_ROLE->value;
+    public string $area_name = \App\Utils\AreaNameEnum::AllArea->value;
     public string $password = '';
     public string $password_confirmation = '';
 
@@ -23,6 +25,8 @@ new #[Layout('layouts.guest')] class extends Component
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'area_name' => ['required', 'string'],
+            'role' => ['required', 'string'],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
 

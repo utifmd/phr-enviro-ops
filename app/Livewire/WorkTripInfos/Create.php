@@ -117,7 +117,7 @@ class Create extends BaseComponent
     /**
      * @throws \Exception
      */
-    private function checkPostThenGenerate(): void
+    private function checkInfoHasBeenTaken(): void
     {
         $dateOrDates = str_contains($this->form->date, '~')
             ? $this->datesRaw : $this->form->date;
@@ -131,12 +131,6 @@ class Create extends BaseComponent
         if ($areActualTripsSubmitted) {
             throw new \Exception('Sorry, your plan already used.');
         }
-        $this->postId = $this->pstRepos->generatePost(
-            $this->authUsr, ['created_at' => $this->focusedDate]
-        );
-        $this->assignLog(
-            'posts', 'added post '.$this->postId
-        );
     }
 
     /**
@@ -271,11 +265,12 @@ class Create extends BaseComponent
         }
     }
 
-    private function mapInfoState(array $infoState, $date, $time): array
+    private function mapInfoState(
+        array $infoState, $date, $time, $postId): array
     {
         return array_map(
-            function ($info) use($date, $time): array {
-                $info['post_id'] = $this->postId;
+            function ($info) use($date, $time, $postId): array {
+                $info['post_id'] = $postId;
                 $info['date'] = $date ?? $this->form->date;
                 $info['time'] = $time ?? $this->form->time;
 
@@ -349,30 +344,41 @@ class Create extends BaseComponent
         $this->scrollToBottom();
     }
 
+    private function addPostWhenCreateMode(): string
+    {
+        if ($this->isEditMode) return Constants::EMPTY_STRING;
+
+        return $this->pstRepos->generatePost(
+            $this->authUsr, ['created_at' => $this->focusedDate]
+        );
+    }
+
     private function savePopulatedByDatesOrDate(): void
     {
         $dateOrDates = $this->form->date;
         if (str_contains($dateOrDates, '~')) {
-            foreach ($this->datesRaw as $date) { $this->savePopulatedByTimesOrTime($date); }
+            foreach ($this->datesRaw as $date) {
+                $postId = $this->addPostWhenCreateMode();
+                $this->savePopulatedByTimesOrTime($date, $postId);
+            }
         } else {
-            $this->savePopulatedByTimesOrTime($dateOrDates);
+            $postId = $this->addPostWhenCreateMode();
+            $this->savePopulatedByTimesOrTime($dateOrDates, $postId);
         }
-        $highlight = $this->isEditMode ? 'updated info' : 'added info';
-        $highlight .= ' '.$dateOrDates;
-
-        $this->assignLog('work-trip-infos', $highlight);
+        $highlight = 'added post (' . $dateOrDates . ')';
+        $this->assignLog('posts', $highlight);
     }
 
-    private function savePopulatedByTimesOrTime($date): void
+    private function savePopulatedByTimesOrTime($date, $postId): void
     {
         if (str_contains($this->form->time, '~')) {
-            foreach ($this->timesRaw as $time) { $this->savePopulated($date, $time); }
+            foreach ($this->timesRaw as $time) { $this->savePopulated($date, $time, $postId); }
         } else {
-            $this->savePopulated($date, null);
+            $this->savePopulated($date, null, $postId);
         }
     }
 
-    private function savePopulated($date, $time): void
+    private function savePopulated($date, $time, $postId): void
     {
         if ($this->isEditMode) {
             foreach ($this->infoState as $info) {
@@ -380,7 +386,7 @@ class Create extends BaseComponent
             }
             return;
         }
-        $infoState = $this->mapInfoState($this->infoState, $date, $time);
+        $infoState = $this->mapInfoState($this->infoState, $date, $time, $postId);
         foreach ($infoState as $info) {
             $this->wtRepos->addInfo($info);
         }
@@ -390,7 +396,7 @@ class Create extends BaseComponent
     {
         try {
             $this->dbRepos->async();
-            $this->checkPostThenGenerate();
+            $this->checkInfoHasBeenTaken();
             $this->checkInfoDeletion();
             $this->savePopulatedByDatesOrDate();
             $this->dbRepos->await();
@@ -398,9 +404,10 @@ class Create extends BaseComponent
 
         } catch (\Throwable $t) {
             $this->dbRepos->cancel();
-            Log::debug($t->getMessage());
-            session()->flash('error', $t->getMessage());
             $this->addError('error', $t->getMessage());
+            session()->flash('error', $t->getMessage());
+
+            Log::debug($t->getMessage());
         }
     }
 

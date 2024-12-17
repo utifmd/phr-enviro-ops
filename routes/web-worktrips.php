@@ -5,10 +5,7 @@ use App\Livewire\WorkTrips\Edit;
 use App\Livewire\WorkTrips\Index;
 use App\Livewire\WorkTrips\Show;
 use Illuminate\Support\Facades\Route;
-/*
- * 1. register user
- * 2. change user password
- * */
+
 Route::middleware('auth')->group(function () {
     Route::get('/work-trips', Index::class)
         ->name('work-trips.index')
