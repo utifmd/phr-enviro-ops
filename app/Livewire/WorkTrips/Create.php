@@ -65,11 +65,11 @@ class Create extends BaseComponent
         $this->initTimeOptions();
         $this->initLocOptions();
         $this->checkTripState();
-        $this->checkRemarks();
     }
 
     private function checkTripState(): void
     {
+        $this->checkRemarks();
         $this->isEditMode = false;
         if ($this->wtRepos->areTripsExistByDatetimeAndArea(
             $date = $this->currentDate, $this->form->time, $this->authUsr['area_name'])) {
@@ -175,9 +175,12 @@ class Create extends BaseComponent
             );
             return;
         }
-        $this->wtRepos->generateNotes(
-            $postId, $userId, $this->remarks
-        );
+        $this->wtRepos->addNotesWithProps([
+            'post_id' => $postId,
+            'user_id' => $userId,
+            'message' => $this->remarks,
+            'created_at' => $this->currentDate,
+        ]);
     }
 
     private function assignLog(string $postId): void

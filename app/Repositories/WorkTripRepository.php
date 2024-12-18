@@ -458,12 +458,17 @@ class WorkTripRepository implements IWorkTripRepository
             ->act_value_sum;
     }
 
-    public function generateNotes(
+    public function addNotes(
         string $postId, string $userId, string $message): void
     {
         WorkTripNote::query()->create([
             'post_id' => $postId, 'user_id' => $userId, 'message' => $message,
         ]);
+    }
+
+    public function addNotesWithProps(array $props): void
+    {
+        WorkTripNote::query()->create($props);
     }
 
     private function notesByDateAndUserIdBuilder(
@@ -486,7 +491,7 @@ class WorkTripRepository implements IWorkTripRepository
         string $userId, string $date, string $message): void
     {
         $this->notesByDateAndUserIdBuilder($userId, $date)
-            ->update(['message' => $message]);
+            ->update(['message' => $message, 'created_at' => $date]);
     }
 
     public function updateNotesByPostId(string $id, string $message): void

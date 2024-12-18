@@ -6,10 +6,8 @@ use App\Livewire\WorkTrips\Index;
 use App\Livewire\WorkTrips\Show;
 use Illuminate\Support\Facades\Route;
 /*
- * 1. clean database
- * 2. set post, workinfo, worktrip by actual date
- * 3. deploy project
- * 4. powerBi space adjust
+ * 1. worktrip set must in this day, or
+ * 2. set worktrip yesterday but also date for post and notes is correct
  * */
 Route::middleware('auth')->group(function () {
     Route::get('/work-trips', Index::class)

@@ -34,7 +34,7 @@ class WorkTripNote extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'message', 'post_id', 'user_id'
+        'message', 'post_id', 'user_id', 'created_at'
     ];
 
     public function post(): BelongsTo

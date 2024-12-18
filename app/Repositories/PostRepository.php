@@ -135,7 +135,7 @@ class PostRepository implements IPostRepository
             ->paginate();
 
         return $builder->through(function ($post){
-            $post->timeAgo = $this->utility->timeAgo($post->created_at);
+            $post->timeAgo = $this->utility->timeAgo($post->updated_at);
             // $post->transporter = trim(('('.($post->operator->department->short_name ?? 'NA').') '.$post->operator->prefix.' '.$post->operator->name.' '.$post->operator->postfix) ?? 'NA');
             $post->pendingCount = $this->utility->countWoPendingRequest($post);
             $post->desc = str_replace(';', ' ', $post->desc);
@@ -153,7 +153,7 @@ class PostRepository implements IPostRepository
             ->paginate();
 
         return $builder->through(function ($post){
-            $post->timeAgo = $this->utility->timeAgo($post->created_at);
+            $post->timeAgo = $this->utility->timeAgo($post->updated_at);
             // $post->transporter = $this->utility->transporter($post->operator);
             $post->pendingCount = $this->utility->countWtPendingRequest($post);
             $post->desc = str_replace(';', ' ', $post->desc);

@@ -66,7 +66,8 @@ interface IWorkTripRepository
 
     public function sumActualByAreaAndDate(string $areaName, string $date): int;
 
-    public function generateNotes(string $postId, string $userId, string $message): void;
+    public function addNotes(string $postId, string $userId, string $message): void;
+    public function addNotesWithProps(array $props): void;
     public function getNotesByDateAndUserId(string $date, string $userId): array;
     public function areNotesByDateAndUserIdExist(string $userId, string $date): bool;
     public function updateNotesByDateAndUserId(string $userId, string $date, string $message): void;
