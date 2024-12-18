@@ -5,7 +5,12 @@ use App\Livewire\WorkTrips\Edit;
 use App\Livewire\WorkTrips\Index;
 use App\Livewire\WorkTrips\Show;
 use Illuminate\Support\Facades\Route;
-
+/*
+ * 1. clean database
+ * 2. set post, workinfo, worktrip by actual date
+ * 3. deploy project
+ * 4. powerBi space adjust
+ * */
 Route::middleware('auth')->group(function () {
     Route::get('/work-trips', Index::class)
         ->name('work-trips.index')
