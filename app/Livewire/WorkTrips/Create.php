@@ -170,6 +170,7 @@ class Create extends BaseComponent
         if ($this->wtRepos->areNotesByDateAndUserIdExist(
             $userId = $this->authUsr['id'], $date = $this->currentDate)) {
 
+            if ($this->remarks == $this->notes[0]['message']) return;
             $this->wtRepos->updateNotesByDateAndUserId(
                 $userId, $date, $this->remarks
             );

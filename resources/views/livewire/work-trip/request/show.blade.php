@@ -6,7 +6,7 @@
                     <div class="sm:flex-auto">
                         <h1 class="text-base font-semibold leading-6 text-gray-900">{{ $form->postModel->title }}</h1>
                         <p class="mt-2 text-sm text-gray-700">{{ $form->postModel->description }}.</p>
-                        @if($remarks = $form->postModel->remarks['message'])
+                        @if($remarks = $form->postModel->remarks['message'] ?? false)
                             <p class="mt-2 text-sm text-gray-700 italic"><span>Remarks:</span> {{ $remarks }}.</p>
                         @endif
                         <p class="mt-2 text-xs text-gray-800">Facility Representative: {{ $form->postModel->user->email ?? 'deleted account' }}</p>
