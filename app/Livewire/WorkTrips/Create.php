@@ -188,14 +188,12 @@ class Create extends BaseComponent
     {
         $highlight = $this->isEditMode
             ? 'change request' : 'send request';
-        $event = null;
 
-        if (empty($this->remarks)) {
+        if (!empty($this->remarks)) {
             $highlight .= ' with remarks';
-            $event = $this->remarks;
         }
         $this->logRepos->addLogs(
-            '/work-trips/requests/'.$postId, $highlight, $event
+            '/work-trips/requests/'.$postId, $highlight
         );
     }
 

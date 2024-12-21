@@ -39,7 +39,7 @@
                                             {{ date_format($log->created_at, 'Y-m-d H:i:s') }}
                                         </td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                            <x-nav-link :href="$log->url" class="hover:cursor-pointer">{{ trim(($log->user->name ?? 'Some user').' '. $log->highlight) }}</x-nav-link>
+                                            <span{{--x-nav-link :href="$log->url"--}}>{{ trim(($log->user->name ?? 'Some user').' '. $log->highlight) }}</span>
                                         </td>
                                     </tr>
                                 @endforeach

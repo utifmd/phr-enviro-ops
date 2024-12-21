@@ -11,6 +11,8 @@ use App\Service\WorkTripService;
 use App\Utils\AreaNameEnum;
 use App\Utils\WorkTripStatusEnum;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class WorkTripNoteController extends Controller
 {
@@ -28,13 +30,34 @@ class WorkTripNoteController extends Controller
         // $this->authUsr = $this->usrRepos->authenticatedUser()->toArray();
     }
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $data = $this->wtRepos->getNotesByArea(
             AreaNameEnum::AllArea->value
         );
         $message = 'latest update ';
         $message .= date('d/m/y H:i:s');
+
+        return WorkTripService::sendResponse(
+            WorkTripNoteResource::collection($data), $message
+        );
+    }
+
+    public function show(string $strToTime): JsonResponse
+    {
+        try {
+            $startDate = date('Y-m-d', strtotime($strToTime));
+
+        } catch (\Exception) {
+            $startDate = date('Y-m-d', strtotime('-1 month'));
+        }
+        $endDate = date('Y-m-d');
+
+        $data = $this->wtRepos->getNotesByDateArea(
+            AreaNameEnum::AllArea->value, $startDate, $endDate
+        );
+        $message = 'latest update ';
+        $message .= date("d/m/y H:i:s");
 
         return WorkTripService::sendResponse(
             WorkTripNoteResource::collection($data), $message

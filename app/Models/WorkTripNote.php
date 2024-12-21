@@ -27,11 +27,15 @@ class WorkTripNote extends Model
 {
     use HasUuids;
 
+    const PER_PAGE = 10;
+
     protected $keyType = 'string';
 
     protected $table = 'work_trip_notes';
 
     public $incrementing = false;
+
+    protected $perPage = WorkTripNote::PER_PAGE;
 
     protected $fillable = [
         'message', 'post_id', 'user_id', 'created_at'

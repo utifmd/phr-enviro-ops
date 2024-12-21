@@ -5,10 +5,7 @@ use App\Livewire\WorkTrips\Edit;
 use App\Livewire\WorkTrips\Index;
 use App\Livewire\WorkTrips\Show;
 use Illuminate\Support\Facades\Route;
-/*
- * 1. worktrip set must in this day, or
- * 2. set worktrip yesterday but also date for post and notes is correct
- * */
+
 Route::middleware('auth')->group(function () {
     Route::get('/work-trips', Index::class)
         ->name('work-trips.index')

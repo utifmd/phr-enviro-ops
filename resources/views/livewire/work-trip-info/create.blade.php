@@ -32,7 +32,8 @@
                 <div class="flow-root">
                     <div class="mt-8 overflow-x-auto">
                         <div class="max-w-screen-xl py-2 align-middle">
-                            <form method="POST" wire:submit="save" role="form" enctype="multipart/form-data">
+                            @props(['confirm' => 'Dengan Memperbarui data tersebut permintaan anda akan diproses ulang oleh PMCOW, apakah anda yakin untuk melanjutkan?'])
+                            <form method="POST" wire:submit="save" @if($isEditMode) wire:confirm="{{ $confirm }}" @endif role="form" enctype="multipart/form-data">
                                 @csrf
                                 @include('livewire.work-trip-info.form')
                             </form>

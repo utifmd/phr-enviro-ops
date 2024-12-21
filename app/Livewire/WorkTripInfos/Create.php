@@ -305,7 +305,16 @@ class Create extends BaseComponent
             if ($this->isEditMode && $info = $this->infoState[$idx]) {
                 $this->delInfoQueue[] = $info;
             }
-            unset($this->infoState[$idx]);
+            //unset($this->infoState[$idx]);
+        } catch (\Exception $e) {
+            $this->addError('error', $e->getMessage());
+        }
+    }
+
+    public function onRemoveInfoState($info): void
+    {
+        try {
+            $this->delInfoQueue[] = $info;
         } catch (\Exception $e) {
             $this->addError('error', $e->getMessage());
         }

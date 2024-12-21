@@ -13,6 +13,7 @@ use App\Utils\ActUnitEnum;
 use App\Utils\AreaNameEnum;
 use App\Utils\Constants;
 use App\Utils\WorkOrderStatusEnum;
+use App\Utils\WorkTripStatusEnum;
 use App\Utils\WorkTripTypeEnum;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -127,9 +128,7 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function updateTrip(array $workTripTrip): void
     {
-        WorkTrip::query()
-            ->find($workTripTrip['id'])
-            ->update($workTripTrip);
+        WorkTrip::query()->find($workTripTrip['id'])->update($workTripTrip);
     }
 
     public function removeTripById(string $id): void
@@ -438,6 +437,7 @@ class WorkTripRepository implements IWorkTripRepository
     {
         $trips = [];
         foreach ($tripState as $trip) {
+            $trip['status'] = WorkTripStatusEnum::PENDING->value;
             $trip['act_value'] = explode('/', $trip['act_value'])[0] ?? 0;
             $trips[] = $trip;
         }
@@ -520,9 +520,30 @@ class WorkTripRepository implements IWorkTripRepository
                 $query->where('area_name', '=', $areaName);
             });
         }
-        return $builder->get();
+        return $builder
+            ->orderByDesc('created_at')
+            ->limit(WorkTripNote::PER_PAGE)->get();
     }
 
+    public function getNotesByDateArea(
+        string $areaName, string $startDate, string $endDate): Collection
+    {
+        $builder = WorkTripNote::query();
+
+        if ($areaName != AreaNameEnum::AllArea->value) {
+            $builder->whereHas('user', function ($query) use ($areaName) {
+                $query->where('area_name', '=', $areaName);
+            });
+        }
+        return $builder
+            ->whereBetween('created_at', [
+                Carbon::parse($startDate)->startOfDay(),
+                Carbon::parse($endDate)->endOfDay(),
+            ])
+            ->orderByDesc('created_at')
+            ->limit(WorkTripNote::PER_PAGE)
+            ->get();
+    }
 
     public function countPendingWorkTrip(array $workTrips): int
     {

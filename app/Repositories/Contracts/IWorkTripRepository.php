@@ -76,4 +76,6 @@ interface IWorkTripRepository
     public function countPendingWorkTrip(array $workTrips): int;
 
     public function getNotesByArea(string $areaName): Collection;
+
+    public function getNotesByDateArea(string $areaName, string $startDate, string $endDate): Collection;
 }
