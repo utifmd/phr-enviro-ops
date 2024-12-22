@@ -388,11 +388,17 @@ class WorkTripRepository implements IWorkTripRepository
             $area, $dateOrDates, $timeOrTimes)->exists();
     }
 
+    public function getLatestInfosDateByArea(string $area): ?string
+    {
+        return WorkTripInfo::query()
+            ->where('area_name', $area)
+            ->orderByDesc('date')->first()->date;
+    }
+
     public function getLatestInfosDateByDateOrDatesAndArea($dateOrDates, string $area): ?string
     {
         return $this->workTripInfosBuilderBy($area, $dateOrDates)
-            ->select('date')
-            ->orderBy('date', 'desc')->first()->date;
+            ->orderByDesc('date')->first()->date;
     }
 
     public function mapTripPairActualValue(array $tripState): array

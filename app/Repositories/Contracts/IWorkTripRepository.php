@@ -58,6 +58,7 @@ interface IWorkTripRepository
     public function areInfosExistByDatetimeAndArea(string $date, string $time, string $area): bool;
     public function areInfosExistByDatetimeOrDatesTimeAndArea($dateOrDates, $timeOrTimes, string $area): bool;
 
+    public function getLatestInfosDateByArea(string $area): ?string;
     public function getLatestInfosDateByDateOrDatesAndArea($dateOrDates, string $area): ?string;
 
     public function mapTripPairActualValue(array $tripState): array;
