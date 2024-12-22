@@ -55,5 +55,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/work-trips/requests/show/{post}', \App\Livewire\WorkTrips\Request\Show::class)
         ->name('work-trips.requests.show')
         ->can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP);
-
 });
