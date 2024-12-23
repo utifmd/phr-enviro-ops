@@ -2,7 +2,7 @@
     <div class="overflow-x-auto">
         <div class="inline-block min-w-full py-2 align-middle">
             <div class="w-full divide-y divide-gray-300">
-                <table class="w-full divide-y divide-gray-300">
+                <table wire:loading.class="opacity-50" class="w-full divide-y divide-gray-300">
                     <thead>
                     <tr>
                         <th scope="col"

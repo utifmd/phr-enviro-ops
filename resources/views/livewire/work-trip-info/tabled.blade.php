@@ -2,7 +2,7 @@
     <div class="overflow-x-auto">
         <div class="inline-block min-w-full py-2 align-middle">
             <div class="w-full divide-y divide-gray-300">
-                <table class="w-full divide-y divide-gray-300">
+                <table wire:loading.class="opacity-50" class="w-full divide-y divide-gray-300">
                     <thead>
                     <tr>
                         <th scope="col"
@@ -25,7 +25,7 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody x-data="{ infoState: @entangle('infoState'), delInfoQueue: @entangle('delInfoQueue'), formActValue: @entangle('form.act_value') }" class="divide-y divide-gray-200 bg-white">
+                    <tbody wire:loading.attr="opacity-50" x-data="{ infoState: @entangle('infoState'), delInfoQueue: @entangle('delInfoQueue'), formActValue: @entangle('form.act_value') }" class="divide-y divide-gray-200 bg-white">
                         <template x-for="(info, i) in infoState" :key="i">
 
                             <tr wire:key="i" class="even:bg-gray-50 hover:bg-amber-50">

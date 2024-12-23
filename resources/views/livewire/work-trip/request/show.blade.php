@@ -84,7 +84,7 @@
                     <div class="flow-root">
                         <div class="overflow-x-auto">
                             <div class="inline-block min-w-full py-10 align-middle">
-                                <table class="w-full divide-y divide-gray-300" wire:loading.class="opacity-50">
+                                <table wire:loading.class="opacity-50" class="w-full divide-y divide-gray-300">
                                     <thead>
                                     <tr>
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">No</th>
