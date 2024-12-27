@@ -203,7 +203,7 @@ class Create extends BaseComponent
                 ? 0 : $this->form->act_value;
         }
         $this->form->user_id = $this->authUsr['id'];
-        $acts = Activity::all();
+        $acts = $this->wtRepos->getAreas();
 
         $this->populateByCMTF($acts);
         $this->populateByGS($acts);
@@ -224,7 +224,7 @@ class Create extends BaseComponent
         );
     }
 
-    private function populateByGS(Collection $acts): void
+    private function populateByGS(array $acts): void
     {
         foreach ($this->locations as $location) {
             if (ActNameEnum::Outgoing->value != $location['actName']) continue;
@@ -233,27 +233,27 @@ class Create extends BaseComponent
             $this->form->area_loc = $location['location'];
 
             foreach ($acts as $act) {
-                if (ActNameEnum::Outgoing->value != $act->name) continue;
+                if (ActNameEnum::Outgoing->value != $act['name']) continue;
 
-                $this->form->act_process = $act->process;
-                $this->form->act_unit = $act->unit;
+                $this->form->act_process = $act['process'];
+                $this->form->act_unit = $act['unit'];
                 $this->infoState[] = $this->form->toArray();
             }
         }
     }
 
-    private function populateByCMTF(Collection $acts): void
+    private function populateByCMTF(array $acts): void
     {
         foreach ($acts as $act) {
-            if (ActNameEnum::Outgoing->value == $act->name) continue;
+            if (ActNameEnum::Outgoing->value == $act['name']) continue;
 
-            $this->form->act_name = $act->name;
-            $this->form->act_process = $act->process;
-            $this->form->act_unit = $act->unit; // $this->form->area_loc = str_contains($area->location, 'CMTF');
+            $this->form->act_name = $act['name'];
+            $this->form->act_process = $act['process'];
+            $this->form->act_unit = $act['unit']; // $this->form->area_loc = str_contains($area->location, 'CMTF');
 
             $areaLoc = null;
             foreach ($this->locations as $location) {
-                if ($act->name == $location['actName']){
+                if ($act['name'] == $location['actName']){
                     $areaLoc = $location['location'];
                 }
             }

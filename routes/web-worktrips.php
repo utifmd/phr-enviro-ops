@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\WorkTripInfos\Import;
 use App\Livewire\WorkTrips\Create;
 use App\Livewire\WorkTrips\Edit;
 use App\Livewire\WorkTrips\Index;
@@ -55,4 +56,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/work-trips/requests/show/{post}', \App\Livewire\WorkTrips\Request\Show::class)
         ->name('work-trips.requests.show')
         ->can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP);
+
+
+    Route::get('/work-trip-infos/import', Import::class)
+        ->name('work-trip-infos.import')
+        ->can(\App\Policies\UserPolicy::IS_DEV_ROLE);
 });

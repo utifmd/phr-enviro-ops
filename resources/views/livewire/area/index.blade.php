@@ -47,8 +47,7 @@
                                                 class="text-red-600 font-bold hover:text-red-900"
                                                 type="button"
                                                 wire:click="delete('{{ $area->id }}')"
-                                                wire:confirm="Are you sure you want to delete?"
-                                            >
+                                                wire:confirm="Are you sure you want to delete?">
                                                 {{ __('Delete') }}
                                             </button>
                                         </td>

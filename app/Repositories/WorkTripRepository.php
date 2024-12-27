@@ -94,6 +94,14 @@ class WorkTripRepository implements IWorkTripRepository
             })
             ->toArray();
     }
+
+    function getAreas(): array
+    {
+        $builder = Activity::query()->orderBy('created_at');
+
+        return $builder->get()->toArray();
+    }
+
     public function getLocations(string $areaName): array
     {
         return Area::query()

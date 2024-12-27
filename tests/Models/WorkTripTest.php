@@ -19,5 +19,4 @@ class WorkTripTest extends TestCase
             self::assertSame(WorkTripTypeEnum::cases()[$i], $collection);
         }*/
     }
-
 }

@@ -1,6 +1,6 @@
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ __('Import Well Masters') }}
+        {{ __('Import Work Trip Info') }}
     </h2>
 </x-slot>
 
@@ -10,8 +10,8 @@
             <div class="w-full">
                 <div class="sm:flex sm:items-center">
                     <div class="sm:flex-auto">
-                        <h1 class="text-base font-semibold leading-6 text-gray-900">{{ __('Import Well Masters') }}</h1>
-                        <p class="mt-2 text-sm text-gray-700">A list of all the {{ __('Import Well Masters') }}.</p>
+                        <h1 class="text-base font-semibold leading-6 text-gray-900">{{ __('Import Work Trip Info') }}</h1>
+                        <p class="mt-2 text-sm text-gray-700">A list of all the {{ __('Import Work Trip Info') }}.</p>
                     </div>
                     {{--<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none gap-1">
                         <a type="button" wire:navigate href="{{ route('well-masters.create') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add new</a>
@@ -28,12 +28,10 @@
                             </div>
                         </div>
                     @endif
-                    {{--<div class="max-w-lg mx-auto">--}}
                     <div class="max-w-lg">
                         <x-input-label for="csvFile" :value="__('Upload File')"/>
                         <x-file-input accept="text/csv" wire:model="csvFile" id="csvFile" name="csvFile"/>
                         <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">Import and <b>Replace</b> current CSV (MAX. 100MB).</p>
-                        {{--<x-text-input wire:model="csvFile" id="csvFile" name="csvFile" type="text" class="mt-1 block w-full" autocomplete="csvFile" placeholder="Ids Wellname"/>--}}
                         @error('csvFile')
                             <x-input-error class="mt-2" :messages="$message"/>
                         @enderror
