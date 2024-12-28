@@ -176,7 +176,7 @@ class Create extends BaseComponent
             );
             return;
         }
-        $this->wtRepos->addNotesWithProps([
+        $this->wtRepos->addNotes([
             'post_id' => $postId,
             'user_id' => $userId,
             'message' => $this->remarks,

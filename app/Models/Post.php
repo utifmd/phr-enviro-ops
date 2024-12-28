@@ -51,7 +51,7 @@ class Post extends Model
     protected $fillable = [
         'title', 'description', 'type', 'user_id', 'operator_id', 'created_at'
     ];
-    protected $perPage = 20;
+    protected $perPage = 6;
 
     function imageUrl(): HasOne
     {

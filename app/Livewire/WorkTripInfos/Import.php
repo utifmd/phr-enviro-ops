@@ -29,17 +29,7 @@ class Import extends Component
     protected IWorkTripRepository $wtRepos;
     public array $authUsr, $columns;
 
-    #[Validate('required|file|mimes:csv,txt')]
     public ?UploadedFile $csvFile = null;
-
-    #[Layout('layouts.app')]
-    public function render(): View
-    {
-        $wellMasters = WorkTripInfo::paginate();
-
-        return view('livewire.work-trip-info.import', compact('wellMasters'))
-            ->with('i', $this->getPage() * $wellMasters->perPage());
-    }
 
     public function boot(
         IDBRepository $dbRepos,
@@ -95,7 +85,7 @@ class Import extends Component
 
     public function import(): void
     {
-        $this->validate();
+        $this->validate(['csvFile' => 'required|file|mimes:csv,txt']);
         try {
             $this->dbRepos->async();
             $report = ['updated' => 0, 'added' => 0, 'batch' => 0];
@@ -118,16 +108,10 @@ class Import extends Component
             }
 
             foreach ($workTripInfos as $info) {
-                $matchRow = WorkTripInfo::query()
-                    ->where('date', '=', $info['date'], 'and')
-                    ->where('time', '=', $info['time'], 'and')
-                    ->where('act_process', '=', $info['act_process'], 'and')
-                    ->where('area_loc', $info['area_loc']);
+                $matchRow = $this->wtRepos->infosExistByDateTimeTypeProcLocBuilder($info);
 
-                if ($matchRow->exists()) {
-                    $existing = $matchRow->first()->toArray();
-                    $existing['act_value'] = $info['act_value'];
-                    $this->wtRepos->updateInfo($existing);
+                if ($matchRow->exists()) { // $existing = $matchRow->first()->toArray(); $existing['act_value'] = $info['act_value']; $this->wtRepos->updateInfo($existing);
+                    $matchRow->update(['act_value' => $info['act_value']]);
                     $report['updated']++;
                     continue;
                 }
@@ -153,8 +137,14 @@ class Import extends Component
             $this->dbRepos->cancel();
             $message = $exception->getMessage();
 
-            session()->flash('message', $message);
+            $this->addError('error', $message);
             Log::debug($message);
         }
+    }
+
+    #[Layout('layouts.app')]
+    public function render(): View
+    {
+        return view('livewire.work-trip-info.import');
     }
 }

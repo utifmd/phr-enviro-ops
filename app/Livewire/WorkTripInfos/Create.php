@@ -191,8 +191,7 @@ class Create extends BaseComponent
         if (is_null($areaName)) return;
 
         $this->form->area_name = $areaName;
-        $this->locations = $this->wtRepos->getLocations($areaName);
-        // $this->form->area_loc = $this->locationOptions[0]['value'] ?? 'NA';
+        $this->locations = $this->wtRepos->getLocations($areaName); // $this->form->area_loc = $this->locationOptions[0]['value'] ?? 'NA';
     }
 
     private function initInfoState(): void

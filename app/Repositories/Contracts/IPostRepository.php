@@ -14,11 +14,13 @@ interface IPostRepository
     function arePostExistByDateOrDatesAndArea($dateOrDates, string $area): bool;
     function addPost(array $request): ?Post;
     function getPostById(string $postId): ?Post;
+    function getPostByDate(string $date): Collection;
     function getPostByIdRaw(string $postId);
     // function getPostByUserId(string $userId): ?Post;
     function countLoadPostBy(?string $userId, ?string $status): int;
     function pagedPosts(?string $idsWellName): LengthAwarePaginator;
     function pagedPostByUserId(string $userId): LengthAwarePaginator;
+    function getPosts(): LengthAwarePaginator;
     function updatePost(array $request): ?Post;
     function removePost(string $post_id): bool;
 

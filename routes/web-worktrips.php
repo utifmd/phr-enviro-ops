@@ -61,4 +61,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/work-trip-infos/import', Import::class)
         ->name('work-trip-infos.import')
         ->can(\App\Policies\UserPolicy::IS_DEV_ROLE);
+
+    Route::get('/work-trips/import', \App\Livewire\WorkTrips\Import::class)
+        ->name('work-trips.import')
+        ->can(\App\Policies\UserPolicy::IS_DEV_ROLE);
 });

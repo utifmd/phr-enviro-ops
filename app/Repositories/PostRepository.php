@@ -10,6 +10,7 @@ use App\Utils\PostTypeEnum;
 use App\Utils\WorkOrderStatusEnum;
 use App\Utils\Contracts\IUtility;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -106,6 +107,15 @@ class PostRepository implements IPostRepository
         return $post->first();
     }
 
+    function getPostByDate(string $date): Collection
+    {
+        $builder = Post::query()->whereBetween('created_at', [
+            Carbon::parse($date)->startOfDay(),
+            Carbon::parse($date)->endOfDay(),
+        ]);
+        return $builder->get();
+    }
+
     function countLoadPostBy(?string $userId = null, ?string $status = null): int
     {
         $builder = Post::query()
@@ -138,6 +148,21 @@ class PostRepository implements IPostRepository
             $post->timeAgo = $this->utility->timeAgo($post->updated_at);
             // $post->transporter = trim(('('.($post->operator->department->short_name ?? 'NA').') '.$post->operator->prefix.' '.$post->operator->name.' '.$post->operator->postfix) ?? 'NA');
             $post->pendingCount = $this->utility->countWoPendingRequest($post);
+            $post->desc = str_replace(';', ' ', $post->desc);
+            return $post;
+        });
+    }
+
+    function getPosts(): LengthAwarePaginator
+    {
+        $builder = Post::query()
+            ->where('type', '=', PostTypeEnum::POST_WELL_TYPE->value)
+            ->orderBy('created_at', 'desc')
+            ->paginate();
+
+        return $builder->through(function ($post){
+            $post->timeAgo = $this->utility->timeAgo($post->updated_at);
+            $post->pendingCount = $this->utility->countWtPendingRequest($post);
             $post->desc = str_replace(';', ' ', $post->desc);
             return $post;
         });

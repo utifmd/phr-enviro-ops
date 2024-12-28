@@ -9,6 +9,7 @@ use App\Repositories\Contracts\IUserRepository;
 use App\Repositories\Contracts\IWellMasterRepository;
 use App\Repositories\Contracts\IWorkOrderRepository;
 use App\Service\Contracts\IWellService;
+use App\Utils\AreaNameEnum;
 use App\Utils\Contracts\IUtility;
 use App\Utils\WorkOrderStatusEnum;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -21,6 +22,7 @@ class WellService implements IWellService
     private IWellMasterRepository $wellMasterRepository;
     private IUtility $utility;
     private ?string $userId = null;
+    private array $authUser;
 
     public function __construct(
         IPostRepository $postRepository,
@@ -29,7 +31,9 @@ class WellService implements IWellService
         IWellMasterRepository $wellMasterRepository,
         IUtility $utility)
     {
-        $this->userId = $userRepository->authenticatedUser()->id;
+        $this->authUser = $userRepository->authenticatedUser()->toArray();
+        $this->userId = $this->authUser['id'];
+
         $this->postRepository = $postRepository;
         $this->workOrderRepository = $workOrderRepository;
         $this->wellMasterRepository = $wellMasterRepository;
@@ -134,6 +138,9 @@ class WellService implements IWellService
     {
         if ($isBypassed) return $this->postRepository->pagedPosts($idsWellName);
 
+        if ($this->authUser['area_name'] == AreaNameEnum::AllArea->value) {
+            return $this->postRepository->getPosts();
+        }
         return $this->postRepository->pagedPostByUserId($this->userId);
     }
 

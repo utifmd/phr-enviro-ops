@@ -1,0 +1,810 @@
+﻿2024-12-15;02:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-15;02:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-15;02:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-15;02:00;Outgoing;Treated Water;Load;3;Central;SMF-Arak
+2024-12-15;02:00;Production;Permeate;m3;0;Central;CMTF-Arak
+2024-12-15;04:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-15;04:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-15;04:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-15;04:00;Outgoing;Treated Water;Load;5;Central;SMF-Arak
+2024-12-15;04:00;Production;Permeate;m3;0;Central;CMTF-Arak
+2024-12-15;06:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-15;06:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-15;06:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-15;06:00;Outgoing;Treated Water;Load;5;Central;SMF-Arak
+2024-12-15;06:00;Production;Permeate;m3;0;Central;CMTF-Arak
+2024-12-15;08:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-15;08:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-15;08:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-15;08:00;Outgoing;Treated Water;Load;5;Central;SMF-Arak
+2024-12-15;08:00;Production;Permeate;m3;0;Central;CMTF-Arak
+2024-12-15;10:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-15;10:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-15;10:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-15;10:00;Outgoing;Treated Water;Load;8;Central;SMF-Arak
+2024-12-15;10:00;Production;Permeate;m3;0;Central;CMTF-Arak
+2024-12-15;12:00;Incoming;Drilling Site;Load;11;Central;CMTF-Arak
+2024-12-15;12:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-15;12:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-15;12:00;Outgoing;Treated Water;Load;12;Central;SMF-Arak
+2024-12-15;12:00;Production;Permeate;m3;0;Central;CMTF-Arak
+2024-12-15;14:00;Incoming;Drilling Site;Load;18;Central;CMTF-Arak
+2024-12-15;14:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-15;14:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-15;14:00;Outgoing;Treated Water;Load;16;Central;SMF-Arak
+2024-12-15;14:00;Production;Permeate;m3;0;Central;CMTF-Arak
+2024-12-15;16:00;Incoming;Drilling Site;Load;25;Central;CMTF-Arak
+2024-12-15;16:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-15;16:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-15;16:00;Outgoing;Treated Water;Load;18;Central;SMF-Arak
+2024-12-15;16:00;Production;Permeate;m3;0;Central;CMTF-Arak
+2024-12-15;18:00;Incoming;Drilling Site;Load;27;Central;CMTF-Arak
+2024-12-15;18:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-15;18:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-15;18:00;Outgoing;Treated Water;Load;18;Central;SMF-Arak
+2024-12-15;18:00;Production;Permeate;m3;0;Central;CMTF-Arak
+2024-12-15;20:00;Incoming;Drilling Site;Load;27;Central;CMTF-Arak
+2024-12-15;20:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-15;20:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-15;20:00;Outgoing;Treated Water;Load;21;Central;SMF-Arak
+2024-12-15;20:00;Production;Permeate;m3;0;Central;CMTF-Arak
+2024-12-15;22:00;Incoming;Drilling Site;Load;27;Central;CMTF-Arak
+2024-12-15;22:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-15;22:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-15;22:00;Outgoing;Treated Water;Load;24;Central;SMF-Arak
+2024-12-15;22:00;Production;Permeate;m3;24;Central;CMTF-Arak
+2024-12-15;00:00;Incoming;Drilling Site;Load;37;Central;CMTF-Arak
+2024-12-15;00:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-15;00:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-15;00:00;Outgoing;Treated Water;Load;26;Central;SMF-Arak
+2024-12-15;00:00;Production;Permeate;m3;51;Central;CMTF-Arak
+2024-12-16;02:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-16;02:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-16;02:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-16;02:00;Outgoing;Treated Water;Load;3;Central;SMF-Arak
+2024-12-16;02:00;Production;Permeate;m3;72;Central;CMTF-Arak
+2024-12-16;04:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-16;04:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-16;04:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-16;04:00;Outgoing;Treated Water;Load;5;Central;SMF-Arak
+2024-12-16;04:00;Production;Permeate;m3;96;Central;CMTF-Arak
+2024-12-16;06:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-16;06:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-16;06:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-16;06:00;Outgoing;Treated Water;Load;5;Central;SMF-Arak
+2024-12-16;06:00;Production;Permeate;m3;74;Central;CMTF-Arak
+2024-12-16;08:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-16;08:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-16;08:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-16;08:00;Outgoing;Treated Water;Load;5;Central;SMF-Arak
+2024-12-16;08:00;Production;Permeate;m3;96;Central;CMTF-Arak
+2024-12-16;10:00;Incoming;Drilling Site;Load;2;Central;CMTF-Arak
+2024-12-16;10:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-16;10:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-16;10:00;Outgoing;Treated Water;Load;7;Central;SMF-Arak
+2024-12-16;10:00;Production;Permeate;m3;117;Central;CMTF-Arak
+2024-12-16;12:00;Incoming;Drilling Site;Load;11;Central;CMTF-Arak
+2024-12-16;12:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-16;12:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-16;12:00;Outgoing;Treated Water;Load;10;Central;SMF-Arak
+2024-12-16;12:00;Production;Permeate;m3;137;Central;CMTF-Arak
+2024-12-16;14:00;Incoming;Drilling Site;Load;18;Central;CMTF-Arak
+2024-12-16;14:00;Incoming;Mud Pit Closure;Load;2;Central;CMTF-Arak
+2024-12-16;14:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-16;14:00;Outgoing;Treated Water;Load;10;Central;SMF-Arak
+2024-12-16;14:00;Production;Permeate;m3;157;Central;CMTF-Arak
+2024-12-16;16:00;Incoming;Drilling Site;Load;24;Central;CMTF-Arak
+2024-12-16;16:00;Incoming;Mud Pit Closure;Load;4;Central;CMTF-Arak
+2024-12-16;16:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-16;16:00;Outgoing;Treated Water;Load;13;Central;SMF-Arak
+2024-12-16;16:00;Production;Permeate;m3;177;Central;CMTF-Arak
+2024-12-16;18:00;Incoming;Drilling Site;Load;27;Central;CMTF-Arak
+2024-12-16;18:00;Incoming;Mud Pit Closure;Load;4;Central;CMTF-Arak
+2024-12-16;18:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-16;18:00;Outgoing;Treated Water;Load;15;Central;SMF-Arak
+2024-12-16;18:00;Production;Permeate;m3;205;Central;CMTF-Arak
+2024-12-16;20:00;Incoming;Drilling Site;Load;27;Central;CMTF-Arak
+2024-12-16;20:00;Incoming;Mud Pit Closure;Load;4;Central;CMTF-Arak
+2024-12-16;20:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-16;20:00;Outgoing;Treated Water;Load;18;Central;SMF-Arak
+2024-12-16;20:00;Production;Permeate;m3;227;Central;CMTF-Arak
+2024-12-16;22:00;Incoming;Drilling Site;Load;28;Central;CMTF-Arak
+2024-12-16;22:00;Incoming;Mud Pit Closure;Load;4;Central;CMTF-Arak
+2024-12-16;22:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-16;22:00;Outgoing;Treated Water;Load;21;Central;SMF-Arak
+2024-12-16;22:00;Production;Permeate;m3;227;Central;CMTF-Arak
+2024-12-16;00:00;Incoming;Drilling Site;Load;37;Central;CMTF-Arak
+2024-12-16;00:00;Incoming;Mud Pit Closure;Load;4;Central;CMTF-Arak
+2024-12-16;00:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-16;00:00;Outgoing;Treated Water;Load;22;Central;SMF-Arak
+2024-12-16;00:00;Production;Permeate;m3;270;Central;CMTF-Arak
+2024-12-17;02:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-17;02:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-17;02:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-17;02:00;Outgoing;Treated Water;Load;2;Central;SMF-Arak
+2024-12-17;02:00;Production;Permeate;m3;21;Central;CMTF-Arak
+2024-12-17;04:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-17;04:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-17;04:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-17;04:00;Outgoing;Treated Water;Load;4;Central;SMF-Arak
+2024-12-17;04:00;Production;Permeate;m3;43;Central;CMTF-Arak
+2024-12-17;06:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-17;06:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-17;06:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-17;06:00;Outgoing;Treated Water;Load;4;Central;SMF-Arak
+2024-12-17;06:00;Production;Permeate;m3;65;Central;CMTF-Arak
+2024-12-17;08:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-17;08:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-17;08:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-17;08:00;Outgoing;Treated Water;Load;4;Central;SMF-Arak
+2024-12-17;08:00;Production;Permeate;m3;83;Central;CMTF-Arak
+2024-12-17;10:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-17;10:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-17;10:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-17;10:00;Outgoing;Treated Water;Load;7;Central;SMF-Arak
+2024-12-17;10:00;Production;Permeate;m3;104;Central;CMTF-Arak
+2024-12-17;12:00;Incoming;Drilling Site;Load;7;Central;CMTF-Arak
+2024-12-17;12:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-17;12:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-17;12:00;Outgoing;Treated Water;Load;10;Central;SMF-Arak
+2024-12-17;12:00;Production;Permeate;m3;127;Central;CMTF-Arak
+2024-12-17;14:00;Incoming;Drilling Site;Load;13;Central;CMTF-Arak
+2024-12-17;14:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-17;14:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-17;14:00;Outgoing;Treated Water;Load;10;Central;SMF-Arak
+2024-12-17;14:00;Production;Permeate;m3;142;Central;CMTF-Arak
+2024-12-17;16:00;Incoming;Drilling Site;Load;19;Central;CMTF-Arak
+2024-12-17;16:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-17;16:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-17;16:00;Outgoing;Treated Water;Load;13;Central;SMF-Arak
+2024-12-17;16:00;Production;Permeate;m3;159;Central;CMTF-Arak
+2024-12-17;18:00;Incoming;Drilling Site;Load;27;Central;CMTF-Arak
+2024-12-17;18:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-17;18:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-17;18:00;Outgoing;Treated Water;Load;15;Central;SMF-Arak
+2024-12-17;18:00;Production;Permeate;m3;181;Central;CMTF-Arak
+2024-12-17;20:00;Incoming;Drilling Site;Load;27;Central;CMTF-Arak
+2024-12-17;20:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-17;20:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-17;20:00;Outgoing;Treated Water;Load;17;Central;SMF-Arak
+2024-12-17;20:00;Production;Permeate;m3;205;Central;CMTF-Arak
+2024-12-17;22:00;Incoming;Drilling Site;Load;28;Central;CMTF-Arak
+2024-12-17;22:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-17;22:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-17;22:00;Outgoing;Treated Water;Load;18;Central;SMF-Arak
+2024-12-17;22:00;Production;Permeate;m3;230;Central;CMTF-Arak
+2024-12-17;00:00;Incoming;Drilling Site;Load;41;Central;CMTF-Arak
+2024-12-17;00:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-17;00:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-17;00:00;Outgoing;Treated Water;Load;20;Central;SMF-Arak
+2024-12-17;00:00;Production;Permeate;m3;256;Central;CMTF-Arak
+2024-12-18;02:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-18;02:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-18;02:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-18;02:00;Outgoing;Treated Water;Load;3;Central;SMF-Arak
+2024-12-18;02:00;Production;Permeate;m3;21;Central;CMTF-Arak
+2024-12-18;04:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-18;04:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-18;04:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-18;04:00;Outgoing;Treated Water;Load;5;Central;SMF-Arak
+2024-12-18;04:00;Production;Permeate;m3;41;Central;CMTF-Arak
+2024-12-18;06:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-18;06:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-18;06:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-18;06:00;Outgoing;Treated Water;Load;5;Central;SMF-Arak
+2024-12-18;06:00;Production;Permeate;m3;56;Central;CMTF-Arak
+2024-12-18;08:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-18;08:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-18;08:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-18;08:00;Outgoing;Treated Water;Load;5;Central;SMF-Arak
+2024-12-18;08:00;Production;Permeate;m3;76;Central;CMTF-Arak
+2024-12-18;10:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-18;10:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-18;10:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-18;10:00;Outgoing;Treated Water;Load;7;Central;SMF-Arak
+2024-12-18;10:00;Production;Permeate;m3;98;Central;CMTF-Arak
+2024-12-18;12:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-18;12:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-18;12:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-18;12:00;Outgoing;Treated Water;Load;9;Central;SMF-Arak
+2024-12-18;12:00;Production;Permeate;m3;119;Central;CMTF-Arak
+2024-12-18;14:00;Incoming;Drilling Site;Load;6;Central;CMTF-Arak
+2024-12-18;14:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-18;14:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-18;14:00;Outgoing;Treated Water;Load;9;Central;SMF-Arak
+2024-12-18;14:00;Production;Permeate;m3;139;Central;CMTF-Arak
+2024-12-18;16:00;Incoming;Drilling Site;Load;11;Central;CMTF-Arak
+2024-12-18;16:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-18;16:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-18;16:00;Outgoing;Treated Water;Load;11;Central;SMF-Arak
+2024-12-18;16:00;Production;Permeate;m3;160;Central;CMTF-Arak
+2024-12-18;18:00;Incoming;Drilling Site;Load;16;Central;CMTF-Arak
+2024-12-18;18:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-18;18:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-18;18:00;Outgoing;Treated Water;Load;13;Central;SMF-Arak
+2024-12-18;18:00;Production;Permeate;m3;187;Central;CMTF-Arak
+2024-12-18;20:00;Incoming;Drilling Site;Load;16;Central;CMTF-Arak
+2024-12-18;20:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-18;20:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-18;20:00;Outgoing;Treated Water;Load;15;Central;SMF-Arak
+2024-12-18;20:00;Production;Permeate;m3;205;Central;CMTF-Arak
+2024-12-18;22:00;Incoming;Drilling Site;Load;16;Central;CMTF-Arak
+2024-12-18;22:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-18;22:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-18;22:00;Outgoing;Treated Water;Load;15;Central;SMF-Arak
+2024-12-18;22:00;Production;Permeate;m3;227;Central;CMTF-Arak
+2024-12-18;00:00;Incoming;Drilling Site;Load;22;Central;CMTF-Arak
+2024-12-18;00:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-18;00:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-18;00:00;Outgoing;Treated Water;Load;20;Central;SMF-Arak
+2024-12-18;00:00;Production;Permeate;m3;248;Central;CMTF-Arak
+2024-12-19;02:00;Incoming;Drilling Site;Load;10;Central;CMTF-Arak
+2024-12-19;02:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-19;02:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-19;02:00;Outgoing;Treated Water;Load;4;Central;SMF-Arak
+2024-12-19;02:00;Production;Permeate;m3;19;Central;CMTF-Arak
+2024-12-19;04:00;Incoming;Drilling Site;Load;17;Central;CMTF-Arak
+2024-12-19;04:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-19;04:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-19;04:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-19;04:00;Production;Permeate;m3;37;Central;CMTF-Arak
+2024-12-19;06:00;Incoming;Drilling Site;Load;19;Central;CMTF-Arak
+2024-12-19;06:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-19;06:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-19;06:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-19;06:00;Production;Permeate;m3;60;Central;CMTF-Arak
+2024-12-19;08:00;Incoming;Drilling Site;Load;19;Central;CMTF-Arak
+2024-12-19;08:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-19;08:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-19;08:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-19;08:00;Production;Permeate;m3;85;Central;CMTF-Arak
+2024-12-19;10:00;Incoming;Drilling Site;Load;19;Central;CMTF-Arak
+2024-12-19;10:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-19;10:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-19;10:00;Outgoing;Treated Water;Load;8;Central;SMF-Arak
+2024-12-19;10:00;Production;Permeate;m3;105;Central;CMTF-Arak
+2024-12-19;12:00;Incoming;Drilling Site;Load;25;Central;CMTF-Arak
+2024-12-19;12:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-19;12:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-19;12:00;Outgoing;Treated Water;Load;10;Central;SMF-Arak
+2024-12-19;12:00;Production;Permeate;m3;125;Central;CMTF-Arak
+2024-12-19;14:00;Incoming;Drilling Site;Load;31;Central;CMTF-Arak
+2024-12-19;14:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-19;14:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-19;14:00;Outgoing;Treated Water;Load;10;Central;SMF-Arak
+2024-12-19;14:00;Production;Permeate;m3;145;Central;CMTF-Arak
+2024-12-19;16:00;Incoming;Drilling Site;Load;38;Central;CMTF-Arak
+2024-12-19;16:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-19;16:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-19;16:00;Outgoing;Treated Water;Load;12;Central;SMF-Arak
+2024-12-19;16:00;Production;Permeate;m3;169;Central;CMTF-Arak
+2024-12-19;18:00;Incoming;Drilling Site;Load;44;Central;CMTF-Arak
+2024-12-19;18:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-19;18:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-19;18:00;Outgoing;Treated Water;Load;13;Central;SMF-Arak
+2024-12-19;18:00;Production;Permeate;m3;186;Central;CMTF-Arak
+2024-12-19;20:00;Incoming;Drilling Site;Load;44;Central;CMTF-Arak
+2024-12-19;20:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-19;20:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-19;20:00;Outgoing;Treated Water;Load;13;Central;SMF-Arak
+2024-12-19;20:00;Production;Permeate;m3;205;Central;CMTF-Arak
+2024-12-19;22:00;Incoming;Drilling Site;Load;46;Central;CMTF-Arak
+2024-12-19;22:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-19;22:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-19;22:00;Outgoing;Treated Water;Load;17;Central;SMF-Arak
+2024-12-19;22:00;Production;Permeate;m3;224;Central;CMTF-Arak
+2024-12-19;00:00;Incoming;Drilling Site;Load;58;Central;CMTF-Arak
+2024-12-19;00:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-19;00:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-19;00:00;Outgoing;Treated Water;Load;21;Central;SMF-Arak
+2024-12-19;00:00;Production;Permeate;m3;241;Central;CMTF-Arak
+2024-12-20;02:00;Incoming;Drilling Site;Load;2;Central;CMTF-Arak
+2024-12-20;02:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-20;02:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-20;02:00;Outgoing;Treated Water;Load;2;Central;SMF-Arak
+2024-12-20;02:00;Production;Permeate;m3;23;Central;CMTF-Arak
+2024-12-20;04:00;Incoming;Drilling Site;Load;2;Central;CMTF-Arak
+2024-12-20;04:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-20;04:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-20;04:00;Outgoing;Treated Water;Load;4;Central;SMF-Arak
+2024-12-20;04:00;Production;Permeate;m3;46;Central;CMTF-Arak
+2024-12-20;06:00;Incoming;Drilling Site;Load;2;Central;CMTF-Arak
+2024-12-20;06:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-20;06:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-20;06:00;Outgoing;Treated Water;Load;4;Central;SMF-Arak
+2024-12-20;06:00;Production;Permeate;m3;72;Central;CMTF-Arak
+2024-12-20;08:00;Incoming;Drilling Site;Load;2;Central;CMTF-Arak
+2024-12-20;08:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-20;08:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-20;08:00;Outgoing;Treated Water;Load;4;Central;SMF-Arak
+2024-12-20;08:00;Production;Permeate;m3;95;Central;CMTF-Arak
+2024-12-20;10:00;Incoming;Drilling Site;Load;3;Central;CMTF-Arak
+2024-12-20;10:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-20;10:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-20;10:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-20;10:00;Production;Permeate;m3;115;Central;CMTF-Arak
+2024-12-20;12:00;Incoming;Drilling Site;Load;10;Central;CMTF-Arak
+2024-12-20;12:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-20;12:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-20;12:00;Outgoing;Treated Water;Load;8;Central;SMF-Arak
+2024-12-20;12:00;Production;Permeate;m3;124;Central;CMTF-Arak
+2024-12-20;14:00;Incoming;Drilling Site;Load;16;Central;CMTF-Arak
+2024-12-20;14:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-20;14:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-20;14:00;Outgoing;Treated Water;Load;10;Central;SMF-Arak
+2024-12-20;14:00;Production;Permeate;m3;136;Central;CMTF-Arak
+2024-12-20;16:00;Incoming;Drilling Site;Load;23;Central;CMTF-Arak
+2024-12-20;16:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-20;16:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-20;16:00;Outgoing;Treated Water;Load;11;Central;SMF-Arak
+2024-12-20;16:00;Production;Permeate;m3;160;Central;CMTF-Arak
+2024-12-20;18:00;Incoming;Drilling Site;Load;27;Central;CMTF-Arak
+2024-12-20;18:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-20;18:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-20;18:00;Outgoing;Treated Water;Load;12;Central;SMF-Arak
+2024-12-20;18:00;Production;Permeate;m3;198;Central;CMTF-Arak
+2024-12-20;20:00;Incoming;Drilling Site;Load;27;Central;CMTF-Arak
+2024-12-20;20:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-20;20:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-20;20:00;Outgoing;Treated Water;Load;12;Central;SMF-Arak
+2024-12-20;20:00;Production;Permeate;m3;198;Central;CMTF-Arak
+2024-12-20;22:00;Incoming;Drilling Site;Load;28;Central;CMTF-Arak
+2024-12-20;22:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-20;22:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-20;22:00;Outgoing;Treated Water;Load;14;Central;SMF-Arak
+2024-12-20;22:00;Production;Permeate;m3;219;Central;CMTF-Arak
+2024-12-20;00:00;Incoming;Drilling Site;Load;42;Central;CMTF-Arak
+2024-12-20;00:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-20;00:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-20;00:00;Outgoing;Treated Water;Load;16;Central;SMF-Arak
+2024-12-20;00:00;Production;Permeate;m3;245;Central;CMTF-Arak
+2024-12-21;02:00;Incoming;Drilling Site;Load;1;Central;CMTF-Arak
+2024-12-21;02:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-21;02:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-21;02:00;Outgoing;Treated Water;Load;2;Central;SMF-Arak
+2024-12-21;02:00;Production;Permeate;m3;29;Central;CMTF-Arak
+2024-12-21;04:00;Incoming;Drilling Site;Load;1;Central;CMTF-Arak
+2024-12-21;04:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-21;04:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-21;04:00;Outgoing;Treated Water;Load;4;Central;SMF-Arak
+2024-12-21;04:00;Production;Permeate;m3;52;Central;CMTF-Arak
+2024-12-21;06:00;Incoming;Drilling Site;Load;1;Central;CMTF-Arak
+2024-12-21;06:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-21;06:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-21;06:00;Outgoing;Treated Water;Load;4;Central;SMF-Arak
+2024-12-21;06:00;Production;Permeate;m3;79;Central;CMTF-Arak
+2024-12-21;08:00;Incoming;Drilling Site;Load;1;Central;CMTF-Arak
+2024-12-21;08:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-21;08:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-21;08:00;Outgoing;Treated Water;Load;4;Central;SMF-Arak
+2024-12-21;08:00;Production;Permeate;m3;98;Central;CMTF-Arak
+2024-12-21;10:00;Incoming;Drilling Site;Load;1;Central;CMTF-Arak
+2024-12-21;10:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-21;10:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-21;10:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-21;10:00;Production;Permeate;m3;118;Central;CMTF-Arak
+2024-12-21;12:00;Incoming;Drilling Site;Load;10;Central;CMTF-Arak
+2024-12-21;12:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-21;12:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-21;12:00;Outgoing;Treated Water;Load;8;Central;SMF-Arak
+2024-12-21;12:00;Production;Permeate;m3;138;Central;CMTF-Arak
+2024-12-21;14:00;Incoming;Drilling Site;Load;18;Central;CMTF-Arak
+2024-12-21;14:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-21;14:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-21;14:00;Outgoing;Treated Water;Load;10;Central;SMF-Arak
+2024-12-21;14:00;Production;Permeate;m3;158;Central;CMTF-Arak
+2024-12-21;16:00;Incoming;Drilling Site;Load;27;Central;CMTF-Arak
+2024-12-21;16:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-21;16:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-21;16:00;Outgoing;Treated Water;Load;12;Central;SMF-Arak
+2024-12-21;16:00;Production;Permeate;m3;179;Central;CMTF-Arak
+2024-12-21;18:00;Incoming;Drilling Site;Load;31;Central;CMTF-Arak
+2024-12-21;18:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-21;18:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-21;18:00;Outgoing;Treated Water;Load;12;Central;SMF-Arak
+2024-12-21;18:00;Production;Permeate;m3;204;Central;CMTF-Arak
+2024-12-21;20:00;Incoming;Drilling Site;Load;31;Central;CMTF-Arak
+2024-12-21;20:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-21;20:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-21;20:00;Outgoing;Treated Water;Load;12;Central;SMF-Arak
+2024-12-21;20:00;Production;Permeate;m3;225;Central;CMTF-Arak
+2024-12-21;22:00;Incoming;Drilling Site;Load;32;Central;CMTF-Arak
+2024-12-21;22:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-21;22:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-21;22:00;Outgoing;Treated Water;Load;14;Central;SMF-Arak
+2024-12-21;22:00;Production;Permeate;m3;250;Central;CMTF-Arak
+2024-12-21;00:00;Incoming;Drilling Site;Load;38;Central;CMTF-Arak
+2024-12-21;00:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-21;00:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-21;00:00;Outgoing;Treated Water;Load;16;Central;SMF-Arak
+2024-12-21;00:00;Production;Permeate;m3;270;Central;CMTF-Arak
+2024-12-22;02:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-22;02:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-22;02:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-22;02:00;Outgoing;Treated Water;Load;2;Central;SMF-Arak
+2024-12-22;02:00;Production;Permeate;m3;20;Central;CMTF-Arak
+2024-12-22;04:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-22;04:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-22;04:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-22;04:00;Outgoing;Treated Water;Load;4;Central;SMF-Arak
+2024-12-22;04:00;Production;Permeate;m3;41;Central;CMTF-Arak
+2024-12-22;06:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-22;06:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-22;06:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-22;06:00;Outgoing;Treated Water;Load;4;Central;SMF-Arak
+2024-12-22;06:00;Production;Permeate;m3;59;Central;CMTF-Arak
+2024-12-22;08:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-22;08:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-22;08:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-22;08:00;Outgoing;Treated Water;Load;4;Central;SMF-Arak
+2024-12-22;08:00;Production;Permeate;m3;79;Central;CMTF-Arak
+2024-12-22;10:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-22;10:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-22;10:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-22;10:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-22;10:00;Production;Permeate;m3;100;Central;CMTF-Arak
+2024-12-22;12:00;Incoming;Drilling Site;Load;10;Central;CMTF-Arak
+2024-12-22;12:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-22;12:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-22;12:00;Outgoing;Treated Water;Load;8;Central;SMF-Arak
+2024-12-22;12:00;Production;Permeate;m3;121;Central;CMTF-Arak
+2024-12-22;14:00;Incoming;Drilling Site;Load;17;Central;CMTF-Arak
+2024-12-22;14:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-22;14:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-22;14:00;Outgoing;Treated Water;Load;10;Central;SMF-Arak
+2024-12-22;14:00;Production;Permeate;m3;142;Central;CMTF-Arak
+2024-12-22;16:00;Incoming;Drilling Site;Load;24;Central;CMTF-Arak
+2024-12-22;16:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-22;16:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-22;16:00;Outgoing;Treated Water;Load;12;Central;SMF-Arak
+2024-12-22;16:00;Production;Permeate;m3;163;Central;CMTF-Arak
+2024-12-22;18:00;Incoming;Drilling Site;Load;32;Central;CMTF-Arak
+2024-12-22;18:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-22;18:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-22;18:00;Outgoing;Treated Water;Load;12;Central;SMF-Arak
+2024-12-22;18:00;Production;Permeate;m3;184;Central;CMTF-Arak
+2024-12-22;20:00;Incoming;Drilling Site;Load;32;Central;CMTF-Arak
+2024-12-22;20:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-22;20:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-22;20:00;Outgoing;Treated Water;Load;12;Central;SMF-Arak
+2024-12-22;20:00;Production;Permeate;m3;205;Central;CMTF-Arak
+2024-12-22;22:00;Incoming;Drilling Site;Load;32;Central;CMTF-Arak
+2024-12-22;22:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-22;22:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-22;22:00;Outgoing;Treated Water;Load;16;Central;SMF-Arak
+2024-12-22;22:00;Production;Permeate;m3;224;Central;CMTF-Arak
+2024-12-22;00:00;Incoming;Drilling Site;Load;40;Central;CMTF-Arak
+2024-12-22;00:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-22;00:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-22;00:00;Outgoing;Treated Water;Load;19;Central;SMF-Arak
+2024-12-22;00:00;Production;Permeate;m3;243;Central;CMTF-Arak
+2024-12-23;02:00;Incoming;Drilling Site;Load;2;Central;CMTF-Arak
+2024-12-23;02:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-23;02:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-23;02:00;Outgoing;Treated Water;Load;4;Central;SMF-Arak
+2024-12-23;02:00;Production;Permeate;m3;20;Central;CMTF-Arak
+2024-12-23;04:00;Incoming;Drilling Site;Load;2;Central;CMTF-Arak
+2024-12-23;04:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-23;04:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-23;04:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-23;04:00;Production;Permeate;m3;40;Central;CMTF-Arak
+2024-12-23;06:00;Incoming;Drilling Site;Load;2;Central;CMTF-Arak
+2024-12-23;06:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-23;06:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-23;06:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-23;06:00;Production;Permeate;m3;67;Central;CMTF-Arak
+2024-12-23;08:00;Incoming;Drilling Site;Load;2;Central;CMTF-Arak
+2024-12-23;08:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-23;08:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-23;08:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-23;08:00;Production;Permeate;m3;87;Central;CMTF-Arak
+2024-12-23;10:00;Incoming;Drilling Site;Load;2;Central;CMTF-Arak
+2024-12-23;10:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-23;10:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-23;10:00;Outgoing;Treated Water;Load;8;Central;SMF-Arak
+2024-12-23;10:00;Production;Permeate;m3;108;Central;CMTF-Arak
+2024-12-23;12:00;Incoming;Drilling Site;Load;9;Central;CMTF-Arak
+2024-12-23;12:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-23;12:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-23;12:00;Outgoing;Treated Water;Load;9;Central;SMF-Arak
+2024-12-23;12:00;Production;Permeate;m3;129;Central;CMTF-Arak
+2024-12-23;14:00;Incoming;Drilling Site;Load;16;Central;CMTF-Arak
+2024-12-23;14:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-23;14:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-23;14:00;Outgoing;Treated Water;Load;9;Central;SMF-Arak
+2024-12-23;14:00;Production;Permeate;m3;151;Central;CMTF-Arak
+2024-12-23;16:00;Incoming;Drilling Site;Load;21;Central;CMTF-Arak
+2024-12-23;16:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-23;16:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-23;16:00;Outgoing;Treated Water;Load;11;Central;SMF-Arak
+2024-12-23;16:00;Production;Permeate;m3;172;Central;CMTF-Arak
+2024-12-23;18:00;Incoming;Drilling Site;Load;30;Central;CMTF-Arak
+2024-12-23;18:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-23;18:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-23;18:00;Outgoing;Treated Water;Load;11;Central;SMF-Arak
+2024-12-23;18:00;Production;Permeate;m3;192;Central;CMTF-Arak
+2024-12-23;20:00;Incoming;Drilling Site;Load;30;Central;CMTF-Arak
+2024-12-23;20:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-23;20:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-23;20:00;Outgoing;Treated Water;Load;11;Central;SMF-Arak
+2024-12-23;20:00;Production;Permeate;m3;213;Central;CMTF-Arak
+2024-12-23;22:00;Incoming;Drilling Site;Load;31;Central;CMTF-Arak
+2024-12-23;22:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-23;22:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-23;22:00;Outgoing;Treated Water;Load;17;Central;SMF-Arak
+2024-12-23;22:00;Production;Permeate;m3;233;Central;CMTF-Arak
+2024-12-23;00:00;Incoming;Drilling Site;Load;39;Central;CMTF-Arak
+2024-12-23;00:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-23;00:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-23;00:00;Outgoing;Treated Water;Load;22;Central;SMF-Arak
+2024-12-23;00:00;Production;Permeate;m3;253;Central;CMTF-Arak
+2024-12-24;02:00;Incoming;Drilling Site;Load;5;Central;CMTF-Arak
+2024-12-24;02:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-24;02:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-24;02:00;Outgoing;Treated Water;Load;3;Central;SMF-Arak
+2024-12-24;02:00;Production;Permeate;m3;21;Central;CMTF-Arak
+2024-12-24;04:00;Incoming;Drilling Site;Load;5;Central;CMTF-Arak
+2024-12-24;04:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-24;04:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-24;04:00;Outgoing;Treated Water;Load;5;Central;SMF-Arak
+2024-12-24;04:00;Production;Permeate;m3;42;Central;CMTF-Arak
+2024-12-24;06:00;Incoming;Drilling Site;Load;5;Central;CMTF-Arak
+2024-12-24;06:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-24;06:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-24;06:00;Outgoing;Treated Water;Load;5;Central;SMF-Arak
+2024-12-24;06:00;Production;Permeate;m3;64;Central;CMTF-Arak
+2024-12-24;08:00;Incoming;Drilling Site;Load;5;Central;CMTF-Arak
+2024-12-24;08:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-24;08:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-24;08:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-24;08:00;Production;Permeate;m3;86;Central;CMTF-Arak
+2024-12-24;10:00;Incoming;Drilling Site;Load;5;Central;CMTF-Arak
+2024-12-24;10:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-24;10:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-24;10:00;Outgoing;Treated Water;Load;8;Central;SMF-Arak
+2024-12-24;10:00;Production;Permeate;m3;107;Central;CMTF-Arak
+2024-12-24;12:00;Incoming;Drilling Site;Load;17;Central;CMTF-Arak
+2024-12-24;12:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-24;12:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-24;12:00;Outgoing;Treated Water;Load;10;Central;SMF-Arak
+2024-12-24;12:00;Production;Permeate;m3;128;Central;CMTF-Arak
+2024-12-24;14:00;Incoming;Drilling Site;Load;25;Central;CMTF-Arak
+2024-12-24;14:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-24;14:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-24;14:00;Outgoing;Treated Water;Load;12;Central;SMF-Arak
+2024-12-24;14:00;Production;Permeate;m3;149;Central;CMTF-Arak
+2024-12-24;16:00;Incoming;Drilling Site;Load;31;Central;CMTF-Arak
+2024-12-24;16:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-24;16:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-24;16:00;Outgoing;Treated Water;Load;14;Central;SMF-Arak
+2024-12-24;16:00;Production;Permeate;m3;170;Central;CMTF-Arak
+2024-12-24;18:00;Incoming;Drilling Site;Load;34;Central;CMTF-Arak
+2024-12-24;18:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-24;18:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-24;18:00;Outgoing;Treated Water;Load;16;Central;SMF-Arak
+2024-12-24;18:00;Production;Permeate;m3;191;Central;CMTF-Arak
+2024-12-24;20:00;Incoming;Drilling Site;Load;34;Central;CMTF-Arak
+2024-12-24;20:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-24;20:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-24;20:00;Outgoing;Treated Water;Load;18;Central;SMF-Arak
+2024-12-24;20:00;Production;Permeate;m3;212;Central;CMTF-Arak
+2024-12-24;22:00;Incoming;Drilling Site;Load;34;Central;CMTF-Arak
+2024-12-24;22:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-24;22:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-24;22:00;Outgoing;Treated Water;Load;21;Central;SMF-Arak
+2024-12-24;22:00;Production;Permeate;m3;232;Central;CMTF-Arak
+2024-12-24;00:00;Incoming;Drilling Site;Load;42;Central;CMTF-Arak
+2024-12-24;00:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-24;00:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-24;00:00;Outgoing;Treated Water;Load;22;Central;SMF-Arak
+2024-12-24;00:00;Production;Permeate;m3;253;Central;CMTF-Arak
+2024-12-25;02:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-25;02:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-25;02:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-25;02:00;Outgoing;Treated Water;Load;2;Central;SMF-Arak
+2024-12-25;02:00;Production;Permeate;m3;20;Central;CMTF-Arak
+2024-12-25;04:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-25;04:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-25;04:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-25;04:00;Outgoing;Treated Water;Load;4;Central;SMF-Arak
+2024-12-25;04:00;Production;Permeate;m3;41;Central;CMTF-Arak
+2024-12-25;06:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-25;06:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-25;06:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-25;06:00;Outgoing;Treated Water;Load;4;Central;SMF-Arak
+2024-12-25;06:00;Production;Permeate;m3;59;Central;CMTF-Arak
+2024-12-25;08:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-25;08:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-25;08:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-25;08:00;Outgoing;Treated Water;Load;4;Central;SMF-Arak
+2024-12-25;08:00;Production;Permeate;m3;79;Central;CMTF-Arak
+2024-12-25;10:00;Incoming;Drilling Site;Load;0;Central;CMTF-Arak
+2024-12-25;10:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-25;10:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-25;10:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-25;10:00;Production;Permeate;m3;100;Central;CMTF-Arak
+2024-12-25;12:00;Incoming;Drilling Site;Load;10;Central;CMTF-Arak
+2024-12-25;12:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-25;12:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-25;12:00;Outgoing;Treated Water;Load;8;Central;SMF-Arak
+2024-12-25;12:00;Production;Permeate;m3;121;Central;CMTF-Arak
+2024-12-25;14:00;Incoming;Drilling Site;Load;17;Central;CMTF-Arak
+2024-12-25;14:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-25;14:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-25;14:00;Outgoing;Treated Water;Load;10;Central;SMF-Arak
+2024-12-25;14:00;Production;Permeate;m3;142;Central;CMTF-Arak
+2024-12-25;16:00;Incoming;Drilling Site;Load;24;Central;CMTF-Arak
+2024-12-25;16:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-25;16:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-25;16:00;Outgoing;Treated Water;Load;12;Central;SMF-Arak
+2024-12-25;16:00;Production;Permeate;m3;163;Central;CMTF-Arak
+2024-12-25;18:00;Incoming;Drilling Site;Load;32;Central;CMTF-Arak
+2024-12-25;18:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-25;18:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-25;18:00;Outgoing;Treated Water;Load;12;Central;SMF-Arak
+2024-12-25;18:00;Production;Permeate;m3;184;Central;CMTF-Arak
+2024-12-25;20:00;Incoming;Drilling Site;Load;32;Central;CMTF-Arak
+2024-12-25;20:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-25;20:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-25;20:00;Outgoing;Treated Water;Load;12;Central;SMF-Arak
+2024-12-25;20:00;Production;Permeate;m3;205;Central;CMTF-Arak
+2024-12-25;22:00;Incoming;Drilling Site;Load;32;Central;CMTF-Arak
+2024-12-25;22:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-25;22:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-25;22:00;Outgoing;Treated Water;Load;16;Central;SMF-Arak
+2024-12-25;22:00;Production;Permeate;m3;224;Central;CMTF-Arak
+2024-12-25;00:00;Incoming;Drilling Site;Load;40;Central;CMTF-Arak
+2024-12-25;00:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-25;00:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-25;00:00;Outgoing;Treated Water;Load;19;Central;SMF-Arak
+2024-12-25;00:00;Production;Permeate;m3;243;Central;CMTF-Arak
+2024-12-26;02:00;Incoming;Drilling Site;Load;2;Central;CMTF-Arak
+2024-12-26;02:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-26;02:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-26;02:00;Outgoing;Treated Water;Load;4;Central;SMF-Arak
+2024-12-26;02:00;Production;Permeate;m3;20;Central;CMTF-Arak
+2024-12-26;04:00;Incoming;Drilling Site;Load;2;Central;CMTF-Arak
+2024-12-26;04:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-26;04:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-26;04:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-26;04:00;Production;Permeate;m3;40;Central;CMTF-Arak
+2024-12-26;06:00;Incoming;Drilling Site;Load;2;Central;CMTF-Arak
+2024-12-26;06:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-26;06:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-26;06:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-26;06:00;Production;Permeate;m3;67;Central;CMTF-Arak
+2024-12-26;08:00;Incoming;Drilling Site;Load;2;Central;CMTF-Arak
+2024-12-26;08:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-26;08:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-26;08:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-26;08:00;Production;Permeate;m3;87;Central;CMTF-Arak
+2024-12-26;10:00;Incoming;Drilling Site;Load;2;Central;CMTF-Arak
+2024-12-26;10:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-26;10:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-26;10:00;Outgoing;Treated Water;Load;8;Central;SMF-Arak
+2024-12-26;10:00;Production;Permeate;m3;108;Central;CMTF-Arak
+2024-12-26;12:00;Incoming;Drilling Site;Load;9;Central;CMTF-Arak
+2024-12-26;12:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-26;12:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-26;12:00;Outgoing;Treated Water;Load;9;Central;SMF-Arak
+2024-12-26;12:00;Production;Permeate;m3;129;Central;CMTF-Arak
+2024-12-26;14:00;Incoming;Drilling Site;Load;16;Central;CMTF-Arak
+2024-12-26;14:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-26;14:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-26;14:00;Outgoing;Treated Water;Load;9;Central;SMF-Arak
+2024-12-26;14:00;Production;Permeate;m3;151;Central;CMTF-Arak
+2024-12-26;16:00;Incoming;Drilling Site;Load;21;Central;CMTF-Arak
+2024-12-26;16:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-26;16:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-26;16:00;Outgoing;Treated Water;Load;11;Central;SMF-Arak
+2024-12-26;16:00;Production;Permeate;m3;172;Central;CMTF-Arak
+2024-12-26;18:00;Incoming;Drilling Site;Load;30;Central;CMTF-Arak
+2024-12-26;18:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-26;18:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-26;18:00;Outgoing;Treated Water;Load;11;Central;SMF-Arak
+2024-12-26;18:00;Production;Permeate;m3;192;Central;CMTF-Arak
+2024-12-26;20:00;Incoming;Drilling Site;Load;30;Central;CMTF-Arak
+2024-12-26;20:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-26;20:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-26;20:00;Outgoing;Treated Water;Load;11;Central;SMF-Arak
+2024-12-26;20:00;Production;Permeate;m3;213;Central;CMTF-Arak
+2024-12-26;22:00;Incoming;Drilling Site;Load;31;Central;CMTF-Arak
+2024-12-26;22:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-26;22:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-26;22:00;Outgoing;Treated Water;Load;17;Central;SMF-Arak
+2024-12-26;22:00;Production;Permeate;m3;233;Central;CMTF-Arak
+2024-12-26;00:00;Incoming;Drilling Site;Load;39;Central;CMTF-Arak
+2024-12-26;00:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-26;00:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-26;00:00;Outgoing;Treated Water;Load;22;Central;SMF-Arak
+2024-12-26;00:00;Production;Permeate;m3;253;Central;CMTF-Arak
+2024-12-27;02:00;Incoming;Drilling Site;Load;4;Central;CMTF-Arak
+2024-12-27;02:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-27;02:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-27;02:00;Outgoing;Treated Water;Load;5;Central;SMF-Arak
+2024-12-27;02:00;Production;Permeate;m3;20;Central;CMTF-Arak
+2024-12-27;04:00;Incoming;Drilling Site;Load;9;Central;CMTF-Arak
+2024-12-27;04:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-27;04:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-27;04:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-27;04:00;Production;Permeate;m3;44;Central;CMTF-Arak
+2024-12-27;06:00;Incoming;Drilling Site;Load;9;Central;CMTF-Arak
+2024-12-27;06:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-27;06:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-27;06:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-27;06:00;Production;Permeate;m3;63;Central;CMTF-Arak
+2024-12-27;08:00;Incoming;Drilling Site;Load;9;Central;CMTF-Arak
+2024-12-27;08:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-27;08:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-27;08:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-27;08:00;Production;Permeate;m3;84;Central;CMTF-Arak
+2024-12-27;10:00;Incoming;Drilling Site;Load;9;Central;CMTF-Arak
+2024-12-27;10:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-27;10:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-27;10:00;Outgoing;Treated Water;Load;9;Central;SMF-Arak
+2024-12-27;10:00;Production;Permeate;m3;105;Central;CMTF-Arak
+2024-12-27;12:00;Incoming;Drilling Site;Load;15;Central;CMTF-Arak
+2024-12-27;12:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-27;12:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-27;12:00;Outgoing;Treated Water;Load;11;Central;SMF-Arak
+2024-12-27;12:00;Production;Permeate;m3;125;Central;CMTF-Arak
+2024-12-27;14:00;Incoming;Drilling Site;Load;21;Central;CMTF-Arak
+2024-12-27;14:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-27;14:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-27;14:00;Outgoing;Treated Water;Load;12;Central;SMF-Arak
+2024-12-27;14:00;Production;Permeate;m3;146;Central;CMTF-Arak
+2024-12-27;16:00;Incoming;Drilling Site;Load;34;Central;CMTF-Arak
+2024-12-27;16:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-27;16:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-27;16:00;Outgoing;Treated Water;Load;3;Central;SMF-Arak
+2024-12-27;16:00;Production;Permeate;m3;167;Central;CMTF-Arak
+2024-12-27;18:00;Incoming;Drilling Site;Load;36;Central;CMTF-Arak
+2024-12-27;18:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-27;18:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-27;18:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-27;18:00;Production;Permeate;m3;188;Central;CMTF-Arak
+2024-12-27;20:00;Incoming;Drilling Site;Load;36;Central;CMTF-Arak
+2024-12-27;20:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-27;20:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-27;20:00;Outgoing;Treated Water;Load;9;Central;SMF-Arak
+2024-12-27;20:00;Production;Permeate;m3;209;Central;CMTF-Arak
+2024-12-27;22:00;Incoming;Drilling Site;Load;36;Central;CMTF-Arak
+2024-12-27;22:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-27;22:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-27;22:00;Outgoing;Treated Water;Load;13;Central;SMF-Arak
+2024-12-27;22:00;Production;Permeate;m3;229;Central;CMTF-Arak
+2024-12-27;00:00;Incoming;Drilling Site;Load;42;Central;CMTF-Arak
+2024-12-27;00:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-27;00:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-27;00:00;Outgoing;Treated Water;Load;17;Central;SMF-Arak
+2024-12-27;00:00;Production;Permeate;m3;251;Central;CMTF-Arak
+2024-12-28;02:00;Incoming;Drilling Site;Load;4;Central;CMTF-Arak
+2024-12-28;02:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-28;02:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-28;02:00;Outgoing;Treated Water;Load;5;Central;SMF-Arak
+2024-12-28;02:00;Production;Permeate;m3;20;Central;CMTF-Arak
+2024-12-28;04:00;Incoming;Drilling Site;Load;9;Central;CMTF-Arak
+2024-12-28;04:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-28;04:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-28;04:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-28;04:00;Production;Permeate;m3;44;Central;CMTF-Arak
+2024-12-28;06:00;Incoming;Drilling Site;Load;9;Central;CMTF-Arak
+2024-12-28;06:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-28;06:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-28;06:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-28;06:00;Production;Permeate;m3;63;Central;CMTF-Arak
+2024-12-28;08:00;Incoming;Drilling Site;Load;9;Central;CMTF-Arak
+2024-12-28;08:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-28;08:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-28;08:00;Outgoing;Treated Water;Load;6;Central;SMF-Arak
+2024-12-28;08:00;Production;Permeate;m3;84;Central;CMTF-Arak
+2024-12-28;10:00;Incoming;Drilling Site;Load;9;Central;CMTF-Arak
+2024-12-28;10:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-28;10:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-28;10:00;Outgoing;Treated Water;Load;9;Central;SMF-Arak
+2024-12-28;10:00;Production;Permeate;m3;105;Central;CMTF-Arak
+2024-12-28;12:00;Incoming;Drilling Site;Load;15;Central;CMTF-Arak
+2024-12-28;12:00;Incoming;Mud Pit Closure;Load;0;Central;CMTF-Arak
+2024-12-28;12:00;Outgoing;Treated Water;Load;0;Central;Bekasap GS
+2024-12-28;12:00;Outgoing;Treated Water;Load;11;Central;SMF-Arak
+2024-12-28;12:00;Production;Permeate;m3;125;Central;CMTF-Arak

@@ -104,8 +104,12 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function getLocations(string $areaName): array
     {
-        return Area::query()
-            ->where('name', '=', $areaName)->get()
+        $builder = Area::query();
+
+        if ($areaName != AreaNameEnum::AllArea->value) {
+            $builder->where('name', '=', $areaName);
+        }
+        return $builder->get()
             ->map(function(Area $area) {
                 $area->actName = str_contains($area->location, 'CMTF')
                     ? ActNameEnum::Incoming->value
@@ -113,6 +117,7 @@ class WorkTripRepository implements IWorkTripRepository
                 return $area;
             })
             ->toArray();
+
     }
 
     public function sumInfoAndTripByArea(string $area): LengthAwarePaginator
@@ -286,9 +291,12 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function getInfoByDateAndArea(string $date, string $area): array
     {
-        return WorkTripInfo::query()
-            ->where('area_name', '=', $area, 'and')
-            ->where('date', $date)->get()->toArray();
+        $builder = WorkTripInfo::query()->where('date', $date);
+
+        if ($area != AreaNameEnum::AllArea->value) {
+            $builder->where('area_name', '=', $area);
+        }
+        return $builder->get()->toArray();
     }
 
 
@@ -316,11 +324,14 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function getInfoByDatetimeAndArea(string $date, string $time, string $area): array
     {
-        return WorkTripInfo::query()
-            ->where('area_name', '=', $area, 'and')
-            ->where('date', '=', $date, 'and')
-            ->where('time', $time)
-            ->get()->toArray();
+        $builder = WorkTripInfo::query()
+            ->where('date', '=', $date)
+            ->where('time', $time);
+
+        if ($area != AreaNameEnum::AllArea->value) {
+            $builder->where('area_name', '=', $area);
+        }
+        return $builder->get()->toArray();
     }
     public function getInfoByDatetimeOrDatesTimeAndArea(
         $dateOrDates, $timeOrTimes, string $area): array
@@ -331,15 +342,18 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function sumInfoByArea(string $area): LengthAwarePaginator
     {
-        return WorkTripInfo::query()
-        ->selectRaw('date, act_unit, users.name AS user, SUM(act_value) AS act_value_sum')
-        /*->where('user_id', '=', $this->authId, 'and')*/
-        ->leftJoin('users', 'users.id', '=', 'work_trip_infos.user_id')
-        ->where('work_trip_infos.area_name', '=', $area, 'and')
-        ->where('act_unit', '=', ActUnitEnum::LOAD->value)
-        ->groupBy('date', 'act_unit', 'user')
-        ->orderByDesc('date')
-        ->paginate();
+        $builder = WorkTripInfo::query()
+            ->selectRaw('date, act_unit, users.name AS user, SUM(act_value) AS act_value_sum') /*->where('user_id', '=', $this->authId, 'and')*/
+            ->leftJoin('users', 'users.id', '=', 'work_trip_infos.user_id')
+            ->where('act_unit', '=', ActUnitEnum::LOAD->value);
+
+        if ($area != AreaNameEnum::AllArea->value) {
+            $builder->where('work_trip_infos.area_name', '=', $area);
+        }
+        return $builder
+            ->groupBy('date', 'act_unit', 'user')
+            ->orderByDesc('date')
+            ->paginate();
     }
     public function getInfos(): LengthAwarePaginator
     {
@@ -472,7 +486,7 @@ class WorkTripRepository implements IWorkTripRepository
             ->act_value_sum;
     }
 
-    public function addNotes(
+    public function addNotesWith(
         string $postId, string $userId, string $message): void
     {
         WorkTripNote::query()->create([
@@ -480,9 +494,9 @@ class WorkTripRepository implements IWorkTripRepository
         ]);
     }
 
-    public function addNotesWithProps(array $props): void
+    public function addNotes(array $data): void
     {
-        WorkTripNote::query()->create($props);
+        WorkTripNote::query()->create($data);
     }
 
     private function notesByDateAndUserIdBuilder(
@@ -557,6 +571,25 @@ class WorkTripRepository implements IWorkTripRepository
             ->orderByDesc('created_at')
             ->limit(WorkTripNote::PER_PAGE)
             ->get();
+    }
+
+    public function tripsExistByDateTimeTypeProcLocBuilder(array $trip): Builder
+    {
+        return WorkTrip::query()
+            ->where('date', '=', $trip['date'], 'and')
+            ->where('time', '=', $trip['time'], 'and')
+            ->where('type', '=', $trip['type'], 'and')
+            ->where('act_process', '=', $trip['act_process'], 'and')
+            ->where('area_loc', $trip['area_loc']);
+    }
+
+    public function infosExistByDateTimeTypeProcLocBuilder(array $info): Builder
+    {
+        return WorkTripInfo::query()
+            ->where('date', '=', $info['date'], 'and')
+            ->where('time', '=', $info['time'], 'and')
+            ->where('act_process', '=', $info['act_process'], 'and')
+            ->where('area_loc', $info['area_loc']);
     }
 
     public function countPendingWorkTrip(array $workTrips): int

@@ -85,7 +85,7 @@ class Import extends Component
             $this->dbRepos->cancel();
             $message = $exception->getMessage();
 
-            session()->flash('message', $message);
+            $this->addError('error', $message);
             Log::debug($message);
         }
     }

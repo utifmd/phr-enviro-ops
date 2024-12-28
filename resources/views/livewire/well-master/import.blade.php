@@ -28,6 +28,10 @@
                             </div>
                         </div>
                     @endif
+                    @error('error')
+                    <x-input-error class="mt-2" :messages="$message"/>
+                    @enderror
+
                     {{--<div class="max-w-lg mx-auto">--}}
                     <div class="max-w-lg">
                         <x-input-label for="csvFile" :value="__('Upload File')"/>
