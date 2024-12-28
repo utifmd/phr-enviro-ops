@@ -162,18 +162,22 @@ class WorkTripRepository implements IWorkTripRepository
     private function workTripsBuilderBy(
         string $area, $dateOrDates, $timeOrTimes = null): Builder
     {
-        $builder = WorkTrip::query()
-            ->where('area_name', '=', $area, 'and');
+        $builder = WorkTrip::query();
 
+        if ($area != AreaNameEnum::AllArea->value) {
+            $builder->where('area_name', '=', $area);
+        }
         return $this->buildConditionalBy($builder, $dateOrDates, $timeOrTimes);
     }
 
     public function getTripByDateAndArea(string $date, string $area): array
     {
-        return WorkTrip::query()
-            ->where('area_name', '=', $area, 'and')
-            ->where('date', $date)
-            ->get()->toArray();
+        $builder = WorkTrip::query()->where('date', $date);
+
+        if ($area != AreaNameEnum::AllArea->value) {
+            $builder->where('area_name', '=', $area);
+        }
+        return $builder->get()->toArray();
     }
 
     public function getActualTripByPostId(string $postId): array
@@ -202,13 +206,17 @@ class WorkTripRepository implements IWorkTripRepository
             ->get()->toArray();
     }
 
-    public function getTripByDatetimeAndArea(string $date, string $time, string $area): array
+    public function getTripByDatetimeAndArea(
+        string $date, string $time, string $area): array
     {
-        return WorkTrip::query()
-            ->where('area_name', '=', $area, 'and')
-            ->where('date', '=', $date, 'and')
-            ->where('time', $time)
-            ->get()->toArray();
+        $builder = WorkTrip::query()
+            ->where('date', '=', $date)
+            ->where('time', $time);
+
+        if ($area != AreaNameEnum::AllArea->value) {
+            $builder->where('area_name', '=', $area);
+        }
+        return $builder->get()->toArray();
     }
 
     public function sumTripByArea(string $area): LengthAwarePaginator
@@ -235,9 +243,12 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function areTripsExistByDateAndArea(string $date, string $area): bool
     {
-        return WorkTrip::query()
-            ->where('area_name', '=', $area, 'and')
-            ->where('date', $date)->exists();
+        $builder = WorkTrip::query()->where('date', $date);
+
+        if ($area != AreaNameEnum::AllArea->value) {
+            $builder->where('area_name', '=', $area);
+        }
+        return $builder->exists();
     }
 
     public function areTripsExistByDatetime(string $date, string $time): bool
@@ -250,11 +261,14 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function areTripsExistByDatetimeAndArea(string $date, string $time, string $area): bool
     {
-        return WorkTrip::query()
-            ->where('area_name', '=', $area, 'and')
-            ->where('date', '=', $date, 'and')
-            ->where('time', $time)
-            ->exists();
+        $builder = WorkTrip::query()
+            ->where('date', '=', $date)
+            ->where('time', $time);
+
+        if ($area != AreaNameEnum::AllArea->value) {
+            $builder->where('area_name', '=', $area);
+        }
+        return $builder->exists();
     }
 
     public function areTripsExistByDatetimeOrDatesTimeAndArea(
@@ -303,9 +317,11 @@ class WorkTripRepository implements IWorkTripRepository
     private function workTripInfosBuilderBy(
         string $area, $dateOrDates, $timeOrTimes = null): Builder
     {
-        $builder = WorkTripInfo::query()
-            ->where('area_name', '=', $area, 'and');
+        $builder = WorkTripInfo::query();
 
+        if ($area != AreaNameEnum::AllArea->value) {
+            $builder->where('area_name', '=', $area);
+        }
         return $this->buildConditionalBy($builder, $dateOrDates, $timeOrTimes);
     }
 
@@ -368,9 +384,12 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function areInfosExistByDateAndArea(string $date, string $area): bool
     {
-        return WorkTripInfo::query()
-            ->where('area_name', '=', $area, 'and')
-            ->where('date', $date)
+        $builder = WorkTripInfo::query();
+
+        if ($area != AreaNameEnum::AllArea->value) {
+            $builder->where('area_name', '=', $area);
+        }
+        return $builder->where('date', $date)
             ->exists();
     }
 
@@ -381,9 +400,12 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function areInfosExistByArea(string $area): bool
     {
-        return WorkTripInfo::query()
-            ->where('area_name', $area)
-            ->exists();
+        $builder = WorkTripInfo::query();
+
+        if ($area != AreaNameEnum::AllArea->value) {
+            $builder->where('area_name', '=', $area);
+        }
+        return $builder->exists();
     }
 
     public function areInfosExistByDatetime(string $date, string $time): bool
@@ -396,11 +418,14 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function areInfosExistByDatetimeAndArea(string $date, string $time, string $area): bool
     {
-        return WorkTripInfo::query()
-            ->where('area_name', '=', $area, 'and')
-            ->where('date', '=', $date, 'and')
-            ->where('time', $time)
-            ->exists();
+        $builder = WorkTripInfo::query()
+            ->where('date', '=', $date)
+            ->where('time', $time);
+
+        if ($area != AreaNameEnum::AllArea->value) {
+            $builder->where('area_name', '=', $area);
+        }
+        return $builder->exists();
     }
 
     public function areInfosExistByDatetimeOrDatesTimeAndArea(
@@ -412,9 +437,12 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function getLatestInfosDateByArea(string $area): ?string
     {
-        return WorkTripInfo::query()
-            ->where('area_name', $area)
-            ->orderByDesc('date')->first()->date;
+        $builder = WorkTripInfo::query();
+
+        if ($area != AreaNameEnum::AllArea->value) {
+            $builder->where('area_name', '=', $area);
+        }
+        return $builder->orderByDesc('date')->first()->date;
     }
 
     public function getLatestInfosDateByDateOrDatesAndArea($dateOrDates, string $area): ?string
@@ -473,17 +501,16 @@ class WorkTripRepository implements IWorkTripRepository
     }
     public function sumActualByAreaAndDate(mixed $areaName, mixed $date): int
     {
-        $collection = WorkTrip::query()
+        $builder = WorkTrip::query()
             ->selectRaw('SUM(act_value) AS act_value_sum')
-            ->where('type', '=', WorkTripTypeEnum::ACTUAL->value, 'and')
-            ->where('area_name', '=', $areaName, 'and')
-            ->where('act_unit', '=', ActUnitEnum::LOAD->value, 'and')
-            ->where('date', $date)
-            ->get();
+            ->where('type', '=', WorkTripTypeEnum::ACTUAL->value)
+            ->where('act_unit', '=', ActUnitEnum::LOAD->value)
+            ->where('date', $date);
 
-        return $collection
-            ->first()
-            ->act_value_sum;
+        if ($areaName != AreaNameEnum::AllArea->value) {
+            $builder->where('area_name', '=', $areaName);
+        }
+        return $builder->get()->first()->act_value_sum;
     }
 
     public function addNotesWith(

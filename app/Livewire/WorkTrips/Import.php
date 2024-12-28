@@ -116,14 +116,11 @@ class Import extends Component
             $infos = $this->wtRepos->getInfoByDateOrDatesAndArea($dates, $area);
 
             foreach ($infos as $trip) {
-                $trip['type'] = WorkTripTypeEnum::PLAN->value;
+                $trip['type'] = WorkTripTypeEnum::ACTUAL->value;
                 $matchRow = $this->wtRepos->tripsExistByDateTimeTypeProcLocBuilder($trip);
+                if (!$matchRow->exists()) continue; // $existing = $matchRow->first()->toArray(); $existing['act_value'] = $trip['act_value']; $this->wtRepos->updateTrip($trip); // $matchRow->update(['act_value' => $trip['act_value']]); // $report['updated']++;
 
-                if ($matchRow->exists()){
-                    $matchRow->update(['act_value' => $trip['act_value']]); /*$existing = $matchRow->first()->toArray(); $existing['act_value'] = $trip['act_value']; $this->wtRepos->updateTrip($trip);*/
-                    $report['updated']++;
-                    continue;
-                }
+                $trip['type'] = WorkTripTypeEnum::PLAN->value;
                 $trip['status'] = WorkTripStatusEnum::APPROVED->value;
                 $this->wtRepos->addTrip($trip);
                 $report['added']++;
@@ -157,11 +154,8 @@ class Import extends Component
             $trip['type'] = WorkTripTypeEnum::ACTUAL->value;
             $trip['status'] = WorkTripStatusEnum::APPROVED->value;
             $trip['post_id'] = $this->dateAndPostIdState[$trip['date']];
-            $trip['user_id'] = $this->authUsr['id'];
+            $trip['user_id'] = $this->authUsr['id']; /*$this->assignNotes($trip['date'], $trip['note'], $trip['post_id'], $trip['user_id']);*/
 
-            /*$this->assignNotes(
-                $trip['date'], $trip['note'], $trip['post_id'], $trip['user_id']
-            );*/
             $this->wtRepos->addTrip($trip);
             $report['added']++;
         }
@@ -183,9 +177,11 @@ class Import extends Component
             $report = $this->generateTripPlan($report);
 
             $message = 'Hasil eksekusi file yang anda upload adalah ';
-            $message .= 'updated: ' . $report['updated'] .
-                ', added: ' . $report['added'] .
-                ', batch: ' . $report['batch'];
+            $message .= 'updated: ' . $report['updated'] . ', added: ' . $report['added'];
+
+            if ($report['added'] > 0) {
+                $message .= ', batch: ' . $report['batch'];
+            }
             session()->flash('message', $message);
             $this->dbRepos->await();
 

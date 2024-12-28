@@ -127,9 +127,11 @@ class Import extends Component
                 $report['added']++;
             }
             $message = 'Hasil eksekusi file yang anda upload adalah ';
-            $message .= 'updated: ' . $report['updated'] .
-                ', added: ' . $report['added'] .
-                ', batch: ' . $report['batch'];
+            $message .= 'updated: ' . $report['updated'] . ', added: ' . $report['added'];
+
+            if ($report['added'] > 0) {
+                $message .= ', batch: ' . $report['batch'];
+            }
             session()->flash('message', $message);
             $this->dbRepos->await();
 
