@@ -5,11 +5,13 @@ namespace App\Repositories\Contracts;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Matrix\Builder;
 
 interface IPostRepository
 {
     function generatePost(array $user, ?array $data): ?string;
-    function arePostExistAt(string $date): bool;
+    function postByDateBuilder(string $date): \Illuminate\Database\Eloquent\Builder;
+    function arePostExistByDate(string $date): bool;
     function arePostExistByDateAndArea(string $date, string $area): bool;
     function arePostExistByDateOrDatesAndArea($dateOrDates, string $area): bool;
     function addPost(array $request): ?Post;

@@ -116,7 +116,10 @@ class Import extends Component
                     continue;
                 }
                 if (is_null($dateAndPostIdState[$date = $info['date']])) {
-                    $postId = $this->pstRepos->generatePost($this->authUsr, ['created_at' => $date]);
+                    $post = $this->pstRepos->postByDateBuilder($info['date']);
+                    $postId = $post->exists()
+                        ? $post->first()->id
+                        : $this->pstRepos->generatePost($this->authUsr, ['created_at' => $date]);
                     $dateAndPostIdState[$info['date']] = $postId
                         ?? throw new Exception('Trouble while generating new post');
                     $report['batch']++;

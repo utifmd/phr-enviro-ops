@@ -10,6 +10,7 @@ use App\Utils\PostTypeEnum;
 use App\Utils\WorkOrderStatusEnum;
 use App\Utils\Contracts\IUtility;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -41,9 +42,17 @@ class PostRepository implements IPostRepository
         return $posted->id;
     }
 
-    public function arePostExistAt(string $date): bool
+    public function postByDateBuilder(string $date): Builder
     {
-        return Post::query()->where('created_at', $date)->exists();
+        return Post::query()->whereBetween('created_at', [
+            Carbon::parse($date)->startOfDay(),
+            Carbon::parse($date)->endOfDay(),
+        ]);
+    }
+
+    public function arePostExistByDate(string $date): bool
+    {
+        return $this->postByDateBuilder($date)->exists();
     }
 
     public function arePostExistByDateAndArea(string $date, string $area): bool
