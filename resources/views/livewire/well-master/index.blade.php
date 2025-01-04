@@ -14,19 +14,25 @@
                         <p class="mt-2 text-sm text-gray-700">A list of all the {{ __('Well Masters') }}.</p>
                     </div>
                     <!-- Settings Dropdown -->
+                    {{--@props(['searchableCols' => collect(\App\Repositories\WellMasterRepository::$searchableCols)->map(fn ($col) => ucwords(str_replace('_', ' ', $col)))->toArray()])--}}
+
+                    <div class="flex items-end">
+                        <x-loading-indicator wire:loading />
+                    </div>
                     <div class="min-w-md">
-                        <x-input-label for="querySearch" :value="__('Pencarian Well Master')"/>
-                        <x-text-input
+                        <div>
+                            <x-input-label for="querySearch" value="Search all of item"/>
+                            <x-text-input
                                 id="querySearch" name="querySearch"
-                                class="block w-full px-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 hover:opacity-50"
-                                autocomplete="querySearch" placeholder="Enter to search"
+                                autocomplete="querySearch" placeholder="Press Enter to search"
                                 wire:model="querySearch"
                                 wire:keydown.enter="search"
                                 type="text"/>
 
-                        @error('querySearch')
-                        <x-input-error class="mt-2" :messages="$message"/>
-                        @enderror
+                            @error('querySearch')
+                            <x-input-error class="mt-2" :messages="$message"/>
+                            @enderror
+                        </div>
                     </div>
                     @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
                         <x-menu>
@@ -104,10 +110,10 @@
                                         Status
                                     </th>
 
-                                    @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
+                                    {{--@can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
                                         <th scope="col"
                                             class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"></th>
-                                    @endcan
+                                    @endcan--}}
                                 </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200 bg-white">
@@ -140,7 +146,7 @@
                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $wellMaster->actual_drmo }}</td>
                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $wellMaster->status }}</td>
 
-                                        @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
+                                        {{--@can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
                                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
                                                 <a wire:navigate
                                                    href="{{ route('well-masters.edit', $wellMaster->id) }}"
@@ -153,7 +159,7 @@
                                                     {{ __('Delete') }}
                                                 </button>
                                             </td>
-                                        @endcan
+                                        @endcan--}}
                                     </tr>
                                 @endforeach
                                 </tbody>

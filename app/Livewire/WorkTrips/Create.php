@@ -9,6 +9,7 @@ use App\Repositories\Contracts\IDBRepository;
 use App\Repositories\Contracts\ILogRepository;
 use App\Repositories\Contracts\IPostRepository;
 use App\Repositories\Contracts\IUserRepository;
+use App\Repositories\Contracts\IWellMasterRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\Constants;
 use App\Utils\Contracts\IUtility;
@@ -34,10 +35,11 @@ class Create extends BaseComponent
     protected IUserRepository $usrRepos;
     protected IPostRepository $pstRepos;
     protected IWorkTripRepository $wtRepos;
+    protected IWellMasterRepository $wellRepos;
 
     public WorkTripForm $form;
-    public array $authUsr, $tripState, $timeOptions, $notes;
-    public string $currentDate, $remarks, $remarksAt;
+    public array $authUsr, $tripState, $timeOptions, $notes, $wells, $incomingDrilling, $incomingMudPit;
+    public string $currentDate, $remarks, $remarksAt, $well;
     public bool $isEditMode = false;
 
 
@@ -47,7 +49,8 @@ class Create extends BaseComponent
         IUtility $util,
         IUserRepository $usrRepos,
         IPostRepository $pstRepos,
-        IWorkTripRepository $wtRepos): void
+        IWorkTripRepository $wtRepos,
+        IWellMasterRepository $wellRepos): void
     {
         $this->dbRepos = $dbRepos;
         $this->logRepos = $logRepos;
@@ -55,6 +58,7 @@ class Create extends BaseComponent
         $this->usrRepos = $usrRepos;
         $this->wtRepos = $wtRepos;
         $this->pstRepos = $pstRepos;
+        $this->wellRepos = $wellRepos;
     }
 
     public function mount(WorkTrip $workTrip): void
@@ -62,6 +66,7 @@ class Create extends BaseComponent
         $this->form->setWorkTripModel($workTrip);
         $this->initAuthUser();
         $this->initDateOptions();
+        $this->initWells();
         $this->initTimeOptions();
         $this->initLocOptions();
         $this->checkTripState();
@@ -149,6 +154,14 @@ class Create extends BaseComponent
             $date, $this->form->time, $this->authUsr['area_name']
         );
         $this->tripState = $this->wtRepos->mapPairInfoAndTripActualValue($infos, $tripState);
+    }
+
+    private function initWells(): void
+    {
+        $query = $this->well ?? Constants::EMPTY_STRING;
+        $this->wells = $this->wellRepos
+            ->getWellMastersByQuery($query)
+            ->toArray();
     }
 
     private function assignPost(string $postId): void
@@ -316,6 +329,12 @@ class Create extends BaseComponent
     {
         $this->form->validate(['act_value' => 'required|integer']);
         $this->initTripState();
+    }
+
+    public function onWellSelected($well): void
+    {
+        /*$this->incomingDrilling = ;
+        $this->incomingMudPit = ;*/
     }
 
     public function save(): void

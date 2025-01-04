@@ -65,4 +65,22 @@ Route::middleware('auth')->group(function () {
     Route::get('/work-trips/import', \App\Livewire\WorkTrips\Import::class)
         ->name('work-trips.import')
         ->can(\App\Policies\UserPolicy::IS_DEV_ROLE);
+
+    Route::get('/work-trip-details', \App\Livewire\WorkTripDetails\Index::class)
+        ->can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
+        ->name('work-trip-details.index');
+
+    /*Route::get('/work-trip-details/create', \App\Livewire\WorkTripDetails\Create::class)
+        ->can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
+        ->name('work-trip-details.create');
+
+    Route::get('/work-trip-details/show/{workTripDetail}', \App\Livewire\WorkTripDetails\Show::class)
+        ->can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
+        ->name('work-trip-details.show');
+
+    Route::get('/work-trip-details/update/{workTripDetail}', \App\Livewire\WorkTripDetails\Edit::class)
+        ->can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
+        ->name('work-trip-details.edit');*/
+
+
 });

@@ -72,12 +72,6 @@ new class extends Component {
                             {{ __('User Master') }}
                         </x-nav-link>
                     @endcan
-                    @can(\App\Policies\UserPolicy::IS_NOT_GUEST_ROLE)
-                        <x-nav-link :href="route('well-masters.index')"
-                                    :active="request()->routeIs('well-masters.*')" wire:navigate>
-                            {{ __('Well Master') }}
-                        </x-nav-link>
-                    @endcan
                     @can(\App\Policies\UserPolicy::IS_PHR_ROLE)
                         <x-nav-link :href="route('work-request')"
                                     :active="request()->routeIs('work-request')" wire:navigate>
@@ -86,6 +80,12 @@ new class extends Component {
                             </div>
                         </x-nav-link>
                     @endcan--}}
+                    @can(\App\Policies\UserPolicy::IS_NOT_GUEST_ROLE)
+                        <x-nav-link :href="route('well-masters.index')"
+                                    :active="request()->routeIs('well-masters.*')" wire:navigate>
+                            {{ __('Well Master') }}
+                        </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
@@ -208,11 +208,6 @@ new class extends Component {
                     {{ __('User Master') }}
                 </x-responsive-nav-link>
             @endcan
-            @can(\App\Policies\UserPolicy::IS_NOT_GUEST_ROLE)
-                <x-responsive-nav-link :href="route('well-masters.index')" :active="request()->routeIs('well-masters.*')" wire:navigate>
-                    {{ __('Well Master') }}
-                </x-responsive-nav-link>
-            @endcan
             @can(\App\Policies\UserPolicy::IS_PHR_ROLE)
                 <x-responsive-nav-link :href="route('work-request')" :active="request()->routeIs('work-request')" wire:navigate>
                     <div class="relative">
@@ -220,6 +215,11 @@ new class extends Component {
                     </div>
                 </x-responsive-nav-link>
             @endcan--}}
+            @can(\App\Policies\UserPolicy::IS_NOT_GUEST_ROLE)
+                <x-responsive-nav-link :href="route('well-masters.index')" :active="request()->routeIs('well-masters.*')" wire:navigate>
+                    {{ __('Well Master') }}
+                </x-responsive-nav-link>
+            @endcan
         </div>
 
         <!-- Responsive Settings Options -->

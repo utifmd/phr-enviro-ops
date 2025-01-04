@@ -3,29 +3,39 @@
 namespace App\Livewire\WellMasters;
 
 use App\Service\Contracts\IWellService;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class Index extends Component
 {
     use WithPagination;
-    private IWellService $service;
+    protected IWellService $service;
+    protected LengthAwarePaginator $wellMaters;
 
     #[\Livewire\Attributes\Session]
-    #[Validate('required|string|min:2')]
     public $querySearch;
 
-    public function booted(IWellService $service): void
+    public function boot(IWellService $service): void
     {
         $this->service = $service;
     }
 
+    public function mount(): void
+    {
+        $this->wellMaters = $this->service->pagedWellMaster($this->querySearch);
+    }
+
+    public function hydrate(): void
+    {
+        $this->mount();
+    }
+
     public function search(): void
     {
-        $this->service->pagedWellMaster($this->querySearch);
+        $this->wellMaters = $this->service->pagedWellMaster($this->querySearch);
     }
 
     public function delete(string $wellMasterId): void
@@ -46,7 +56,7 @@ class Index extends Component
     #[Layout('layouts.app')]
     public function render(): View
     {
-        $wellMasters = $this->service->pagedWellMaster($this->querySearch);
+        $wellMasters = $this->wellMaters;
 
         return view('livewire.well-master.index', compact('wellMasters'))
             ->with('i', $this->getPage() * $wellMasters->perPage());

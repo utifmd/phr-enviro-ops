@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 
 class WellMasterRepository implements IWellMasterRepository
 {
+    public static array $searchableCols = ['field_name' ,'ids_wellname' ,'well_number' ,'legal_well' ,'wbs_number', 'rig_no'];
     private ?Builder $builder;
     private array $params;
 
@@ -30,7 +31,7 @@ class WellMasterRepository implements IWellMasterRepository
 
         $this->setParams($query);
         foreach ($this->params as $key => $value) {
-            $builder->orWhere($key, 'LIKE', "%$value%");
+            $builder->orWhereLike($key, "%$query%");
         }
         return $builder->paginate();
     }
@@ -57,16 +58,15 @@ class WellMasterRepository implements IWellMasterRepository
         $builder = $this->builder;
 
         foreach ($this->params as $key => $value) {
-            $builder->orWhere($key, 'LIKE', "%$value%");
+            $builder->orWhereLike($key, "%$query%");
         }
-        return $builder->orderBy('ids_well_name')->limit($limit)->get();
+        return $builder->orderByDesc('created_at')->limit($limit)->get();
     }
 
     private function setParams($query): void
     {
         $params = [];
-        $columns = ['field_name' ,'ids_wellname' ,'well_number' ,'legal_well' ,'wbs_number'];
-        foreach ($columns as $column) {$params[$column] = $query;}
+        foreach (self::$searchableCols as $column) {$params[$column] = $query;}
 
         $this->params = $params;
     }

@@ -1,6 +1,5 @@
 <?php
 
-use App\Livewire\Posts\WorkRequest;
 use App\Livewire\WellMasters\Create;
 use App\Livewire\WellMasters\Edit;
 use App\Livewire\WellMasters\Import;
