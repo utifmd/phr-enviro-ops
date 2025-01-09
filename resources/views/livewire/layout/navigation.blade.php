@@ -14,7 +14,7 @@ new class extends Component {
         $this->redirect('/', navigate: true);
     }
 }; ?>
-
+@props(['areaName' => ucfirst(strtolower(auth()->user()->area_name ?? ''))])
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -35,51 +35,23 @@ new class extends Component {
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
-                        <x-nav-link :href="route('work-trip-infos.index')" :active="request()->routeIs('work-trip-infos.index') || request()->routeIs('work-trip-infos.create')" wire:navigate>
-                            {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Planing') }}
+                        <x-nav-link :href="route('work-trip-infos.index')" :active="request()->routeIs('work-trip-infos.*')" wire:navigate>
+                            {{ trim($areaName.' VT Planing') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('work-trips.requests.index')" :active="request()->routeIs('work-trips.requests.index') || request()->routeIs('work-trips.requests.create') || request()->routeIs('work-trips.requests.show')" wire:navigate>
-                            {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Verification') }}
+                        <x-nav-link :href="route('work-trips.requests.index')" :active="request()->routeIs('work-trips.requests.*')" wire:navigate>
+                            {{ trim($areaName.' VT Verification') }}
                         </x-nav-link>
                     @endcan
                     @can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
-                        <x-nav-link :href="route('work-trips.index')" :active="request()->routeIs('work-trips.index') || request()->routeIs('work-trips.create') || request()->routeIs('work-trips.requests.show')" wire:navigate>
-                            {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Actual') }}
+                        <x-nav-link :href="route('work-trips.index')" :active="request()->routeIs('work-trips.requests.*')" wire:navigate>
+                            {{ trim($areaName.' VT Actual') }}
                         </x-nav-link>
                     @endcan
-                    {{--  :href="route('work-trip-infos.index')"
-
-                    @can(\App\Policies\UserPolicy::IS_PHR_ROLE)
-                        <x-nav-link :href="route('departments.index')"
-                                    :active="request()->routeIs('departments.*')" wire:navigate>
-                            <div class="relative">
-                                {{ __('Department Master') }}
-                            </div>
+                    @can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW)
+                        <x-nav-link :href="route('work-trip-details.index')" :active="request()->routeIs('work-trip-details.*')" wire:navigate>
+                            {{ trim($areaName.' Loading /Unloading') }}
                         </x-nav-link>
                     @endcan
-                    @can(\App\Policies\UserPolicy::IS_PHR_ROLE)
-                        <x-nav-link
-                            :href="route('operators.index')" wire:navigate
-                            :active="request()->routeIs('operators.*') || request()->routeIs('vehicles.*') || request()->routeIs('crews.*')">
-                            <div class="relative">
-                                {{ __('Operator Master') }}
-                            </div>
-                        </x-nav-link>
-                    @endcan
-                    @can(\App\Policies\UserPolicy::IS_DEV_ROLE)
-                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')"
-                                    wire:navigate>
-                            {{ __('User Master') }}
-                        </x-nav-link>
-                    @endcan
-                    @can(\App\Policies\UserPolicy::IS_PHR_ROLE)
-                        <x-nav-link :href="route('work-request')"
-                                    :active="request()->routeIs('work-request')" wire:navigate>
-                            <div class="relative">
-                                {{ __('Load Request') }}
-                            </div>
-                        </x-nav-link>
-                    @endcan--}}
                     @can(\App\Policies\UserPolicy::IS_NOT_GUEST_ROLE)
                         <x-nav-link :href="route('well-masters.index')"
                                     :active="request()->routeIs('well-masters.*')" wire:navigate>
@@ -113,25 +85,6 @@ new class extends Component {
                         <x-dropdown-link :href="route('profile')" wire:navigate>
                             {{ __('Profile') }}
                         </x-dropdown-link>
-                        {{--@can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
-                            <x-dropdown-link :href="route('work-trip-infos.index')" wire:navigate>
-                                {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Plan') }}
-                            </x-dropdown-link>
-                            <x-dropdown-link :href="route('work-trips.requests.index')" wire:navigate>
-                                {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Verify') }}
-                            </x-dropdown-link>
-                        @endcan
-                        @can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
-                            <x-dropdown-link :href="route('work-trips.index')" wire:navigate>
-                                {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Actual') }}
-                            </x-dropdown-link>
-                        @endcan--}}
-
-                        {{--@can(\App\Policies\UserPolicy::IS_PHR_ROLE)
-                        <x-dropdown-link :href="route('users.index')" wire:navigate>
-                            {{ __('User Management') }}
-                        </x-dropdown-link> bm
-                        @endcan--}}
                         <!-- Authentication -->
                         <button wire:click="logout" class="w-full text-start">
                             <x-dropdown-link>
@@ -141,7 +94,7 @@ new class extends Component {
                     </x-slot>
                 </x-dropdown>
                 @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
-                    <x-nav-link class="border-none" :href="route('logs.index')" :active="request()->routeIs('logs.index')" wire:navigate>
+                    <x-nav-link class="border-none" :href="route('logs.index')" :active="request()->routeIs('logs.*')" wire:navigate>
                         <div class="ms-1">
                             <img class="fill-current h-4 w-4" src="{{ asset('/csv/notifications_unread.svg') }}" alt="Notification">
                         </div>
@@ -173,48 +126,23 @@ new class extends Component {
             </x-responsive-nav-link>
 
             @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
-                <x-responsive-nav-link :href="route('work-trip-infos.index')" :active="request()->routeIs('work-trip-infos.index')" wire:navigate>
-                    {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Planing') }}
+                <x-responsive-nav-link :href="route('work-trip-infos.index')" :active="request()->routeIs('work-trip-infos.*')" wire:navigate>
+                    {{ trim($areaName.' VT Planing') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('work-trips.requests.index')" :active="request()->routeIs('work-trips.requests.index')" wire:navigate>
-                    {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Verification') }}
+                <x-responsive-nav-link :href="route('work-trips.requests.index')" :active="request()->routeIs('work-trips.requests.*')" wire:navigate>
+                    {{ trim($areaName.' VT Verification') }}
                 </x-responsive-nav-link>
             @endcan
             @can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
-                <x-responsive-nav-link :href="route('work-trips.index')" :active="request()->routeIs('work-trips.index')" wire:navigate>
-                    {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Actual') }}
+                <x-responsive-nav-link :href="route('work-trips.index')" :active="request()->routeIs('work-trips.*')" wire:navigate>
+                    {{ trim($areaName.' VT Actual') }}
                 </x-responsive-nav-link>
             @endcan
-            {{--
-            @can(\App\Policies\UserPolicy::IS_DEV_ROLE)
-                <x-responsive-nav-link :href="route('departments.index')" :active="request()->routeIs('departments.*')" wire:navigate>
-                    <div class="relative">
-                        {{ __('Department Master') }}
-                    </div>
+            @can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW)
+                <x-responsive-nav-link :href="route('work-trip-details.index')" :active="request()->routeIs('work-trip-details.*')" wire:navigate>
+                    {{ trim($areaName.' Loading /Unloading') }}
                 </x-responsive-nav-link>
             @endcan
-            @can(\App\Policies\UserPolicy::IS_PHR_ROLE)
-                <x-responsive-nav-link
-                    wire:navigate
-                    :href="route('operators.index')"
-                    :active="request()->routeIs('operators.*') || request()->routeIs('vehicles.*') || request()->routeIs('crews.*')">
-                    <div class="relative">
-                        {{ __('Operator Master') }}
-                    </div>
-                </x-responsive-nav-link>
-            @endcan
-            @can(\App\Policies\UserPolicy::IS_DEV_ROLE)
-                <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')" wire:navigate>
-                    {{ __('User Master') }}
-                </x-responsive-nav-link>
-            @endcan
-            @can(\App\Policies\UserPolicy::IS_PHR_ROLE)
-                <x-responsive-nav-link :href="route('work-request')" :active="request()->routeIs('work-request')" wire:navigate>
-                    <div class="relative">
-                        {{ __('Load Request') }}
-                    </div>
-                </x-responsive-nav-link>
-            @endcan--}}
             @can(\App\Policies\UserPolicy::IS_NOT_GUEST_ROLE)
                 <x-responsive-nav-link :href="route('well-masters.index')" :active="request()->routeIs('well-masters.*')" wire:navigate>
                     {{ __('Well Master') }}
@@ -240,24 +168,10 @@ new class extends Component {
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
                 @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
-                    <x-responsive-nav-link :href="route('logs.index')" :active="request()->routeIs('logs.index')" wire:navigate>
+                    <x-responsive-nav-link :href="route('logs.index')" :active="request()->routeIs('logs.*')" wire:navigate>
                         {{ __('Notification') }}
                     </x-responsive-nav-link>
                 @endcan
-
-                {{--@can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
-                <x-responsive-nav-link :href="route('work-trip-infos.index')" wire:navigate>
-                    {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Plan') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('work-trips.requests.index')" wire:navigate>
-                    {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Plan') }}
-                </x-responsive-nav-link>
-                @endcan
-                @can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
-                <x-responsive-nav-link :href="route('work-trips.index')" wire:navigate>
-                    {{ trim(ucfirst(strtolower(auth()->user()->area_name ?? '')).' VT Actual') }}
-                </x-responsive-nav-link>
-                @endcan--}}
                 <!-- Authentication -->
                 <button wire:click="logout" class="w-full text-start">
                     <x-responsive-nav-link>

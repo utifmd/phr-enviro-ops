@@ -66,6 +66,7 @@ class WorkTripDetail extends Model
         'remarks',
         'post_id',
         'user_id',
+        'created_at'
     ];
 
     public function post(): BelongsTo

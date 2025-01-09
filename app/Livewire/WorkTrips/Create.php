@@ -3,8 +3,11 @@
 namespace App\Livewire\WorkTrips;
 
 use App\Livewire\BaseComponent;
+use App\Livewire\Forms\WorkTripDetailForm;
 use App\Livewire\Forms\WorkTripForm;
+use App\Mapper\Contracts\IWorkTripMapper;
 use App\Models\WorkTrip;
+use App\Models\WorkTripDetail;
 use App\Repositories\Contracts\IDBRepository;
 use App\Repositories\Contracts\ILogRepository;
 use App\Repositories\Contracts\IPostRepository;
@@ -35,10 +38,12 @@ class Create extends BaseComponent
     protected IUserRepository $usrRepos;
     protected IPostRepository $pstRepos;
     protected IWorkTripRepository $wtRepos;
+    protected IWorkTripMapper $wtMapper;
     protected IWellMasterRepository $wellRepos;
 
     public WorkTripForm $form;
-    public array $authUsr, $tripState, $timeOptions, $notes, $wells, $incomingDrilling, $incomingMudPit;
+
+    public array $authUsr, $tripState, $timeOptions, $notes, $wells;
     public string $currentDate, $remarks, $remarksAt, $well;
     public bool $isEditMode = false;
 
@@ -47,6 +52,7 @@ class Create extends BaseComponent
         IDBRepository $dbRepos,
         ILogRepository $logRepos,
         IUtility $util,
+        IWorkTripMapper $wtMapper,
         IUserRepository $usrRepos,
         IPostRepository $pstRepos,
         IWorkTripRepository $wtRepos,
@@ -55,6 +61,7 @@ class Create extends BaseComponent
         $this->dbRepos = $dbRepos;
         $this->logRepos = $logRepos;
         $this->util = $util;
+        $this->wtMapper = $wtMapper;
         $this->usrRepos = $usrRepos;
         $this->wtRepos = $wtRepos;
         $this->pstRepos = $pstRepos;
@@ -64,6 +71,7 @@ class Create extends BaseComponent
     public function mount(WorkTrip $workTrip): void
     {
         $this->form->setWorkTripModel($workTrip);
+
         $this->initAuthUser();
         $this->initDateOptions();
         $this->initWells();
@@ -145,6 +153,7 @@ class Create extends BaseComponent
         }
     }
 
+
     private function getTripState(string $date): void
     {
         $tripState = $this->wtRepos->getTripByDatetimeAndArea(
@@ -153,14 +162,19 @@ class Create extends BaseComponent
         $infos = $this->wtRepos->getInfoByDatetimeAndArea(
             $date, $this->form->time, $this->authUsr['area_name']
         );
-        $this->tripState = $this->wtRepos->mapPairInfoAndTripActualValue($infos, $tripState);
+        $this->tripState = $this->wtMapper->mapPairInfoAndTripActualValue($infos, $tripState);
     }
 
     private function initWells(): void
     {
-        $query = $this->well ?? Constants::EMPTY_STRING;
+        $this->well = Constants::EMPTY_STRING;
+        $this->searchWellBy($this->well);
+    }
+
+    public function searchWellBy(?string $query = null): void
+    {
         $this->wells = $this->wellRepos
-            ->getWellMastersByQuery($query)
+            ->getWellMastersByQuery($query ?? $this->well)
             ->toArray();
     }
 
@@ -304,7 +318,7 @@ class Create extends BaseComponent
     private function savePopulated(): void
     {
         if ($this->isEditMode) {
-            $tripState = $this->wtRepos->mapTripUnpairActualValue($this->tripState);
+            $tripState = $this->wtMapper->mapTripUnpairActualValue($this->tripState);
             foreach ($tripState as $trip){
                 $this->wtRepos->updateTrip($trip);
             }

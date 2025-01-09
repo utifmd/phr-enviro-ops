@@ -27,7 +27,7 @@ class UserFactory extends Factory
         $output = [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'role' => UserRoleEnum::USER_GUEST_ROLE->value,
+            'role' => UserRoleEnum::GUEST_ROLE->value,
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('12121212'),
             'remember_token' => Str::random(10),

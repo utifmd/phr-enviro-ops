@@ -14,7 +14,7 @@
                         <th scope="col"
                             class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Activity
                         </th>
-                        <th scope="col"
+                        <th scope="col" x-show="wellState.mudPit.length || wellState.drilling.length"
                             class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Well Name
                         </th>
                         <th scope="col"
@@ -31,8 +31,8 @@
                                 <td x-text="i +1" class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900"></td>
                                 <td x-text="trip.time" class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900" {{--wire:click="onInfoStateTimeSelected({{$i}})"--}}></td>
                                 <td x-text="trip.act_name+' '+trip.act_process" class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900" {{--wire:click="onInfoStateActNameSelected({{$i}})"--}}></td>
-                                <td>
-                                    <div x-show="trip.act_process == 'Mud Pit Closure' && wellState.mudPit.length">
+                                <td x-show="wellState.mudPit.length || wellState.drilling.length">
+                                    <div x-show="trip.act_process == 'Mud Pit Closure'">
                                         <template x-for="(item, j) in wellState.mudPit" :key="j">
                                             <x-text-badge-with-close-button x-text="item" class="my-1 mx-1"/>
                                         </template>

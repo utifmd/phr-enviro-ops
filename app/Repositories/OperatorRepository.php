@@ -16,6 +16,7 @@ class OperatorRepository implements Contracts\IOperatorRepository
     function getOperatorsOptions(): array
     {
         return $this->getOperators()->map(function (Operator $operator) {
+            $operator->name = trim($operator->prefix.' '.$operator->name.' '.$operator->postfix);
             $operator->value = $operator->id;
             return $operator;
         })->toArray();

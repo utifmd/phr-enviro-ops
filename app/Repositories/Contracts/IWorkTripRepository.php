@@ -62,10 +62,6 @@ interface IWorkTripRepository
     public function getLatestInfosDateByArea(string $area): ?string;
     public function getLatestInfosDateByDateOrDatesAndArea($dateOrDates, string $area): ?string;
 
-    public function mapTripPairActualValue(array $tripState): array;
-    public function mapPairInfoAndTripActualValue(array $infos, array $tripState): array;
-    public function mapTripUnpairActualValue(array $tripState): array;
-
     public function sumActualByAreaAndDate(string $areaName, string $date): int;
 
     public function addNotesWith(string $postId, string $userId, string $message): void;

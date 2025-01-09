@@ -66,21 +66,20 @@ Route::middleware('auth')->group(function () {
         ->name('work-trips.import')
         ->can(\App\Policies\UserPolicy::IS_DEV_ROLE);
 
-    Route::get('/work-trip-details', \App\Livewire\WorkTripDetails\Index::class)
-        ->can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
-        ->name('work-trip-details.index');
 
-    /*Route::get('/work-trip-details/create', \App\Livewire\WorkTripDetails\Create::class)
-        ->can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
-        ->name('work-trip-details.create');
+    Route::get('/work-trip-details', \App\Livewire\WorkTripDetails\Index::class)
+        ->name('work-trip-details.index')
+        ->can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW);
+
+    Route::get('/work-trip-details/create', \App\Livewire\WorkTripDetails\Create::class)
+        ->name('work-trip-details.create')
+        ->can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW);
 
     Route::get('/work-trip-details/show/{workTripDetail}', \App\Livewire\WorkTripDetails\Show::class)
-        ->can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
-        ->name('work-trip-details.show');
+        ->name('work-trip-details.show')
+        ->can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW);
 
     Route::get('/work-trip-details/update/{workTripDetail}', \App\Livewire\WorkTripDetails\Edit::class)
-        ->can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
-        ->name('work-trip-details.edit');*/
-
-
+        ->name('work-trip-details.edit')
+        ->can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW);
 });

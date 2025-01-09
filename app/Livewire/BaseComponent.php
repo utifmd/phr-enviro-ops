@@ -6,7 +6,6 @@ use Livewire\Component;
 
 abstract class BaseComponent extends Component
 {
-
     public function scrollToTop(): void
     {
         $this->dispatch('scroll-to-top');

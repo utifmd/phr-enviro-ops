@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'name' => 'Planner EFO',
             'email' => $email,
             'username' => explode('@', $email)[0],
-            'role' => UserRoleEnum::USER_DEV_ROLE->value,
+            'role' => UserRoleEnum::DEV_ROLE->value,
             'operator_id' => Operator::query()->first()->id,
         ]);
     }

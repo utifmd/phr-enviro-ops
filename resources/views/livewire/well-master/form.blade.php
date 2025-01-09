@@ -1,7 +1,9 @@
 <div class="space-y-6">
-    
+
     <div>
-        <x-input-label for="field_name" :value="__('Field Name')"/>
+        <x-input-label for="field_name">
+            Field Name<span class="text-red-500">&nbsp;*</span>
+        </x-input-label>
         <x-text-input wire:model="form.field_name" id="field_name" name="field_name" type="text" class="mt-1 block w-full" autocomplete="field_name" placeholder="Field Name"/>
         @error('form.field_name')
             <x-input-error class="mt-2" :messages="$message"/>
@@ -15,14 +17,18 @@
         @enderror
     </div>
     <div>
-        <x-input-label for="well_number" :value="__('Well Number')"/>
+        <x-input-label for="well_number">
+            Well Number<span class="text-red-500">&nbsp;*</span>
+        </x-input-label>
         <x-text-input wire:model="form.well_number" id="well_number" name="well_number" type="text" class="mt-1 block w-full" autocomplete="well_number" placeholder="Well Number"/>
         @error('form.well_number')
             <x-input-error class="mt-2" :messages="$message"/>
         @enderror
     </div>
     <div>
-        <x-input-label for="legal_well" :value="__('Legal Well')"/>
+        <x-input-label for="legal_well">
+            Legal Well<span class="text-red-500">&nbsp;*</span>
+        </x-input-label>
         <x-text-input wire:model="form.legal_well" id="legal_well" name="legal_well" type="text" class="mt-1 block w-full" autocomplete="legal_well" placeholder="Legal Well"/>
         @error('form.legal_well')
             <x-input-error class="mt-2" :messages="$message"/>
@@ -50,14 +56,18 @@
         @enderror
     </div>
     <div>
-        <x-input-label for="rig_no" :value="__('Rig No')"/>
+        <x-input-label for="rig_no">
+            Rig No<span class="text-red-500">&nbsp;*</span>
+        </x-input-label>
         <x-text-input wire:model="form.rig_no" id="rig_no" name="rig_no" type="text" class="mt-1 block w-full" autocomplete="rig_no" placeholder="Rig No"/>
         @error('form.rig_no')
             <x-input-error class="mt-2" :messages="$message"/>
         @enderror
     </div>
     <div>
-        <x-input-label for="wbs_number" :value="__('Wbs Number')"/>
+        <x-input-label for="wbs_number">
+            Wbs Number<span class="text-red-500">&nbsp;*</span>
+        </x-input-label>
         <x-text-input wire:model="form.wbs_number" id="wbs_number" name="wbs_number" type="text" class="mt-1 block w-full" autocomplete="wbs_number" placeholder="Wbs Number"/>
         @error('form.wbs_number')
             <x-input-error class="mt-2" :messages="$message"/>
@@ -85,7 +95,9 @@
         @enderror
     </div>
     <div>
-        <x-input-label for="status" :value="__('Status')"/>
+        <x-input-label for="status">
+            Status<span class="text-red-500">&nbsp;*</span>
+        </x-input-label>
         <x-text-input wire:model="form.status" id="status" name="status" type="text" class="mt-1 block w-full" autocomplete="status" placeholder="Status"/>
         @error('form.status')
             <x-input-error class="mt-2" :messages="$message"/>

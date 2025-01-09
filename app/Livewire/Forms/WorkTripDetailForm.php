@@ -8,7 +8,7 @@ use Livewire\Form;
 class WorkTripDetailForm extends Form
 {
     public ?WorkTripDetail $workTripDetailModel;
-    
+
     public $transporter = '';
     public $driver = '';
     public $police_number = '';
@@ -26,6 +26,7 @@ class WorkTripDetailForm extends Form
     public $remarks = '';
     public $post_id = '';
     public $user_id = '';
+    public $created_at = '';
 
     public function rules(): array
     {
@@ -45,13 +46,14 @@ class WorkTripDetailForm extends Form
 			'remarks' => 'string',
 			'post_id' => 'required|uuid',
 			'user_id' => 'required|uuid',
+			'created_at' => 'required|string',
         ];
     }
 
     public function setWorkTripDetailModel(WorkTripDetail $workTripDetailModel): void
     {
         $this->workTripDetailModel = $workTripDetailModel;
-        
+
         $this->transporter = $this->workTripDetailModel->transporter;
         $this->driver = $this->workTripDetailModel->driver;
         $this->police_number = $this->workTripDetailModel->police_number;

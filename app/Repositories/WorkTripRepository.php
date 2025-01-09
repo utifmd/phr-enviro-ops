@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Mapper\Contracts\IWorkTripMapper;
 use App\Models\Activity;
 use App\Models\Area;
 use App\Models\WorkTrip;
@@ -19,16 +20,16 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 
 class WorkTripRepository implements IWorkTripRepository
 {
+    public IWorkTripMapper $mapper;
     /**
      * Create a new class instance.
      */
-    public function __construct()
+    public function __construct(IWorkTripMapper $mapper)
     {
-        //
+        $this->mapper = $mapper;
     }
 
     public function index(): Collection
@@ -449,55 +450,6 @@ class WorkTripRepository implements IWorkTripRepository
     {
         return $this->workTripInfosBuilderBy($area, $dateOrDates)
             ->orderByDesc('date')->first()->date;
-    }
-
-    public function mapTripPairActualValue(array $tripState): array
-    {
-        $actualTrips = [];
-        $planTrips = [];
-        // usort($tripState, fn($a, $b) => $b['id'] > $a['id']);
-        foreach ($tripState as $trip) {
-            if($trip['type'] != WorkTripTypeEnum::PLAN->value) continue;
-            $planTrips[] = $trip;
-        }
-        foreach ($tripState as $i => $trip) {
-            if($trip['type'] != WorkTripTypeEnum::ACTUAL->value) continue;
-            $trip['act_value'] = ($trip['act_value'] ?? 0).'/'.($planTrips[$i]['act_value'] ?? 0);
-            $actualTrips[] = $trip;
-        }
-        return $actualTrips;
-    }
-
-    public function mapPairInfoAndTripActualValue(array $infos, array $tripState): array
-    {
-        $actualTrips = [];
-        foreach ($tripState as $trip) {
-            if($trip['type'] != WorkTripTypeEnum::ACTUAL->value) continue;
-            // $trip['act_value'] = ($trip['act_value'] ?? 0).'/'.($planTrips[$i]['act_value'] ?? 0);
-            $trip['act_value'] = ($trip['act_value'] ?? 0).'/';
-
-            foreach ($infos as $info) {
-                if ($trip['act_name'] == $info['act_name'] &&
-                    $trip['act_process'] == $info['act_process'] &&
-                    $trip['act_unit'] == $info['act_unit'] &&
-                    $trip['area_loc'] == $info['area_loc']) {
-                    $trip['act_value'] .= $info['act_value'];
-                }
-            }
-            $actualTrips[] = $trip;
-        }
-        return $actualTrips;
-    }
-
-    public function mapTripUnpairActualValue(array $tripState): array
-    {
-        $trips = [];
-        foreach ($tripState as $trip) {
-            $trip['status'] = WorkTripStatusEnum::PENDING->value;
-            $trip['act_value'] = explode('/', $trip['act_value'])[0] ?? 0;
-            $trips[] = $trip;
-        }
-        return $trips;
     }
     public function sumActualByAreaAndDate(mixed $areaName, mixed $date): int
     {

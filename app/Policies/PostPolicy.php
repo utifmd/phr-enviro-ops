@@ -25,7 +25,7 @@ class PostPolicy
     public function isUserOwnThePost(User $user, Post $post): bool
     {
         return $post->user_id == $user->id ||
-            $user->role == UserRoleEnum::USER_DEV_ROLE->value;
+            $user->role == UserRoleEnum::DEV_ROLE->value;
     }
 
     public function isPhrOrUserOwnThePost(User $user, Post $post): bool
@@ -33,7 +33,7 @@ class PostPolicy
         return
             $post->user_id == $user->id ||
             $user->role == UserRoleEnum::FAC_REP_MK_ROLE->value ||
-            $user->role == UserRoleEnum::USER_DEV_ROLE->value;
+            $user->role == UserRoleEnum::DEV_ROLE->value;
     }
 
     public function isThePostStillPending(User $user, Post $post): bool

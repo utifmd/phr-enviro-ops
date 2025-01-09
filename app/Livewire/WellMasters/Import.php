@@ -4,6 +4,7 @@ namespace App\Livewire\WellMasters;
 
 use App\Models\WellMaster;
 use App\Repositories\Contracts\IDBRepository;
+use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
@@ -48,6 +49,17 @@ class Import extends Component
         return $line_of_text;
     }
 
+    private function removeBom($filePath): void
+    {
+        $content = file_get_contents($filePath);
+
+        $bom = "\xEF\xBB\xBF"; // BOM UTF-8
+        if (substr($content, 0, 3) === $bom) {
+            $content = substr($content, 3);
+            file_put_contents($filePath, $content);
+        }
+    }
+
     public function import(): void
     {
         try {
@@ -58,20 +70,27 @@ class Import extends Component
             $report = ['added' => 0, 'skipped' => 0];
 
             $tempPath = $this->csvFile->getRealPath();
-            $wellMasters = $this->readCSV($tempPath);
+            $this->removeBom($tempPath);
+            $csv = $this->readCSV($tempPath);
 
-            if (is_null($wellMasters)) return;
-            foreach ($wellMasters as $wellMaster) {
+            if (is_null($csv)) return;
+            foreach ($csv as $rawRow) {
                 $rowInput = [];
-                $cells = explode(';', collect($wellMaster)->first());
+                $row = explode(';', collect($rawRow)->first());
                 $matchRow = WellMaster::query();
-                foreach ($cells as $i => $cell) {
+                foreach ($row as $i => $cell) {
                     $rowInput[$columns[$i] ?? $i] = $cell;
                     $matchRow->where($columns[$i], '=', $cell);
                 }
                 if ($matchRow->exists()) {
                     $report['skipped']++;
                     continue;
+                }
+                if (empty($rowInput['actual_spud'])) {
+                    $rowInput['actual_spud'] = null;// date('Y-m-d H:i:s');
+                }
+                if (empty($rowInput['actual_drmo'])) {
+                    $rowInput['actual_drmo'] = null;// date('Y-m-d H:i:s');
                 }
                 WellMaster::query()->create($rowInput);
                 $report['added']++;

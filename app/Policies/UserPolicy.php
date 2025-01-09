@@ -9,6 +9,8 @@ class UserPolicy
 {
     const IS_USER_IS_PM_COW_N_DEV = 'isUserIsPmCowAndDev';
     const IS_USER_IS_PM_COW = 'isUserIsPmCow';
+    const IS_USER_IS_VT_CREW = 'isUserIsVtCrew';
+    const IS_USER_IS_VT_CREW_N_DEV = 'isUserIsVtCrewAndDev';
 
     const IS_USER_IS_FAC_REP = 'isUserIsFacRep';
     const IS_USER_IS_PLANNER = 'isUserIsPlanner';
@@ -31,21 +33,30 @@ class UserPolicy
     public function isUserIsPlanner(User $user): bool
     {
         return $user->role == UserRoleEnum::PLANNER_ROLE->value ||
-            $user->role == UserRoleEnum::USER_DEV_ROLE->value;
+            $user->role == UserRoleEnum::DEV_ROLE->value;
     }
     public function isUserIsFacRep(User $user): bool
     {
         return $user->role == UserRoleEnum::FAC_REP_MK_ROLE->value ||
-            $user->role == UserRoleEnum::USER_DEV_ROLE->value;
+            $user->role == UserRoleEnum::DEV_ROLE->value;
     }
     public function isUserIsPmCowAndDev(User $user): bool
     {
         return $user->role == UserRoleEnum::PM_COW_ROLE->value ||
-            $user->role == UserRoleEnum::USER_DEV_ROLE->value;
+            $user->role == UserRoleEnum::DEV_ROLE->value;
+    }
+    public function isUserIsVtCrewAndDev(User $user): bool
+    {
+        return $user->role == UserRoleEnum::VT_CREW_ROLE->value ||
+            $user->role == UserRoleEnum::DEV_ROLE->value;
     }
     public function isUserIsPmCow(User $user): bool
     {
         return $user->role == UserRoleEnum::PM_COW_ROLE->value;
+    }
+    public function isUserIsVtCrew(User $user): bool
+    {
+        return $user->role == UserRoleEnum::VT_CREW_ROLE->value;
     }
     public function isUserHasCurrentPost(User $user): bool
     {
@@ -53,11 +64,11 @@ class UserPolicy
     }
 
     public function isUserRoleIsDev(User $user): bool {
-        return $user->role == UserRoleEnum::USER_DEV_ROLE->value;
+        return $user->role == UserRoleEnum::DEV_ROLE->value;
     }
 
     public function isUserRoleIsNotGuest(User $user): bool
     {
-        return $user->role != UserRoleEnum::USER_GUEST_ROLE->value;
+        return $user->role != UserRoleEnum::GUEST_ROLE->value;
     }
 }
