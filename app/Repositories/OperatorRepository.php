@@ -21,14 +21,4 @@ class OperatorRepository implements Contracts\IOperatorRepository
             return $operator;
         })->toArray();
     }
-
-    function getVehicleTypesOptions(): array
-    {
-        return VehicleClass::all()
-            ->map(function(VehicleClass $vehicle) {
-                $vehicle->name = $vehicle->type;
-                $vehicle->value = $vehicle->name;
-                return $vehicle;
-            })->toArray();
-    }
 }

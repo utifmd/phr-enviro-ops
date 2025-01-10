@@ -11,10 +11,13 @@ use App\Repositories\Contracts\ILogRepository;
 use App\Repositories\Contracts\IOperatorRepository;
 use App\Repositories\Contracts\IPostRepository;
 use App\Repositories\Contracts\IUserRepository;
+use App\Repositories\Contracts\IVehicleRepository;
 use App\Repositories\Contracts\IWellMasterRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\Constants;
 use App\Utils\Contracts\IUtility;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -30,11 +33,14 @@ class Create extends Component
     protected IWorkTripMapper $wtMapper;
     protected IWellMasterRepository $wellRepos;
     protected IOperatorRepository $opeRepos;
+    protected IVehicleRepository $vehRepos;
     protected ICrewRepository $crewRepos;
 
     public WorkTripDetailForm $form;
 
-    public array $timeOptions, $authUsr, $wells, $operators, $vehicles, $crews;
+    public array $timeOptions, $authUsr, $wells,
+        $operators, $vehicles, $crews, $facilities;
+
     public string $currentDate, $well;
     public bool $isEditMode = false;
 
@@ -48,6 +54,7 @@ class Create extends Component
         IWorkTripRepository $wtRepos,
         IWellMasterRepository $wellRepos,
         IOperatorRepository $opeRepos,
+        IVehicleRepository $vehRepos,
         ICrewRepository $crewRepos): void
     {
         $this->dbRepos = $dbRepos;
@@ -60,6 +67,7 @@ class Create extends Component
         $this->pstRepos = $pstRepos;
         $this->wellRepos = $wellRepos;
         $this->crewRepos = $crewRepos;
+        $this->vehRepos = $vehRepos;
     }
 
     public function mount(WorkTripDetail $tripDetail): void
@@ -68,6 +76,7 @@ class Create extends Component
 
         $this->initAuthUser();
         $this->initDateOptions();
+        $this->initAreas();
         $this->initWells();
         $this->initOperators();
         $this->initVehicles();
@@ -77,9 +86,33 @@ class Create extends Component
         $this->initDetail();
     }
 
+    public function hydrate(): void
+    {
+        $this->initAuthUser();
+    }
+
     private function initAuthUser(): void
     {
         $this->authUsr = $this->usrRepos->authenticatedUser()->toArray();
+        $this->form->user_id = $this->authUsr['id'];
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    public function check(): void
+    {
+        $this->form->validate();
+        $message = json_encode($this->form->toArray());
+        // Log::debug($message);
+        $this->addError('error', $message);
+    }
+
+    private function initAreas(): void
+    {
+        $this->facilities = $this->wtRepos->getLocationsOptions(
+            $this->authUsr['area_name']
+        );
     }
 
     private function initOperators(): void
@@ -89,7 +122,9 @@ class Create extends Component
 
     private function initVehicles(): void
     {
-        $this->vehicles = $this->opeRepos->getVehicleTypesOptions();
+        $this->vehicles = $this->vehRepos->getVehiclesOptions(
+            $this->authUsr['operator_id']
+        );
     }
 
     private function initCrews(): void
@@ -132,7 +167,6 @@ class Create extends Component
         $this->form->area_name = $areaName;
     }
 
-
     private function initDetail(): void
     {
         $this->form->setWorkTripDetailModel(new WorkTripDetail(array()));
@@ -141,6 +175,25 @@ class Create extends Component
         $this->form->transporter = trim(
             $operator['prefix'].' '.$operator['name'].' '.$operator['postfix']
         );
+        $this->form->time_out = $this->form->time_in;
+        $this->assignPost();
+    }
+
+    public function onTimeOptionChange(): void
+    {
+        $this->form->time_out = $this->form->time_in;
+    }
+
+    private function assignPost(): void
+    {
+        $post = $this->pstRepos
+            ->postByDateBuilder($this->currentDate)
+            ->whereHas('user', fn ($query) => $query->where('area_name', $this->authUsr['area_name']));
+
+        $postId = $post->first()->id
+            ?? $this->pstRepos->generatePost($this->authUsr);
+
+        $this->form->post_id = $postId;
     }
 
     public function searchWellBy(?string $query = null): void

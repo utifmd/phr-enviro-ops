@@ -8,5 +8,4 @@ interface IOperatorRepository
 {
     function getOperators(): Collection;
     function getOperatorsOptions(): array;
-    function getVehicleTypesOptions(): array;
 }

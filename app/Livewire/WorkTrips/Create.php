@@ -47,7 +47,6 @@ class Create extends BaseComponent
     public string $currentDate, $remarks, $remarksAt, $well;
     public bool $isEditMode = false;
 
-
     public function boot(
         IDBRepository $dbRepos,
         ILogRepository $logRepos,

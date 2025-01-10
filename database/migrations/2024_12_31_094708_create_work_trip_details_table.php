@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('police_number')->nullable(false);
             $table->time('time_in')->nullable(false);
             $table->string('well_name')->nullable(false);
-            $rigOrMudPit = collect(\App\Utils\WorkTripDetailCategoryEnum::cases())->map(fn($case) => $case->value);
+            $rigOrMudPit = collect(\App\Utils\WorkTripDetailTypeEnum::cases())->map(fn($case) => $case->value);
             $table->enum('type', $rigOrMudPit->toArray());
             $table->string('rig_name')->nullable(false);
             $table->integer('load')->nullable(false);

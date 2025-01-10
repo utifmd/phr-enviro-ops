@@ -8,4 +8,5 @@ interface IVehicleRepository
 {
     function getVehicles(?string $operatorId): Collection;
     function getVehiclesOptions(?string $operatorId): array;
+    function getVehicleTypesOptions(): array;
 }
