@@ -5,6 +5,8 @@ namespace App\Mapper;
 use App\Mapper\Contracts\IWorkTripMapper;
 use App\Utils\WorkTripStatusEnum;
 use App\Utils\WorkTripTypeEnum;
+use Illuminate\Support\Collection;
+
 class WorkTripMapper implements IWorkTripMapper
 {
 
@@ -55,5 +57,18 @@ class WorkTripMapper implements IWorkTripMapper
             $trips[] = $trip;
         }
         return $trips;
+    }
+
+    function mapToOptions(Collection $collection): Collection
+    {
+        return $collection->map(function ($model) {
+            if (isset($model->name)) {
+                $model->name = trim($model->prefix.' '.$model->name.' '.$model->postfix);
+            } else {
+                $model->name = $model->plat;
+            }
+            $model->value = $model->id;
+            return $model;
+        });
     }
 }

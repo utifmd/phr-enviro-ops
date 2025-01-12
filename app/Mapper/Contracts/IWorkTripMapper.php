@@ -12,4 +12,6 @@ interface IWorkTripMapper
     public function mapTripPairActualValue(array $tripState): array;
     public function mapPairInfoAndTripActualValue(array $infos, array $tripState): array;
     public function mapTripUnpairActualValue(array $tripState): array;
+
+    function mapToOptions(Collection $collection): Collection;
 }

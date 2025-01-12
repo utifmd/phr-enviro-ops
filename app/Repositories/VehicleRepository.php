@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Vehicle;
 use App\Models\VehicleClass;
 use App\Repositories\Contracts\IVehicleRepository;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class VehicleRepository implements IVehicleRepository
@@ -35,5 +36,25 @@ class VehicleRepository implements IVehicleRepository
                 $vehicle->value = $vehicle->name;
                 return $vehicle;
             })->toArray();
+    }
+
+    function vehiclesByQueryBuilder(string $query): Builder
+    {
+        return Vehicle::query()
+            ->whereLike('plat', "%$query%")
+            ->orderByDesc('created_at');
+    }
+
+    function getVehiclesByOperatorIdQuery(string $operatorId, string $query, ?int $limit): Collection
+    {
+        return $this->vehiclesByQueryBuilder($query)
+            ->where('operator_id', $operatorId)
+            ->limit($limit)->get();
+    }
+
+
+    function getVehiclesByQuery(string $query, ?int $limit = 5): Collection
+    {
+        return $this->vehiclesByQueryBuilder($query)->limit($limit)->get();
     }
 }

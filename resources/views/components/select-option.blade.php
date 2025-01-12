@@ -1,4 +1,4 @@
-@props(['cases' => null, 'isIdle' => true])
+@props(['cases' => null, 'isIdle' => true, 'areValueAndNameTheSame' => false])
 <div>
     @if(!is_null($cases))
         <select
@@ -6,7 +6,7 @@
             name="roles" id="roles">
             @if($isIdle) <option value="">All</option> @endif
             @foreach($cases as $case)
-                <option value="{{ $case->value ?? $case['value'] ?? 'NA' }}">
+                <option value="{{ $areValueAndNameTheSame ? ($case->name ?? $case['name'] ?? 'NA') : ($case->value ?? $case['value'] ?? 'NA') }}">
                     {{ $case->name ?? $case['name'] ?? 'NA' }}
                 </option>
             @endforeach

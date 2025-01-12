@@ -4,21 +4,58 @@
     'concentratedWater' => \App\Utils\WorkTripDetailTypeEnum::CONCENTRATED_WATER->value,
     'treatedWater' => \App\Utils\WorkTripDetailTypeEnum::TREATED_WATER->value,
 ])
-<div x-data="{ wellState:{isIncoming: true, isDrilling: true, text: '', wells:[], drilling:[], mudPit:[]} }"
+<div x-data="{ formState:{isIncoming: true, isDrilling: true, wells: @entangle('wells'), wellsCollected: [], well: '', vehicles: @entangle('vehicles'), vehCollected: [], vehicle: ''} }"
      class="space-y-6">
+    <x-loading-field label="Transporter" for="transporter" required="true">
+        <x-select-option
+            wire:model="form.transporter" wire:change="onOperatorOptionChange" x-on:change="formState.vehCollected = []" :cases="$operators" id="transporter" name="transporter"
+            type="text" class="mt-1 block w-full" autocomplete="transporter" placeholder="Transporter"/>
+        @error('form.transporter')
+        <x-input-error class="mt-2" :messages="$message"/>
+        @enderror
+    </x-loading-field>
+    <x-loading-field label="Driver Name" for="driver" required="true">
+        <x-select-option wire:model="form.driver" :cases="$crews" id="driver" name="driver" type="text"
+                         class="mt-1 block w-full" autocomplete="driver" placeholder="Driver"/>
+        @error('form.driver')
+        <x-input-error class="mt-2" :messages="$message"/>
+        @enderror
+    </x-loading-field>
+    <x-loading-field label="Police Number" for="police_number" required="true">
+        <x-text-search-option
+            id="police_number" name="police_number" type="text" class="mt-1 block w-full" placeholder="Search Police Number"
+            x-model="formState.vehicle"
+            x-on:focus="open = formState.vehicles.length > 0"
+            x-on:input.debounce.1500ms="$wire.searchVehicleBy(formState.vehicle)">
+
+            <template x-for="(vehicle, i) in formState.vehicles" :key="i">
+                <li x-on:click="open = false; formState.vehCollected[0] = vehicle; $wire.onVehicleSelected(vehicle)"
+                    x-text="vehicle.plat" class="px-4 py-2 hover:bg-indigo-100 cursor-pointer"></li>
+            </template>
+        </x-text-search-option>
+        <div>
+            <template x-for="(veh, j) in formState.vehCollected" :key="j">
+                <x-text-badge-with-close-button x-text="veh.plat+', '+veh.vendor" class="my-1 mx-1"/>
+            </template>
+        </div>
+        @error('form.police_number')
+        <x-input-error class="mt-2" :messages="$message"/>
+        @enderror
+    </x-loading-field>
+
     <div>
         <x-input-label for="incomingOrOutgoing">
             Incoming or Outgoing<span class="text-red-500">&nbsp;*</span>
         </x-input-label>
         <div id="incomingOrOutgoing" class="flex flex-wrap ms-2 space-x-6">
             <div class="flex items-center">
-                <input x-model="wellState.isIncoming" value="{{true}}" id="incomingOrOutgoing" name="incomingOrOutgoing"
+                <input x-model="formState.isIncoming" value="{{true}}" id="incomingOrOutgoing" name="incomingOrOutgoing"
                        type="radio"
                        class="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 focusring-yellow-500 darkfocusring-yellow-600 darkring-offset-gray-800 focusring-2 darkbg-gray-700 darkborder-gray-600">
                 <label for="red-radio" class="ms-2 text-sm font-medium text-gray-900 darktext-gray-300">Incoming</label>
             </div>
             <div class="flex items-center">
-                <input x-model="wellState.isIncoming" value="{{false}}" id="incomingOrOutgoing"
+                <input x-model="formState.isIncoming" value="{{false}}" id="incomingOrOutgoing"
                        name="incomingOrOutgoing" type="radio"
                        class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focusring-green-500 darkfocusring-green-600 darkring-offset-gray-800 focusring-2 darkbg-gray-700 darkborder-gray-600">
                 <label for="green-radio"
@@ -26,20 +63,30 @@
             </div>
         </div>
         @error('form.incomingOrOutgoing')
-        <x-input-error class="mt-2" messages="message"/>
+        <x-input-error class="mt-2" messages="Please select these option"/>
         @enderror
     </div>
     <div>
         <x-input-label for="facility">
-            <span x-text="(wellState.isIncoming ? 'To' : 'From')+' Facility'"></span><span class="text-red-500">&nbsp*</span>
+            <span x-text="(formState.isIncoming ? 'To' : 'From')+' Facility'"></span><span class="text-red-500">&nbsp*</span>
         </x-input-label>
         <x-select-option wire:model="form.facility" :cases="$facilities" id="facility" name="facility" type="text" class="mt-1 block w-full"
-                      autocomplete="facility" placeholder="Facility"/>
+                         autocomplete="facility" placeholder="Facility"/>
         @error('form.facility')
         <x-input-error class="mt-2" :messages="$message"/>
         @enderror
     </div>
-    <div x-show="wellState.isIncoming">
+    <div>
+        <x-input-label for="time_in">
+            Time In ({{$currentDate}})<span class="text-red-500">&nbsp*</span>
+        </x-input-label>
+        <x-select-option class="mt-1 block w-full" wire:model="form.time_in" wire:change.prevent="onTimeOptionChange"
+                         :cases="$timeOptions" :isIdle="false" id="time_in" name="time_in"/>
+        @error('form.time_in')
+        <x-input-error class="mt-2" :messages="$message"/>
+        @enderror
+    </div>
+    <div x-show="formState.isIncoming">
         <x-input-label for="type">
             Incoming From<span class="text-red-500">&nbsp*</span>
         </x-input-label>
@@ -56,10 +103,10 @@
             </div>
         </div>
         @error('form.type')
-        <x-input-error class="mt-2" messages="message"/>
+        <x-input-error class="mt-2" :messages="$message"/>
         @enderror
     </div>
-    <div x-show="!wellState.isIncoming">
+    <div x-show="!formState.isIncoming">
         <x-input-label for="type">
             Outgoing For<span class="text-red-500">&nbsp*</span>
         </x-input-label>
@@ -76,38 +123,6 @@
             </div>
         </div>
         @error('form.type')
-        <x-input-error class="mt-2" messages="message"/>
-        @enderror
-    </div>
-    <x-loading-field label="Transporter" for="transporter" required="true">
-        <x-select-option wire:model="form.transporter" :cases="$operators" id="transporter" name="transporter"
-                         type="text" class="mt-1 block w-full" autocomplete="transporter" placeholder="Transporter"/>
-        @error('form.transporter')
-        <x-input-error class="mt-2" :messages="$message"/>
-        @enderror
-    </x-loading-field>
-    <x-loading-field label="Driver Name" for="driver" required="true">
-        <x-select-option wire:model="form.driver" :cases="$crews" id="driver" name="driver" type="text"
-                         class="mt-1 block w-full" autocomplete="driver" placeholder="Driver"/>
-        @error('form.driver')
-        <x-input-error class="mt-2" :messages="$message"/>
-        @enderror
-    </x-loading-field>
-    <x-loading-field label="Police Number" for="police_number" required="true">
-        <x-select-option wire:model="form.police_number" :cases="$vehicles" id="police_number" name="police_number"
-                         type="text" class="mt-1 block w-full" autocomplete="police_number"
-                         placeholder="Police Number"/>
-        @error('form.police_number')
-        <x-input-error class="mt-2" :messages="$message"/>
-        @enderror
-    </x-loading-field>
-    <div>
-        <x-input-label for="time_in">
-            Time In<span class="text-red-500">&nbsp*</span>
-        </x-input-label>
-        <x-select-option class="mt-1 block w-full" wire:model="form.time_in" wire:change.prevent="onTimeOptionChange"
-                         :cases="$timeOptions" :isIdle="false" id="time_in" name="time_in"/>
-        @error('form.time_in')
         <x-input-error class="mt-2" :messages="$message"/>
         @enderror
     </div>
@@ -121,16 +136,20 @@
     </div>--}}
 
     <x-loading-field for="well" label="Well Name" required="true">
-        <x-text-search-option x-model="wellState.well" x-on:input.debounce.1500ms="$wire.searchWellBy(wellState.well)"
-                              id="well" name="well" class="block w-full h-11" placeholder="Well Name">
-            <template x-for="(well, i) in wellState.wells" :key="i">
-                <li x-on:click="open = false; wellState[wellState.isDrilling ? 'drilling' : 'mudPit'].push(well.ids_wellname);"
+        <x-text-search-option
+            id="well" name="well" class="block w-full h-11" placeholder="Search Well Name"
+            x-model="formState.well"
+            x-on:input.debounce.1500ms="$wire.searchWellBy(formState.well)"
+            x-on:focus="open = formState.wells.length > 0">
+
+            <template x-for="(well, i) in formState.wells" :key="i"> {{--<li x-on:click="open = false; formState.wellsCollected.push(well); $wire.onWellSelected(well)"--}}
+                <li x-on:click="open = false; formState.wellsCollected[0] = well; $wire.onWellSelected(well)"
                     x-text="well.ids_wellname" class="px-4 py-2 hover:bg-indigo-100 cursor-pointer"></li>
             </template>
         </x-text-search-option>
         <div>
-            <template id="wells" name="wells" x-for="(item, j) in wellState.drilling" :key="j">
-                <x-text-badge-with-close-button x-text="item" class="my-1 mx-1"/>
+            <template id="wells" name="wells" x-for="(well, j) in formState.wellsCollected" :key="j">
+                <x-text-badge-with-close-button x-text="well.ids_wellname+', '+well.legal_well+', '+well.well_number+', '+well.field_name" class="my-1 mx-1"/>
             </template>
         </div>
         @error('well')
@@ -146,8 +165,9 @@
         @enderror
     </div>--}}
     <x-loading-field for="rig_name" label="Rig Name" required="true">
-        <x-text-input wire:model="form.rig_name" disabled="true" id="rig_name" name="rig_name" type="text" class="mt-1 block w-full"
-                      autocomplete="rig_name" placeholder="Rig Name"/>
+        <x-text-input
+            x-model="formState.wellsCollected.map(({rig_no}) => rig_no).join(', ')" disabled="true" id="rig_name" name="rig_name" type="text" class="mt-1 block w-full"
+            autocomplete="rig_name" placeholder="Rig Name"/>
         @error('form.rig_name')
         <x-input-error class="mt-2" :messages="$message"/>
         @enderror
@@ -163,8 +183,9 @@
         @enderror
     </div>--}}
     <x-loading-field for="wbs_number" label="WBS Number" required="true">
-        <x-text-input wire:model="form.wbs_number" disabled="true" id="wbs_number" name="wbs_number" type="text"
-                      class="mt-1 block w-full" autocomplete="wbs_number" placeholder="Wbs Number"/>
+        <x-text-input
+            x-model="formState.wellsCollected.map(({wbs_number}) => wbs_number).join(', ')" disabled="true" id="wbs_number" name="wbs_number" type="text"
+            class="mt-1 block w-full" autocomplete="wbs_number" placeholder="Wbs Number"/>
         @error('form.wbs_number')
         <x-input-error class="mt-2" :messages="$message"/>
         @enderror
@@ -205,8 +226,8 @@
         <x-input-label for="load">
             Load<span class="text-red-500">&nbsp*</span>
         </x-input-label>
-        <x-text-input wire:model="form.load" id="load" name="load" type="text" type="number" pattern="[0-9]*" inputmode="numeric" min="1" max="999" class="mt-1 block w-full"
-                      autocomplete="load" placeholder="Load"/>
+        <x-text-input wire:model="form.load" id="load" name="load" type="number" pattern="[0-9]*" inputmode="numeric" min="1" max="999" class="mt-1 block w-full"
+                      autocomplete="load" placeholder="Total Load"/>
         @error('form.load')
         <x-input-error class="mt-2" :messages="$message"/>
         @enderror
@@ -219,7 +240,13 @@
         <x-input-error class="mt-2" :messages="$message"/>
         @enderror
     </div>
-    <x-general-button wire:click="check">Check</x-general-button>
+    {{--<x-general-button wire:click="check">Check</x-general-button>--}}
+    @error('post_id')
+    <x-input-error class="mt-2" :messages="$message"/>
+    @enderror
+    @error('user_id')
+    <x-input-error class="mt-2" :messages="$message"/>
+    @enderror
     @error('error')
     <x-input-error class="mt-2" :messages="$message"/>
     @enderror

@@ -67,19 +67,36 @@ Route::middleware('auth')->group(function () {
         ->can(\App\Policies\UserPolicy::IS_DEV_ROLE);
 
 
-    Route::get('/work-trip-details', \App\Livewire\WorkTripDetails\Index::class)
-        ->name('work-trip-details.index')
+    Route::get('/work-trip-in-details', \App\Livewire\WorkTripInDetails\Index::class)
+        ->name('work-trip-in-details.index')
         ->can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW);
 
-    Route::get('/work-trip-details/create', \App\Livewire\WorkTripDetails\Create::class)
-        ->name('work-trip-details.create')
+    Route::get('/work-trip-in-details/create', \App\Livewire\WorkTripInDetails\Create::class)
+        ->name('work-trip-in-details.create')
         ->can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW);
 
-    Route::get('/work-trip-details/show/{workTripDetail}', \App\Livewire\WorkTripDetails\Show::class)
-        ->name('work-trip-details.show')
+    Route::get('/work-trip-in-details/show/{workTripDetail}', \App\Livewire\WorkTripInDetails\Show::class)
+        ->name('work-trip-in-details.show')
         ->can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW);
 
-    Route::get('/work-trip-details/update/{workTripDetail}', \App\Livewire\WorkTripDetails\Edit::class)
-        ->name('work-trip-details.edit')
+    Route::get('/work-trip-in-details/update/{workTripDetail}', \App\Livewire\WorkTripInDetails\Edit::class)
+        ->name('work-trip-in-details.edit')
         ->can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW);
+
+    Route::get('/work-trip-out-details', \App\Livewire\WorkTripOutDetails\Index::class)
+        ->name('work-trip-out-details.index')
+        ->can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW); //IS_USER_IS_FAC_OPE_N_DEV
+
+    Route::get('/work-trip-out-details/create', \App\Livewire\WorkTripOutDetails\Create::class)
+        ->name('work-trip-out-details.create')
+        ->can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW);
+
+    Route::get('/work-trip-out-details/show/{workTripOutDetail}', \App\Livewire\WorkTripOutDetails\Show::class)
+        ->name('work-trip-out-details.show')
+        ->can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW);
+
+    Route::get('/work-trip-out-details/update/{workTripOutDetail}', \App\Livewire\WorkTripOutDetails\Edit::class)
+        ->name('work-trip-out-details.edit')
+        ->can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW);
+
 });

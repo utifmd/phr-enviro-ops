@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Livewire\WorkTripDetails;
+namespace App\Livewire\WorkTripOutDetails;
 
-use App\Livewire\Forms\WorkTripDetailForm;
+use App\Livewire\Forms\WorkTripOutDetailForm;
 use App\Mapper\Contracts\IWorkTripMapper;
-use App\Models\WorkTripDetail;
+use App\Models\WorkTripOutDetail;
 use App\Repositories\Contracts\ICrewRepository;
 use App\Repositories\Contracts\IDBRepository;
 use App\Repositories\Contracts\ILogRepository;
@@ -16,8 +16,6 @@ use App\Repositories\Contracts\IWellMasterRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\Constants;
 use App\Utils\Contracts\IUtility;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -36,7 +34,7 @@ class Create extends Component
     protected IVehicleRepository $vehRepos;
     protected ICrewRepository $crewRepos;
 
-    public WorkTripDetailForm $form;
+    public WorkTripOutDetailForm $form;
 
     public array $timeOptions, $authUsr, $wells,
         $operators, $vehicles, $crews, $facilities;
@@ -70,17 +68,15 @@ class Create extends Component
         $this->vehRepos = $vehRepos;
     }
 
-    public function mount(WorkTripDetail $tripDetail): void
+    public function mount(WorkTripOutDetail $tripDetail): void
     {
-        $this->form->setWorkTripDetailModel($tripDetail);
+        $this->form->setWorkTripOutDetailModel($tripDetail);
 
         $this->initAuthUser();
         $this->initDateOptions();
         $this->initAreas();
         $this->initWells();
         $this->initOperators();
-        $this->initVehicles();
-        $this->initCrews();
         $this->initTimeOptions();
         $this->initLocOptions();
         $this->initDetail();
@@ -89,23 +85,13 @@ class Create extends Component
     public function hydrate(): void
     {
         $this->initAuthUser();
+        $this->initTimeOptions();
     }
 
     private function initAuthUser(): void
     {
         $this->authUsr = $this->usrRepos->authenticatedUser()->toArray();
         $this->form->user_id = $this->authUsr['id'];
-    }
-
-    /**
-     * @throws ValidationException
-     */
-    public function check(): void
-    {
-        $this->form->validate();
-        $message = json_encode($this->form->toArray());
-        // Log::debug($message);
-        $this->addError('error', $message);
     }
 
     private function initAreas(): void
@@ -118,20 +104,36 @@ class Create extends Component
     private function initOperators(): void
     {
         $this->operators = $this->opeRepos->getOperatorsOptions();
+
+        $this->initVehicles();
+        $this->assignCrews();
+    }
+
+    private function assignCrews(?string $operatorId = null): void
+    {
+        if (is_null($operatorId)) {
+            $this->crews = $this->crewRepos->getCrewsOptions(
+                $this->authUsr['operator_id']
+            );
+            return;
+        }
+        $collection = $this->wtMapper->mapToOptions(
+            $this->crewRepos->getCrews($operatorId)
+        );
+        $this->crews = $collection->toArray();
+    }
+    private function assignVehicles(string $query, ?string $operatorId = null): void
+    {
+        $operatorId = is_null($operatorId) ? $this->authUsr['operator_id'] : $operatorId;
+        $collection = $this->vehRepos
+            ->getVehiclesByOperatorIdQuery($operatorId, $query, 5);
+
+        $this->vehicles = $this->wtMapper->mapToOptions($collection)->toArray();
     }
 
     private function initVehicles(): void
     {
-        $this->vehicles = $this->vehRepos->getVehiclesOptions(
-            $this->authUsr['operator_id']
-        );
-    }
-
-    private function initCrews(): void
-    {
-        $this->crews = $this->crewRepos->getCrewsOptions(
-            $this->authUsr['operator_id']
-        );
+        $this->vehicles = array();
     }
 
     private function initWells(): void
@@ -152,11 +154,10 @@ class Create extends Component
             ->getListOfTimesOptions(0, 22);
 
         $formTimeSession = session('form_time');
-        $options = $formTimeSession
+        $option = $formTimeSession
             ?? $this->timeOptions[0]['value'] ?? Constants::EMPTY_STRING;
 
-        $this->form->time_in = $options;
-        $this->form->time_out = $options;
+        $this->adjustTime($option);
     }
 
     private function initLocOptions(): void
@@ -169,7 +170,7 @@ class Create extends Component
 
     private function initDetail(): void
     {
-        $this->form->setWorkTripDetailModel(new WorkTripDetail(array()));
+        $this->form->setWorkTripOutDetailModel(new WorkTripOutDetail(array()));
 
         $operator = $this->authUsr['operator'];
         $this->form->transporter = trim(
@@ -179,17 +180,43 @@ class Create extends Component
         $this->assignPost();
     }
 
+    private function adjustTime($time): void
+    {
+        $this->form->time_in = $time;
+        $this->form->time_out = date($time, strtotime('+1 hour'));
+    }
+
+    public function onWellSelected(array $well): void
+    {
+        $this->form->well_name = $well['ids_wellname'];
+        $this->form->rig_name = $well['rig_no'];
+        $this->form->wbs_number = $well['wbs_number'];
+    }
+    public function onVehicleSelected(array $vehicle): void
+    {
+        $this->form->police_number = $vehicle['plat'];
+    }
+
     public function onTimeOptionChange(): void
     {
-        $this->form->time_out = $this->form->time_in;
+        $this->adjustTime(
+            $this->form->time_in
+        );
+    }
+
+    public function onOperatorOptionChange(): void
+    {
+        $this->assignCrews($this->form->transporter);
+        $this->assignVehicles(Constants::EMPTY_STRING);
     }
 
     private function assignPost(): void
     {
         $post = $this->pstRepos
             ->postByDateBuilder($this->currentDate)
-            ->whereHas('user', fn ($query) => $query->where('area_name', $this->authUsr['area_name']));
-
+            ->whereHas('user', fn ($query) =>
+            $query->where('area_name', $this->authUsr['area_name'])
+            );
         $postId = $post->first()->id
             ?? $this->pstRepos->generatePost($this->authUsr);
 
@@ -202,16 +229,26 @@ class Create extends Component
             ->getWellMastersByQuery($query ?? $this->well)
             ->toArray();
     }
+
+    public function searchVehicleBy(?string $query = null): void
+    {
+        $this->assignVehicles($query, $this->form->transporter);
+    }
+
     public function save(): void
     {
-        $this->form->store();
+        // $this->form->validate();
+        $message = json_encode($this->form->toArray());
+        // Log::debug($message);
+        $this->addError('error', $message);
+        /*$this->form->store();
 
-        $this->redirectRoute('work-trip-details.index', navigate: true);
+        $this->redirectRoute('work-trip-out-details.index', navigate: true);*/
     }
 
     #[Layout('layouts.app')]
     public function render(): View
     {
-        return view('livewire.work-trip-detail.create');
+        return view('livewire.work-trip-out-detail.create');
     }
 }

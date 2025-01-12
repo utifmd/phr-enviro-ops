@@ -3,7 +3,7 @@
     <div x-data="{ open: false }" @click.away="open = false" class="relative">
         <input
             {{ $disabled ? 'disabled' : '' }}
-            @focus="open = true"
+            {{--@focus="open = true"--}}
             @keydown.escape="open = false"
             {!! $attributes->merge(['class' => 'block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm '.($disabled ? 'opacity-60' : '')]) !!}
             type="text"

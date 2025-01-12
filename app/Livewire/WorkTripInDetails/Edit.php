@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Livewire\WorkTripDetails;
+namespace App\Livewire\WorkTripInDetails;
 
-use App\Livewire\Forms\WorkTripDetailForm;
-use App\Models\WorkTripDetail;
+use App\Livewire\Forms\WorkTripInDetailForm;
+use App\Models\WorkTripInDetail;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class Edit extends Component
 {
-    public WorkTripDetailForm $form;
+    public WorkTripInDetailForm $form;
 
-    public function mount(WorkTripDetail $workTripDetail)
+    public function mount(WorkTripInDetail $workTripDetail)
     {
         $this->form->setWorkTripDetailModel($workTripDetail);
     }
@@ -26,6 +26,6 @@ class Edit extends Component
     #[Layout('layouts.app')]
     public function render()
     {
-        return view('livewire.work-trip-detail.edit');
+        return view('livewire.work-trip-in-detail.edit');
     }
 }

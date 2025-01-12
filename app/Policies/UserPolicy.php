@@ -21,6 +21,8 @@ class UserPolicy
     const IS_DEV_ROLE = 'isUserRoleIsDev';
 
     const IS_USER_HAS_CURRENT_POST = "isUserHasCurrentPost";
+    const IS_USER_IS_FAC_OPE_N_DEV = 'isUserIsFacOpeAndDev';
+
     /**
      * Create a new policy instance.
      */
@@ -48,6 +50,11 @@ class UserPolicy
     public function isUserIsVtCrewAndDev(User $user): bool
     {
         return $user->role == UserRoleEnum::VT_CREW_ROLE->value ||
+            $user->role == UserRoleEnum::DEV_ROLE->value;
+    }
+    public function isUserIsFacOpeAndDev(User $user): bool
+    {
+        return $user->role == UserRoleEnum::FAC_OPE_ROLE->value ||
             $user->role == UserRoleEnum::DEV_ROLE->value;
     }
     public function isUserIsPmCow(User $user): bool

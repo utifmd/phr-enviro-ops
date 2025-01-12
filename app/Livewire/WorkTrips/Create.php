@@ -3,11 +3,11 @@
 namespace App\Livewire\WorkTrips;
 
 use App\Livewire\BaseComponent;
-use App\Livewire\Forms\WorkTripDetailForm;
+use App\Livewire\Forms\WorkTripInDetailForm;
 use App\Livewire\Forms\WorkTripForm;
 use App\Mapper\Contracts\IWorkTripMapper;
 use App\Models\WorkTrip;
-use App\Models\WorkTripDetail;
+use App\Models\WorkTripInDetail;
 use App\Repositories\Contracts\IDBRepository;
 use App\Repositories\Contracts\ILogRepository;
 use App\Repositories\Contracts\IPostRepository;

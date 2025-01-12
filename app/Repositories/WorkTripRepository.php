@@ -6,6 +6,7 @@ use App\Mapper\Contracts\IWorkTripMapper;
 use App\Models\Activity;
 use App\Models\Area;
 use App\Models\WorkTrip;
+use App\Models\WorkTripInDetail;
 use App\Models\WorkTripInfo;
 use App\Models\WorkTripNote;
 use App\Repositories\Contracts\IWorkTripRepository;
@@ -569,6 +570,17 @@ class WorkTripRepository implements IWorkTripRepository
             ->where('time', '=', $info['time'], 'and')
             ->where('act_process', '=', $info['act_process'], 'and')
             ->where('area_loc', $info['area_loc']);
+    }
+
+    public function inDetailExistByDateTimeFacBuilder(
+        string $createdAt, string $time, string $facility): Builder {
+        return WorkTripInDetail::query()
+            ->where('facility', $facility)
+            ->where('time_in', $time) // ->orWhere('time_in', $time)
+            ->whereBetween('created_at', [
+                Carbon::parse($createdAt)->startOfDay(),
+                Carbon::parse($createdAt)->endOfDay(),
+            ]);
     }
 
     public function countPendingWorkTrip(array $workTrips): int

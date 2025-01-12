@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 /**
@@ -30,6 +29,7 @@ use Illuminate\Support\Str;
  * @property $remarks
  * @property $post_id
  * @property $user_id
+ * @property $created_at
  *
  * RELATION
  * @property $post
@@ -38,7 +38,7 @@ use Illuminate\Support\Str;
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class WorkTripDetail extends Model
+class WorkTripInDetail extends Model
 {
     use HasFactory, HasUuids;
 
@@ -46,7 +46,7 @@ class WorkTripDetail extends Model
 
     public $incrementing = false;
 
-    protected $table = 'work_trip_details';
+    protected $table = 'work_trip_in_details';
 
     protected $fillable = [
         'transporter',

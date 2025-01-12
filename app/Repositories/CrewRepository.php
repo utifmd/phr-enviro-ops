@@ -2,12 +2,20 @@
 
 namespace App\Repositories;
 
+use App\Mapper\Contracts\IWorkTripMapper;
 use App\Models\Crew;
 use App\Repositories\Contracts\ICrewRepository;
 use Illuminate\Support\Collection;
 
 class CrewRepository implements ICrewRepository
 {
+    private IWorkTripMapper $wtMapper;
+
+    public function __construct(IWorkTripMapper $wtMapper)
+    {
+        $this->wtMapper = $wtMapper;
+    }
+
     function getCrews(?string $operatorId = null): Collection
     {
         $builder = Crew::query();
@@ -20,9 +28,8 @@ class CrewRepository implements ICrewRepository
 
     function getCrewsOptions(?string $operatorId): array
     {
-        return $this->getCrews($operatorId)->transform(function (Crew $crew) {
-            $crew->value = $crew->id;
-            return $crew;
-        })->toArray();
+        $collection = $this->getCrews($operatorId);
+        return $this->wtMapper->mapToOptions($collection)
+            ->toArray();
     }
 }

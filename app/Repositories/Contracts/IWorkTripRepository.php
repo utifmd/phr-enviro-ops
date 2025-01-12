@@ -79,4 +79,5 @@ interface IWorkTripRepository
 
     public function tripsExistByDateTimeTypeProcLocBuilder(array $trip): Builder;
     public function infosExistByDateTimeTypeProcLocBuilder(array $info): Builder;
+    public function inDetailExistByDateTimeFacBuilder(string $createdAt, string $time, string $facility): Builder;
 }

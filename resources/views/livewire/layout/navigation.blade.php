@@ -48,7 +48,7 @@ new class extends Component {
                         </x-nav-link>
                     @endcan
                     @can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW)
-                        <x-nav-link :href="route('work-trip-details.index')" :active="request()->routeIs('work-trip-details.*')" wire:navigate>
+                        <x-nav-link :href="route('work-trip-in-details.index')" :active="request()->routeIs('work-trip-in-details.*')" wire:navigate>
                             {{ trim($areaName.' Loading /Unloading') }}
                         </x-nav-link>
                     @endcan
@@ -139,7 +139,7 @@ new class extends Component {
                 </x-responsive-nav-link>
             @endcan
             @can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW)
-                <x-responsive-nav-link :href="route('work-trip-details.index')" :active="request()->routeIs('work-trip-details.*')" wire:navigate>
+                <x-responsive-nav-link :href="route('work-trip-in-details.index')" :active="request()->routeIs('work-trip-in-details.*')" wire:navigate>
                     {{ trim($areaName.' Loading /Unloading') }}
                 </x-responsive-nav-link>
             @endcan
