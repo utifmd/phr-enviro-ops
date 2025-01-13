@@ -12,7 +12,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 /* TODO:
- * 1.
+ * 1. preps for loading out for cmtf to smf or environment
  * */
 class Index extends Component
 {
