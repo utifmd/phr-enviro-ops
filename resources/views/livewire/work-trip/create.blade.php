@@ -23,7 +23,8 @@
                         <h1 class="text-base font-semibold leading-6 text-gray-900">Actual Quota Area {{ ucfirst(strtolower($authUsr['area_name'])) ?? 'NA' }}</h1>
                         <p class="mt-2 text-sm text-gray-700">{{$isEditMode ? 'Change' : 'Send'}} Actual Quota.</p>
                     </div>
-                    <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                    <div class="flex space-x-2 mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                        <a type="button" wire:navigate href="{{ route('work-trip-in-details.index') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">VT Actual Log Sheet</a>
                         <a type="button" wire:navigate href="{{ route('work-trips.index') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">All</a>
                     </div>
                 </div>

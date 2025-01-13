@@ -3,11 +3,10 @@
 namespace App\Livewire\WorkTrips;
 
 use App\Livewire\BaseComponent;
-use App\Livewire\Forms\WorkTripInDetailForm;
 use App\Livewire\Forms\WorkTripForm;
 use App\Mapper\Contracts\IWorkTripMapper;
+use App\Models\Area;
 use App\Models\WorkTrip;
-use App\Models\WorkTripInDetail;
 use App\Repositories\Contracts\IDBRepository;
 use App\Repositories\Contracts\ILogRepository;
 use App\Repositories\Contracts\IPostRepository;
@@ -19,12 +18,10 @@ use App\Utils\Contracts\IUtility;
 use App\Utils\WorkTripStatusEnum;
 use App\Utils\WorkTripTypeEnum;
 use Exception;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
-use Symfony\Component\Mime\HtmlToTextConverter\DefaultHtmlToTextConverter;
 use Throwable;
 
 class Create extends BaseComponent
@@ -39,11 +36,10 @@ class Create extends BaseComponent
     protected IPostRepository $pstRepos;
     protected IWorkTripRepository $wtRepos;
     protected IWorkTripMapper $wtMapper;
-    protected IWellMasterRepository $wellRepos;
 
     public WorkTripForm $form;
 
-    public array $authUsr, $tripState, $timeOptions, $notes, $wells;
+    public array $authUsr, $tripState, $timeOptions, $notes;
     public string $currentDate, $remarks, $remarksAt, $well;
     public bool $isEditMode = false;
 
@@ -54,8 +50,7 @@ class Create extends BaseComponent
         IWorkTripMapper $wtMapper,
         IUserRepository $usrRepos,
         IPostRepository $pstRepos,
-        IWorkTripRepository $wtRepos,
-        IWellMasterRepository $wellRepos): void
+        IWorkTripRepository $wtRepos): void
     {
         $this->dbRepos = $dbRepos;
         $this->logRepos = $logRepos;
@@ -64,7 +59,6 @@ class Create extends BaseComponent
         $this->usrRepos = $usrRepos;
         $this->wtRepos = $wtRepos;
         $this->pstRepos = $pstRepos;
-        $this->wellRepos = $wellRepos;
     }
 
     public function mount(WorkTrip $workTrip): void
@@ -73,7 +67,6 @@ class Create extends BaseComponent
 
         $this->initAuthUser();
         $this->initDateOptions();
-        $this->initWells();
         $this->initTimeOptions();
         $this->initLocOptions();
         $this->checkTripState();
@@ -132,9 +125,7 @@ class Create extends BaseComponent
 
     private function initLocOptions(): void
     {
-        $areaName = $this->authUsr['area_name'] ?? null;
-        if (is_null($areaName)) return;
-
+        $areaName = $this->authUsr['area_name'];
         $this->form->area_name = $areaName;
     }
 
@@ -142,10 +133,16 @@ class Create extends BaseComponent
     {
         $this->form->act_value = empty($value = $this->form->act_value) ? 0 : $value;
         try {
+            $areaName = $this->authUsr['area_name'];
+            $cmtfFacility = $this->wtRepos->getCMTFLocationBy($areaName);
+
             $infoState = $this->wtRepos->getInfoByDatetimeAndArea(
-                $this->currentDate, $this->form->time, $this->authUsr['area_name']
+                $this->currentDate, $this->form->time, $areaName
             );
-            $this->tripState = $this->mapInfoToPlanTripState($infoState);
+            $inDetails = $this->wtRepos->getInDetailByDateTimeFacBuilder(
+                $this->currentDate, $this->form->time, $cmtfFacility)->get()->toArray();
+
+            $this->tripState = $this->pairInfoInDetailToPlanTripState($infoState, $inDetails); // $this->addError('error', $areaName.' '. $cmtfFacility);
 
         } catch (Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -162,19 +159,6 @@ class Create extends BaseComponent
             $date, $this->form->time, $this->authUsr['area_name']
         );
         $this->tripState = $this->wtMapper->mapPairInfoAndTripActualValue($infos, $tripState);
-    }
-
-    private function initWells(): void
-    {
-        $this->well = Constants::EMPTY_STRING;
-        $this->searchWellBy($this->well);
-    }
-
-    public function searchWellBy(?string $query = null): void
-    {
-        $this->wells = $this->wellRepos
-            ->getWellMastersByQuery($query ?? $this->well)
-            ->toArray();
     }
 
     private function assignPost(string $postId): void
@@ -223,13 +207,21 @@ class Create extends BaseComponent
         );
     }
 
-    private function mapInfoToPlanTripState(array $infos): array
+    private function pairInfoInDetailToPlanTripState(array $infos, array $inDetails): array
     {
         $trips = [];
         foreach ($infos as $trip) {
             $trip['type'] = WorkTripTypeEnum::PLAN->value;
             $trip['status'] = WorkTripStatusEnum::APPROVED->value;
-            $trip['act_value'] = $this->form->act_value .'/'. $trip['act_value'];
+            // set act_value jika date, time, facility, type sesuai dengan data pair
+            $actValue = $this->form->act_value;
+            foreach ($inDetails as $inDetail) {
+                if ($trip['act_process'] != $inDetail['type']) continue;
+                $actValue += $inDetail['load'];
+                $trip['in_detail_remark'] = $inDetail['remarks'];
+                $trip['in_detail_url'] = route('work-trip-in-details.show', $inDetail['id']);
+            }
+            $trip['act_value'] = $actValue .'/'. $trip['act_value'];
             $trips[] = $trip;
         } // usort($trips, fn ($a, $b) => $b['act_process'] < $a['act_process']);
         return $trips;

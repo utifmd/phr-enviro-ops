@@ -4,8 +4,22 @@
     'concentratedWater' => \App\Utils\WorkTripDetailTypeEnum::CONCENTRATED_WATER->value,
     'treatedWater' => \App\Utils\WorkTripDetailTypeEnum::TREATED_WATER->value,
 ])
-<div x-data="{ formState:{isDrilling: true, wells: @entangle('wells'), wellsCollected: [], well: '', vehicles: @entangle('vehicles'), vehCollected: [], vehicle: ''} }"
-     class="space-y-6">
+<div x-data="{
+ formState:{
+    isDrilling: true,
+
+    wells: @entangle('wells'),
+    vehicles: @entangle('vehicles'),
+
+    wellsCollected: [],
+    vehCollected: [],
+
+    well: @entangle('form.well_name'),
+    vehicle: @entangle('form.police_number'),
+    rigName: @entangle('form.rig_name'),
+    wbsNumber: @entangle('form.wbs_number')
+ }
+}" class="space-y-6">
     <div>
         <x-input-label for="time_in">
             Time In ({{$currentDate}})<span class="text-red-500">&nbsp*</span>
@@ -98,8 +112,11 @@
             x-on:focus="open = formState.wells.length > 0">
 
             <template x-for="(well, i) in formState.wells" :key="i"> {{--<li x-on:click="open = false; formState.wellsCollected.push(well); $wire.onWellSelected(well)"--}}
-                <li x-on:click="open = false; formState.wellsCollected[0] = well; $wire.onWellSelected(well)"
-                    x-text="well.ids_wellname" class="px-4 py-2 hover:bg-indigo-100 cursor-pointer"></li>
+                <li x-on:click="
+                    open = false;
+                    formState.wellsCollected[0] = well;
+                    $wire.onWellSelected(well)"
+                    x-text="well.ids_wellname" class="px-4 py-2 hover:bg-indigo-100 cursor-pointer"></li> {{--formState.wellsCollected.map(({rig_no}) => rig_no).join(', ')--}}
             </template>
         </x-text-search-option>
         <div>
@@ -113,7 +130,7 @@
     </x-loading-field>
     <x-loading-field for="rig_name" label="Rig Name" required="true">
         <x-text-input
-            x-model="formState.wellsCollected.map(({rig_no}) => rig_no).join(', ')" disabled="true" id="rig_name" name="rig_name" type="text" class="mt-1 block w-full"
+            x-model="formState.rigName" disabled="true" id="rig_name" name="rig_name" type="text" class="mt-1 block w-full"
             autocomplete="rig_name" placeholder="Rig Name"/>
         @error('form.rig_name')
         <x-input-error class="mt-2" :messages="$message"/>
@@ -121,7 +138,7 @@
     </x-loading-field>
     <x-loading-field for="wbs_number" label="WBS Number" required="true">
         <x-text-input
-            x-model="formState.wellsCollected.map(({wbs_number}) => wbs_number).join(', ')" disabled="true" id="wbs_number" name="wbs_number" type="text"
+            x-model="formState.wbsNumber" disabled="true" id="wbs_number" name="wbs_number" type="text"
             class="mt-1 block w-full" autocomplete="wbs_number" placeholder="Wbs Number"/>
         @error('form.wbs_number')
         <x-input-error class="mt-2" :messages="$message"/>
@@ -161,18 +178,6 @@
         <x-input-error class="mt-2" :messages="$message"/>
         @enderror
     </div>
-    @error('form.area_name')
-    <x-input-error class="mt-2" :messages="$message"/>
-    @enderror
-    @error('created_at')
-    <x-input-error class="mt-2" :messages="$message"/>
-    @enderror
-    @error('post_id')
-    <x-input-error class="mt-2" :messages="$message"/>
-    @enderror
-    @error('user_id')
-    <x-input-error class="mt-2" :messages="$message"/>
-    @enderror
     @error('error')
     <x-input-error class="mt-2" :messages="$message"/>
     @enderror

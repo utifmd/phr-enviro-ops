@@ -1,6 +1,6 @@
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ $workTripDetail->name ?? __('Show') . " " . __('Work Trip Detail') }}
+        {{ $workTripDetail->name ?? __('Show') . " " . __('VT Crew Log Sheet Detail') }}
     </h2>
 </x-slot>
 
@@ -10,11 +10,11 @@
             <div class="w-full">
                 <div class="sm:flex sm:items-center">
                     <div class="sm:flex-auto">
-                        <h1 class="text-base font-semibold leading-6 text-gray-900">{{ __('Show') }} Work Trip Detail</h1>
-                        <p class="mt-2 text-sm text-gray-700">Details of {{ __('Work Trip Detail') }}.</p>
+                        <h1 class="text-base font-semibold leading-6 text-gray-900">{{ __('Show') }} VT Crew Log Sheet Detail</h1>
+                        <p class="mt-2 text-sm text-gray-700">Details of {{ __('VT Crew Log Sheet Detail') }}.</p>
                     </div>
                     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <a type="button" wire:navigate href="{{ route('work-trip-in-details.index') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Back</a>
+                        {{--<a type="button" wire:navigate href="{{ route('work-trip-in-details.index') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Back</a>--}}
                     </div>
                 </div>
 
@@ -24,6 +24,9 @@
                             <div class="mt-6 border-t border-gray-100">
                                 <dl class="divide-y divide-gray-100">
 
+                                    @error('error')
+                                    <x-input-error class="mt-2" :messages="$message"/>
+                                    @enderror
                                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt class="text-sm font-medium leading-6 text-gray-900">Transporter</dt>
                                         <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $workTripDetail->transporter }}</dd>
@@ -83,14 +86,6 @@
                                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt class="text-sm font-medium leading-6 text-gray-900">Remarks</dt>
                                         <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $workTripDetail->remarks }}</dd>
-                                    </div>
-                                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                        <dt class="text-sm font-medium leading-6 text-gray-900">Post Id</dt>
-                                        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $workTripDetail->post_id }}</dd>
-                                    </div>
-                                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                        <dt class="text-sm font-medium leading-6 text-gray-900">User Id</dt>
-                                        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $workTripDetail->user_id }}</dd>
                                     </div>
 
                                 </dl>

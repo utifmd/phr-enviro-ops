@@ -4,6 +4,7 @@ namespace App\Livewire\WorkTripInDetails;
 
 use App\Livewire\Forms\WorkTripInDetailForm;
 use App\Models\WorkTripInDetail;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -11,13 +12,13 @@ class Show extends Component
 {
     public WorkTripInDetailForm $form;
 
-    public function mount(WorkTripInDetail $workTripDetail)
+    public function mount(WorkTripInDetail $workTripInDetail): void
     {
-        $this->form->setWorkTripDetailModel($workTripDetail);
+        $this->form->setWorkTripInDetailModel($workTripInDetail);
     }
 
     #[Layout('layouts.app')]
-    public function render()
+    public function render(): View
     {
         return view('livewire.work-trip-in-detail.show', ['workTripDetail' => $this->form->workTripDetailModel]);
     }

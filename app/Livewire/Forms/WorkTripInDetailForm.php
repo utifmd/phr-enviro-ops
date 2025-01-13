@@ -11,24 +11,24 @@ class WorkTripInDetailForm extends Form
 {
     public ?WorkTripInDetail $workTripDetailModel;
 
-    public $transporter = '';
-    public $driver = '';
-    public $police_number = '';
-    public $time_in = '';
-    public $well_name = '';
-    public $type = '';
-    public $rig_name = '';
-    public $load = '';
-    public $volume = '';
-    public $tds = '';
-    public $facility = '';
-    public $area_name = '';
-    public $wbs_number = '';
-    public $time_out = '';
-    public $remarks = '';
-    public $post_id = '';
-    public $user_id = '';
-    public $created_at = '';
+    public ?string $transporter;
+    public ?string $driver;
+    public ?string $police_number;
+    public ?string $time_in;
+    public ?string $well_name;
+    public ?string $type;
+    public ?string $rig_name;
+    public ?int $load;
+    public ?int $volume;
+    public ?int $tds;
+    public ?string $facility;
+    public ?string $area_name;
+    public ?string $wbs_number;
+    public ?string $time_out;
+    public ?string $remarks;
+    public ?string $post_id;
+    public ?string $user_id;
+    public ?string $created_at;
 
     public function rules(): array
     {
@@ -40,9 +40,9 @@ class WorkTripInDetailForm extends Form
 			'well_name' => 'required|string',
 			'type' => 'required|string',
 			'rig_name' => 'required|string',
-			'volume' => 'integer',
-			'tds' => 'integer',
-			'remarks' => 'string',
+			'volume' => 'integer|nullable',
+			'tds' => 'integer|nullable',
+			'remarks' => 'string|nullable',
 			'load' => 'required|integer',
 			'facility' => 'required|string',
 			'area_name' => 'required|string',
@@ -54,7 +54,7 @@ class WorkTripInDetailForm extends Form
         ];
     }
 
-    public function setWorkTripDetailModel(WorkTripInDetail $workTripDetailModel): void
+    public function setWorkTripInDetailModel(WorkTripInDetail $workTripDetailModel): void
     {
         $this->workTripDetailModel = $workTripDetailModel;
 
@@ -75,7 +75,7 @@ class WorkTripInDetailForm extends Form
         $this->remarks = $this->workTripDetailModel->remarks ?? Constants::EMPTY_STRING;
         $this->post_id = $this->workTripDetailModel->post_id;
         $this->user_id = $this->workTripDetailModel->user_id;
-        $this->created_at = $this->workTripDetailModel->created_at;
+        $this->created_at = date('Y-m-d', strtotime($this->workTripDetailModel->created_at));
     }
 
     /**

@@ -68,18 +68,16 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/work-trip-in-details', \App\Livewire\WorkTripInDetails\Index::class)
-        ->name('work-trip-in-details.index')
-        ->can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW);
+        ->name('work-trip-in-details.index');
 
     Route::get('/work-trip-in-details/create', \App\Livewire\WorkTripInDetails\Create::class)
         ->name('work-trip-in-details.create')
         ->can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW);
 
-    Route::get('/work-trip-in-details/show/{workTripDetail}', \App\Livewire\WorkTripInDetails\Show::class)
-        ->name('work-trip-in-details.show')
-        ->can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW);
+    Route::get('/work-trip-in-details/show/{workTripInDetail}', \App\Livewire\WorkTripInDetails\Show::class)
+        ->name('work-trip-in-details.show');
 
-    Route::get('/work-trip-in-details/update/{workTripDetail}', \App\Livewire\WorkTripInDetails\Edit::class)
+    Route::get('/work-trip-in-details/update/{workTripInDetail}', \App\Livewire\WorkTripInDetails\Edit::class)
         ->name('work-trip-in-details.edit')
         ->can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW);
 
@@ -92,8 +90,7 @@ Route::middleware('auth')->group(function () {
         ->can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW);
 
     Route::get('/work-trip-out-details/show/{workTripOutDetail}', \App\Livewire\WorkTripOutDetails\Show::class)
-        ->name('work-trip-out-details.show')
-        ->can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW);
+        ->name('work-trip-out-details.show');
 
     Route::get('/work-trip-out-details/update/{workTripOutDetail}', \App\Livewire\WorkTripOutDetails\Edit::class)
         ->name('work-trip-out-details.edit')

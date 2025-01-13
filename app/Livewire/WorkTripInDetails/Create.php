@@ -73,7 +73,7 @@ class Create extends Component
 
     public function mount(WorkTripInDetail $tripDetail): void
     {
-        $this->form->setWorkTripDetailModel($tripDetail);
+        $this->form->setWorkTripInDetailModel($tripDetail);
 
         $this->initAuthUser();
         $this->initDateOptions();
@@ -90,6 +90,7 @@ class Create extends Component
         $this->initAuthUser();
         $this->initDateOptions();
         $this->assignOperator();
+        $this->onTimeOptionChange();
     }
 
     private function initAuthUser(): void
@@ -150,11 +151,6 @@ class Create extends Component
         $this->vehicles = $this->wtMapper->mapToOptions($collection)->toArray();
     }
 
-    private function initVehicles(): void
-    {
-        $this->vehicles = array();
-    }
-
     private function initWells(): void
     {
         $this->well = Constants::EMPTY_STRING;
@@ -189,7 +185,7 @@ class Create extends Component
 
     private function initDetail(): void
     {
-        $this->form->setWorkTripDetailModel(new WorkTripInDetail(array()));
+        $this->form->setWorkTripInDetailModel(new WorkTripInDetail(array()));
         $this->assignPost();
     }
 
@@ -219,7 +215,9 @@ class Create extends Component
     {
         $this->assignOperator();
         $this->assignCrews();
-        $this->assignVehicles(Constants::EMPTY_STRING);
+        $this->assignVehicles(
+            Constants::EMPTY_STRING, $this->operatorId
+        );
     }
 
     private function assignPost(): void
@@ -252,15 +250,21 @@ class Create extends Component
      */
     public function save(): void
     {
-        $inDetailBuilder = $this->wtRepos->inDetailExistByDateTimeFacBuilder(
+        /*$inDetailBuilder = $this->wtRepos->getInDetailByDateTimeFacBuilder(
             $this->currentDate, $this->form->time_in, $this->form->facility
         );
         if ($inDetailBuilder->exists()) {
             $inDetailBuilder->update($this->form->validate());
         } else {
             $this->form->store();
+        }*/
+        try {
+            $this->form->store();
+            $this->redirectRoute('work-trip-in-details.index', navigate: true);
+
+        } catch (\Exception $e) {
+            $this->addError('error', $e->getMessage());
         }
-        $this->redirectRoute('work-trip-in-details.index', navigate: true);
     }
 
     #[Layout('layouts.app')]

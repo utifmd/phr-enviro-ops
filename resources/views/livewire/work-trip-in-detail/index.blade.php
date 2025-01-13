@@ -13,8 +13,18 @@
                         <h1 class="text-base font-semibold leading-6 text-gray-900">{{ __('Incoming Log Sheet Report') }}</h1>
                         <p class="mt-2 text-sm text-gray-700">A list of all the {{ __('Incoming Log Sheet Report') }}.</p>
                     </div>
-                    <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <a type="button" wire:navigate href="{{ route('work-trip-in-details.create') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Set Daily Incoming Log Sheet</a>
+                    <div class="flex space-x-1 mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                        <div class="flex space-x-1">
+                            <div class="flex items-center">
+                                <x-loading-indicator wire:loading />
+                            </div>
+                            <x-text-input wire:model="date" wire:change="onDateChange" type="date" min="2021-06-07T000000" max="{{date('Y-m-d')}}"/>
+                        </div>
+                    @can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW)
+                        <div>
+                            <a type="button" wire:navigate href="{{ route('work-trip-in-details.create') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Set Daily Incoming Log Sheet</a>
+                        </div>
+                    @endcan
                     </div>
                 </div>
 
@@ -42,7 +52,9 @@
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Load</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Remarks</th>
 
-                                    {{--<th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"></th>--}}
+                                    @can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW)
+                                        <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"></th>
+                                    @endcan
                                 </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200 bg-white">
@@ -66,18 +78,20 @@
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $workTripDetail->load }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $workTripDetail->remarks }}</td>
 
-                                        {{--<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
-                                            <a wire:navigate href="{{ route('work-trip-in-details.show', $workTripDetail->id) }}" class="text-gray-600 font-bold hover:text-gray-900 mr-2">{{ __('Show') }}</a>
-                                            <a wire:navigate href="{{ route('work-trip-in-details.edit', $workTripDetail->id) }}" class="text-indigo-600 font-bold hover:text-indigo-900  mr-2">{{ __('Edit') }}</a>
-                                            <button
-                                                class="text-red-600 font-bold hover:text-red-900"
-                                                type="button"
-                                                wire:click="delete({{ $workTripDetail->id }})"
-                                                wire:confirm="Are you sure you want to delete?"
-                                            >
-                                                {{ __('Delete') }}
-                                            </button>
-                                        </td>--}}
+                                        @can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW)
+                                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
+                                                <a wire:navigate href="{{ route('work-trip-in-details.show', $workTripDetail->id) }}" class="text-gray-600 font-bold hover:text-gray-900 mr-2">{{ __('Show') }}</a>
+                                                <a wire:navigate href="{{ route('work-trip-in-details.edit', $workTripDetail->id) }}" class="text-indigo-600 font-bold hover:text-indigo-900  mr-2">{{ __('Edit') }}</a>
+                                                <button
+                                                    class="text-red-600 font-bold hover:text-red-900"
+                                                    type="button"
+                                                    wire:click="delete('{{ $workTripDetail->id }}')"
+                                                    wire:confirm="Are you sure you want to delete?"
+                                                >
+                                                    {{ __('Delete') }}
+                                                </button>
+                                            </td>
+                                        @endcan
                                     </tr>
                                 @endforeach
                                 </tbody>

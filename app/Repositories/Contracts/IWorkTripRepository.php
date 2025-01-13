@@ -19,6 +19,7 @@ interface IWorkTripRepository
     function getLocationsOptions(?string $areaName): array;
     function getAreas(): array;
     function getLocations(string $areaName): array;
+    function getCMTFLocationBy(string $areaName): ?string;
     public function getByPostId($id): Collection;
 
 
@@ -79,5 +80,5 @@ interface IWorkTripRepository
 
     public function tripsExistByDateTimeTypeProcLocBuilder(array $trip): Builder;
     public function infosExistByDateTimeTypeProcLocBuilder(array $info): Builder;
-    public function inDetailExistByDateTimeFacBuilder(string $createdAt, string $time, string $facility): Builder;
+    public function getInDetailByDateTimeFacBuilder(string $createdAt, string $time, string $facility): Builder;
 }

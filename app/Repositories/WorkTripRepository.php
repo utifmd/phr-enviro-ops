@@ -104,6 +104,14 @@ class WorkTripRepository implements IWorkTripRepository
         return $builder->get()->toArray();
     }
 
+    function getCMTFLocationBy(string $areaName): ?string
+    {
+        return Area::query()->where('name', $areaName)->get()
+            ->filter(fn (Area $area) => str_contains($area->location, 'CMTF'))
+            ->map(fn (Area $area) => $area->location)
+            ->first();
+    }
+
     public function getLocations(string $areaName): array
     {
         $builder = Area::query();
@@ -572,7 +580,7 @@ class WorkTripRepository implements IWorkTripRepository
             ->where('area_loc', $info['area_loc']);
     }
 
-    public function inDetailExistByDateTimeFacBuilder(
+    public function getInDetailByDateTimeFacBuilder(
         string $createdAt, string $time, string $facility): Builder {
         return WorkTripInDetail::query()
             ->where('facility', $facility)

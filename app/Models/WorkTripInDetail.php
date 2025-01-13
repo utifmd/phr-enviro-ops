@@ -46,6 +46,8 @@ class WorkTripInDetail extends Model
 
     public $incrementing = false;
 
+    protected $perPage = 10;
+
     protected $table = 'work_trip_in_details';
 
     protected $fillable = [
