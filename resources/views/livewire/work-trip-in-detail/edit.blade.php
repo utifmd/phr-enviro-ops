@@ -1,6 +1,6 @@
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ __('Update') }} VT Log Sheet Detail
+        Daily Tracking Vacuum Truck And Water Truck
     </h2>
 </x-slot>
 

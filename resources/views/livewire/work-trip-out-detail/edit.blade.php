@@ -1,6 +1,6 @@
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ __('Update') }} Work Trip Out Detail
+        Daily Tracking Vacuum Truck And Water Truck
     </h2>
 </x-slot>
 
@@ -10,11 +10,12 @@
             <div class="w-full">
                 <div class="sm:flex sm:items-center">
                     <div class="sm:flex-auto">
-                        <h1 class="text-base font-semibold leading-6 text-gray-900">{{ __('Update') }} Work Trip Out Detail</h1>
-                        <p class="mt-2 text-sm text-gray-700">Update existing {{ __('Work Trip Out Detail') }}.</p>
+                        <h1 class="text-base font-semibold leading-6 text-gray-900">{{ __('Update') }} VT Log Sheet Detail</h1>
+                        <p class="mt-2 text-sm text-gray-700">Update existing {{ __('VT Log Sheet Detail') }}.</p>
                     </div>
                     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <a type="button" wire:navigate href="{{ route('work-trip-out-details.index') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Back</a>
+                        <a type="button" wire:navigate href="{{ route('work-trip-in-details.index') }}"
+                           class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Back</a>
                     </div>
                 </div>
 
@@ -24,7 +25,7 @@
                             <form method="POST" wire:submit="save" role="form" enctype="multipart/form-data">
                                 {{ method_field('PATCH') }}
                                 @csrf
-                                @include('livewire.work-trip-out-detail.form')
+                                @include('livewire.work-trip-in-detail.form')
                             </form>
                         </div>
                     </div>

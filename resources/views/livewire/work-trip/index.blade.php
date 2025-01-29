@@ -37,7 +37,7 @@
                                 </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200 bg-white">
-                                @foreach ($infoState as $info)
+                                @forelse ($infoState as $info)
                                     <tr class="even:bg-gray-50" wire:key="{{ $info->date }}">
                                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ ++$i }}.</td>
 
@@ -50,7 +50,11 @@
                                             <a wire:navigate href="{{ route('work-trips.create-by', $info->date) }}" class="text-gray-600 font-bold hover:text-gray-900 mr-2">{{ __('Send Actual') }}</a>
                                         </td>--}}
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="border border-gray-300 px-4 py-2 text-center">There is No Data.</td>
+                                    </tr>
+                                @endforelse
                                 </tbody>
                             </table>
 

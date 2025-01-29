@@ -11,23 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('work_trip_out_details', function (Blueprint $table) {
+        Schema::create('work_trip_details', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('transporter')->nullable(false);
             $table->string('driver')->nullable(false);
             $table->string('police_number')->nullable(false);
             $table->time('time_in')->nullable(false);
-            $table->time('time_out')->nullable(false);
-            $table->string('from_pit')->nullable(false);
-            $table->string('from_facility')->nullable(false);
-            $table->string('to_facility')->nullable(false);
-            $rigOrMudPit = collect(\App\Utils\WorkTripDetailTypeEnum::cases())->map(fn($case) => $case->value);
-            $table->enum('type', $rigOrMudPit->toArray());
-            $table->integer('tds')->nullable();
-            $table->integer('volume')->nullable();
+            $allowedType = collect(\App\Utils\ActNameEnum::cases())->map(fn($case) => $case->value);
+            $table->enum('type', $allowedType->toArray());
             $table->integer('load')->nullable(false);
+            $table->integer('volume')->nullable();
+            $table->integer('tds')->nullable();
             $areas = collect(\App\Utils\AreaNameEnum::cases())->map(fn($case) => $case->value);
             $table->enum('area_name', $areas->toArray());
+            $table->time('time_out')->nullable(false);
             $table->string('remarks')->nullable();
 
             $table->foreignUuid('post_id')
@@ -45,6 +42,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('work_trip_out_details');
+        Schema::dropIfExists('work_trip_details');
     }
 };

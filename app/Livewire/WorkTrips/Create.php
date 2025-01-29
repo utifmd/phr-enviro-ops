@@ -13,11 +13,14 @@ use App\Repositories\Contracts\IPostRepository;
 use App\Repositories\Contracts\IUserRepository;
 use App\Repositories\Contracts\IWellMasterRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
+use App\Utils\ActNameEnum;
 use App\Utils\Constants;
 use App\Utils\Contracts\IUtility;
 use App\Utils\WorkTripStatusEnum;
 use App\Utils\WorkTripTypeEnum;
 use Exception;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
@@ -139,10 +142,10 @@ class Create extends BaseComponent
             $infoState = $this->wtRepos->getInfoByDatetimeAndArea(
                 $this->currentDate, $this->form->time, $areaName
             );
-            $inDetails = $this->wtRepos->getInDetailByDateTimeFacBuilder(
-                $this->currentDate, $this->form->time, $cmtfFacility)->get()->toArray();
+            $details = $this->wtRepos->getDetailByDateTimeFacBuilder(
+                $this->currentDate, $this->form->time, $cmtfFacility)->get();
 
-            $this->tripState = $this->pairInfoInDetailToPlanTripState($infoState, $inDetails); // $this->addError('error', $areaName.' '. $cmtfFacility);
+            $this->tripState = $this->pairInfoDetailToPlanTripState($infoState, $details);
 
         } catch (Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -207,7 +210,7 @@ class Create extends BaseComponent
         );
     }
 
-    private function pairInfoInDetailToPlanTripState(array $infos, array $inDetails): array
+    private function pairInfoDetailToPlanTripState(array $infos, Collection $details): array
     {
         $trips = [];
         foreach ($infos as $trip) {
@@ -215,11 +218,19 @@ class Create extends BaseComponent
             $trip['status'] = WorkTripStatusEnum::APPROVED->value;
             // set act_value jika date, time, facility, type sesuai dengan data pair
             $actValue = $this->form->act_value;
-            foreach ($inDetails as $inDetail) {
-                if ($trip['act_process'] != $inDetail['type']) continue;
-                $actValue += $inDetail['load'];
-                $trip['in_detail_remark'] = $inDetail['remarks'];
-                $trip['in_detail_url'] = route('work-trip-in-details.show', $inDetail['id']);
+
+            foreach ($details as $detail) {
+                $payload = array();
+                $actProcess = $detail->detailIn['type'] ?? $detail->detailOut['type']  ?? null;
+                // Log::debug('actProcess: '.$actProcess);
+                if (is_null($actProcess)) continue;
+                if ($trip['act_process'] != $actProcess) continue;
+
+                $actValue += $detail->load;
+
+                $payload['remark'] = $detail->remarks;
+                $payload['url'] = route('work-trip-details.show', $detail->id);
+                $trip['details'][] = $payload;
             }
             $trip['act_value'] = $actValue .'/'. $trip['act_value'];
             $trips[] = $trip;

@@ -2,14 +2,14 @@
 
 namespace App\Livewire\Forms;
 
-use App\Models\WorkTripInDetail;
+use App\Models\WorkTripDetailIn;
 use App\Utils\Constants;
 use Illuminate\Validation\ValidationException;
 use Livewire\Form;
 
 class WorkTripInDetailForm extends Form
 {
-    public ?WorkTripInDetail $workTripDetailModel;
+    public ?WorkTripDetailIn $workTripDetailModel;
 
     public ?string $transporter;
     public ?string $driver;
@@ -54,7 +54,7 @@ class WorkTripInDetailForm extends Form
         ];
     }
 
-    public function setWorkTripInDetailModel(WorkTripInDetail $workTripDetailModel): void
+    public function setWorkTripInDetailModel(WorkTripDetailIn $workTripDetailModel): void
     {
         $this->workTripDetailModel = $workTripDetailModel;
 

@@ -4,7 +4,8 @@ namespace App\Livewire\WorkTripInDetails;
 
 use App\Livewire\Forms\WorkTripInDetailForm;
 use App\Mapper\Contracts\IWorkTripMapper;
-use App\Models\WorkTripInDetail;
+use App\Models\WorkTripDetail;
+use App\Models\WorkTripDetailIn;
 use App\Repositories\Contracts\ICrewRepository;
 use App\Repositories\Contracts\IDBRepository;
 use App\Repositories\Contracts\ILogRepository;
@@ -14,6 +15,7 @@ use App\Repositories\Contracts\IUserRepository;
 use App\Repositories\Contracts\IVehicleRepository;
 use App\Repositories\Contracts\IWellMasterRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
+use App\Utils\ActNameEnum;
 use App\Utils\Constants;
 use App\Utils\Contracts\IUtility;
 use Illuminate\Support\Facades\Log;
@@ -71,7 +73,7 @@ class Create extends Component
         $this->vehRepos = $vehRepos;
     }
 
-    public function mount(WorkTripInDetail $tripDetail): void
+    public function mount(WorkTripDetailIn $tripDetail): void
     {
         $this->form->setWorkTripInDetailModel($tripDetail);
 
@@ -185,7 +187,7 @@ class Create extends Component
 
     private function initDetail(): void
     {
-        $this->form->setWorkTripInDetailModel(new WorkTripInDetail(array()));
+        $this->form->setWorkTripInDetailModel(new WorkTripDetailIn(array()));
         $this->assignPost();
     }
 
@@ -259,10 +261,26 @@ class Create extends Component
             $this->form->store();
         }*/
         try {
-            $this->form->store();
+            // $this->form->store();
+            $validated = $this->form->validate();
+            $this->dbRepos->async();
+
+            $validated['type'] = ActNameEnum::Incoming->value;
+            $createdDetail = WorkTripDetail::query()->create($validated);
+            WorkTripDetailIn::query()->create([
+                'well_name' => $this->form->well_name,
+                'rig_name' => $this->form->rig_name,
+                'facility' => $this->form->facility,
+                'wbs_number' => $this->form->wbs_number,
+                'type' => $this->form->type,
+                'work_trip_detail_id' => $createdDetail->id,
+            ]);
+            $this->dbRepos->await();
             $this->redirectRoute('work-trip-in-details.index', navigate: true);
 
         } catch (\Exception $e) {
+            $this->dbRepos->cancel();
+
             $this->addError('error', $e->getMessage());
         }
     }

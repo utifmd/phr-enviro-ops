@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 /**
@@ -16,15 +17,16 @@ use Illuminate\Support\Str;
  * @property $driver
  * @property $police_number
  * @property $time_in
- * @property $time_out
- * @property $from_pit
- * @property $from_facility
- * @property $to_facility
+ * @property $well_name
  * @property $type
+ * @property $rig_name
+ * @property $load
  * @property $volume
  * @property $tds
- * @property $load
+ * @property $facility
  * @property $area_name
+ * @property $wbs_number
+ * @property $time_out
  * @property $remarks
  * @property $post_id
  * @property $user_id
@@ -33,34 +35,36 @@ use Illuminate\Support\Str;
  * RELATION
  * @property $post
  * @property $user
+ * @property $detailIn
+ * @property $detailOut
  *
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class WorkTripOutDetail extends Model
+class WorkTripDetail extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $keyType = 'string';
-
     public $incrementing = false;
 
-    protected $table = 'work_trip_out_details';
+    protected $keyType = 'string';
+    protected $primaryKey = 'id';
+
+    protected $perPage = 10;
+
+    protected $table = 'work_trip_details';
 
     protected $fillable = [
         'transporter',
         'driver',
         'police_number',
         'time_in',
-        'time_out',
-        'from_pit',
-        'from_facility',
-        'to_facility',
         'type',
+        'load',
         'volume',
         'tds',
-        'load',
         'area_name',
+        'time_out',
         'remarks',
         'post_id',
         'user_id',
@@ -75,6 +79,20 @@ class WorkTripOutDetail extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function detailIn(): HasOne
+    {
+        return $this->hasOne(
+            WorkTripDetailIn::class, 'work_trip_detail_id', 'id'
+        );
+    }
+
+    public function detailOut(): HasOne
+    {
+        return $this->hasOne(
+            WorkTripDetailOut::class, 'work_trip_detail_id', 'id'
+        );
     }
 
     protected static function booted(): void

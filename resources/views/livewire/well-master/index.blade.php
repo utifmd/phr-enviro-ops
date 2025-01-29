@@ -117,7 +117,7 @@
                                 </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200 bg-white">
-                                @foreach ($wellMasters as $wellMaster)
+                                @forelse ($wellMasters as $wellMaster)
                                     <tr class="even:bg-gray-50" wire:key="{{ $wellMaster->id }}">
                                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ ++$i }}</td>
 
@@ -161,7 +161,12 @@
                                             </td>
                                         @endcan--}}
                                     </tr>
-                                @endforeach
+
+                                @empty
+                                    <tr>
+                                        <td colspan="15" class="border border-gray-300 px-4 py-2 text-center">Please filter the table record by date.</td>
+                                    </tr>
+                                @endforelse
                                 </tbody>
                             </table>
                         </div>

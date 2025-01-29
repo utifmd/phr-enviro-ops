@@ -80,5 +80,8 @@ interface IWorkTripRepository
 
     public function tripsExistByDateTimeTypeProcLocBuilder(array $trip): Builder;
     public function infosExistByDateTimeTypeProcLocBuilder(array $info): Builder;
+    public function getDetailByDateTimeFacBuilder(string $createdAt, string $time, string $facility): Builder;
     public function getInDetailByDateTimeFacBuilder(string $createdAt, string $time, string $facility): Builder;
+    public function detailByDateTimeFacBuilder(string $createdAt, string $time, string $facility, ?string $actName = null): Builder;
+    public function detailBuilder(string $createdAt): Builder;
 }

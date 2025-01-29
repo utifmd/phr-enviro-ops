@@ -2,8 +2,9 @@
 
 namespace App\Livewire\WorkTripInDetails;
 
-use App\Models\WorkTripInDetail;
-use App\Utils\Constants;
+use App\Models\WorkTripDetail;
+use App\Models\WorkTripDetailIn;
+use App\Utils\ActNameEnum;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -11,26 +12,30 @@ use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
-/* TODO:
- * 1. preps for loading out for cmtf to smf or environment
- * */
 class Index extends Component
 {
     use WithPagination;
-    protected LengthAwarePaginator $inDetailsByArea;
+    protected LengthAwarePaginator $detailsByArea;
     public string $date;
+
     public function mount(): void
     {
         $this->date = date('Y-m-d');
-        $this->inDetailsByArea = $this->inDetailsBuilderBy()->paginate();
+        $this->initWorkTripDetails();
     }
-    public function onDateChange(): void
+
+    public function hydrate(): void
     {
-        $this->inDetailsByArea = $this->inDetailsBuilderBy($this->date)->paginate();
+        $this->initWorkTripDetails();
     }
-    private function inDetailsBuilderBy(?string $date = null): Builder
+
+    private function initWorkTripDetails(): void
     {
-        $builder = WorkTripInDetail::query();
+        $this->detailsByArea = $this->detailsBuilderBy($this->date)->paginate();
+    }
+    private function detailsBuilderBy(?string $date = null): Builder
+    {
+        $builder = WorkTripDetail::query();
 
         if (!is_null($date)) {
             $builder->whereBetween('created_at', [
@@ -38,11 +43,17 @@ class Index extends Component
                 Carbon::parse($date)->endOfDay(),
             ]);
         }
+        $userAreaName = auth()->user()->area_name;
         return $builder
-            ->where('area_name', auth()->user()->area_name)
+            ->where('type', ActNameEnum::Incoming->value)
+            ->where('area_name', $userAreaName)
             ->orderByDesc('created_at');
     }
-    public function delete(WorkTripInDetail $workTripDetail): void
+    public function onDateChange(): void
+    {
+        $this->initWorkTripDetails();
+    }
+    public function delete(WorkTripDetailIn $workTripDetail): void
     {
         $workTripDetail->delete();
 
@@ -52,7 +63,7 @@ class Index extends Component
     #[Layout('layouts.app')]
     public function render(): View
     {
-        $workTripDetails = $this->inDetailsByArea;
+        $workTripDetails = $this->detailsByArea;
 
         return view('livewire.work-trip-in-detail.index', compact('workTripDetails'))
             ->with('i', $this->getPage() * $workTripDetails->perPage());

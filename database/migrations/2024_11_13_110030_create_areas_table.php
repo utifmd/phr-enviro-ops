@@ -16,7 +16,7 @@ return new class extends Migration
             $table->enum('name', collect(\App\Utils\AreaNameEnum::cases())
                 ->map(fn ($case) => $case->value)->toArray()
             );
-            $table->string('location')->nullable(false)->unique();
+            $table->string('location')->nullable(false);
             $table->timestamps();
         });
     }

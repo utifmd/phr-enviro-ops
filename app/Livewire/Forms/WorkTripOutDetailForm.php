@@ -2,21 +2,21 @@
 
 namespace App\Livewire\Forms;
 
-use App\Models\WorkTripOutDetail;
+use App\Models\WorkTripDetailOut;
 use Livewire\Form;
 
 class WorkTripOutDetailForm extends Form
 {
-    public ?WorkTripOutDetail $workTripOutDetailModel;
-    
-    public $transporter = '';
-    public $driver = '';
-    public $police_number = '';
-    public $time_in = '';
+    public ?WorkTripDetailOut $workTripOutDetailModel;
+
+    public $transporter = '';//
+    public $driver = ''; //
+    public $police_number = ''; //
+    public $time_in = '';//
     public $time_out = '';
     public $from_pit = '';
-    public $from_facility = '';
-    public $to_facility = '';
+    public $from_facility = ''; //
+    public $to_facility = ''; //
     public $type = '';
     public $tds = '';
     public $volume = '';
@@ -25,31 +25,35 @@ class WorkTripOutDetailForm extends Form
     public $remarks = '';
     public $post_id = '';
     public $user_id = '';
+    public $created_at = '';
 
     public function rules(): array
     {
         return [
-			'transporter' => 'required|string',
-			'driver' => 'required|string',
-			'police_number' => 'required|string',
-			'time_in' => 'required',
-			'time_out' => 'required',
-			'from_pit' => 'required|string',
-			'from_facility' => 'required|string',
-			'to_facility' => 'required|string',
-			'type' => 'required',
-			'load' => 'required',
-			'area_name' => 'required',
-			'remarks' => 'string',
-			'post_id' => 'required',
-			'user_id' => 'required',
+            'transporter' => 'required|string',
+            'driver' => 'required|string',
+            'police_number' => 'required|string',
+            'time_in' => 'required|string',
+            'time_out' => 'required|string',
+            'from_pit' => 'required|string',
+            'from_facility' => 'required|string',
+            'to_facility' => 'required|string',
+            'type' => 'required|string',
+            'tds' => 'integer|nullable',
+            'volume' => 'integer|nullable',
+            'load' => 'required|integer',
+            'area_name' => 'required|string',
+            'remarks' => 'required|string',
+            'post_id' => 'required|uuid',
+            'user_id' => 'required|uuid',
+            'created_at' => 'required|string'
         ];
     }
 
-    public function setWorkTripOutDetailModel(WorkTripOutDetail $workTripOutDetailModel): void
+    public function setWorkTripOutDetailModel(WorkTripDetailOut $workTripOutDetailModel): void
     {
         $this->workTripOutDetailModel = $workTripOutDetailModel;
-        
+
         $this->transporter = $this->workTripOutDetailModel->transporter;
         $this->driver = $this->workTripOutDetailModel->driver;
         $this->police_number = $this->workTripOutDetailModel->police_number;

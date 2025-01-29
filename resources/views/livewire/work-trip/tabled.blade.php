@@ -35,8 +35,12 @@
                                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
                                     <span x-on:click="if(formActValue.length !== 0) trip.act_value = formActValue+'/'+trip.act_value.split('/')[1]" x-text="trip.act_value+' '+trip.act_unit" class="cursor-pointer hover:underline hover:font-semibold hover:text-yellow-600"></span>
                                 </td>
-                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
-                                    <a x-text="trip.in_detail_remark" x-bind:href="trip.in_detail_url" target="_blank" class="hover:opacity-50"></a>
+                                {{--<td x-text="trip.in_detail_remark" class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900"></td>--}}
+                                <td class="py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
+                                    <template x-for="(detail, idx) in trip.details" :key="idx">
+                                        <li><a x-text="detail.remark" x-bind:href="detail.url" target="_blank" class="hover:opacity-50"></a></li>
+                                    </template>
+                                    {{--<a x-text="trip.detail_remarks" x-bind:href="trip.in_detail_url" target="_blank" class="hover:opacity-50"></a>--}}
                                 </td>
                             </tr>
                         </template>

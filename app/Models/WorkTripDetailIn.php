@@ -12,73 +12,45 @@ use Illuminate\Support\Str;
  * Class User
  *
  * @property $id
- * @property $transporter
- * @property $driver
- * @property $police_number
- * @property $time_in
  * @property $well_name
- * @property $type
  * @property $rig_name
- * @property $load
- * @property $volume
- * @property $tds
  * @property $facility
- * @property $area_name
  * @property $wbs_number
- * @property $time_out
- * @property $remarks
- * @property $post_id
- * @property $user_id
+ * @property $type
  * @property $created_at
  *
- * RELATION
- * @property $post
- * @property $user
+ *  RELATION
+ * @property $workTripDetail
  *
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class WorkTripInDetail extends Model
+class WorkTripDetailIn extends Model
 {
     use HasFactory, HasUuids;
 
+    public $incrementing = false;
+
     protected $keyType = 'string';
 
-    public $incrementing = false;
+    protected $primaryKey = 'id';
 
     protected $perPage = 10;
 
-    protected $table = 'work_trip_in_details';
+    protected $table = 'work_trip_details_in';
 
     protected $fillable = [
-        'transporter',
-        'driver',
-        'police_number',
-        'time_in',
         'well_name',
-        'type',
         'rig_name',
-        'load',
-        'volume',
-        'tds',
         'facility',
-        'area_name',
         'wbs_number',
-        'time_out',
-        'remarks',
-        'post_id',
-        'user_id',
-        'created_at'
+        'type',
+        'work_trip_detail_id',
     ];
 
-    public function post(): BelongsTo
+    public function workTripDetail(): BelongsTo
     {
-        return $this->belongsTo(Post::class);
-    }
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(WorkTripDetail::class);
     }
 
     protected static function booted(): void

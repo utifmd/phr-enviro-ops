@@ -3,7 +3,7 @@
 namespace App\Livewire\WorkTripInDetails;
 
 use App\Livewire\Forms\WorkTripInDetailForm;
-use App\Models\WorkTripInDetail;
+use App\Models\WorkTripDetailIn;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -12,7 +12,7 @@ class Show extends Component
 {
     public WorkTripInDetailForm $form;
 
-    public function mount(WorkTripInDetail $workTripInDetail): void
+    public function mount(WorkTripDetailIn $workTripInDetail): void
     {
         $this->form->setWorkTripInDetailModel($workTripInDetail);
     }

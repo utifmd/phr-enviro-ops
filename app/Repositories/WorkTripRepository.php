@@ -6,7 +6,8 @@ use App\Mapper\Contracts\IWorkTripMapper;
 use App\Models\Activity;
 use App\Models\Area;
 use App\Models\WorkTrip;
-use App\Models\WorkTripInDetail;
+use App\Models\WorkTripDetail;
+use App\Models\WorkTripDetailIn;
 use App\Models\WorkTripInfo;
 use App\Models\WorkTripNote;
 use App\Repositories\Contracts\IWorkTripRepository;
@@ -580,15 +581,46 @@ class WorkTripRepository implements IWorkTripRepository
             ->where('area_loc', $info['area_loc']);
     }
 
+    public function getDetailByDateTimeFacBuilder(
+        string $createdAt, string $time, string $facility): Builder
+    {
+        return $this->detailByDateTimeFacBuilder($createdAt, $time, $facility);
+    }
+
     public function getInDetailByDateTimeFacBuilder(
         string $createdAt, string $time, string $facility): Builder {
-        return WorkTripInDetail::query()
-            ->where('facility', $facility)
-            ->where('time_in', $time) // ->orWhere('time_in', $time)
-            ->whereBetween('created_at', [
+
+        return $this->detailByDateTimeFacBuilder(
+            $createdAt, $time, $facility, ActNameEnum::Incoming->value
+        );
+    }
+
+    public function detailBuilder(string $createdAt): Builder
+    {
+        return WorkTripDetail::query()->whereBetween('created_at', [
                 Carbon::parse($createdAt)->startOfDay(),
                 Carbon::parse($createdAt)->endOfDay(),
             ]);
+    }
+
+    public function detailByDateTimeFacBuilder(
+        string $createdAt, string $time, string $facility, ?string $actName = null): Builder
+    {
+        $builder = $this->detailBuilder($createdAt)->where('time_in', $time); // ->orWhere('time_in', $time)
+
+        if (is_null($actName)) return $builder;
+
+        if($actName != ActNameEnum::Incoming->value) {
+            $builder->whereHas('detailOut', function ($query) use ($facility) {
+                $query->where('from_facility', '=', $facility);
+            });
+        } else {
+            $builder->whereHas('detailIn', function ($query) use ($facility) {
+                $query->where('facility', '=', $facility);
+            });
+        }
+
+        return $builder;
     }
 
     public function countPendingWorkTrip(array $workTrips): int

@@ -58,7 +58,7 @@
                                 </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200 bg-white">
-                                @foreach ($workTripDetails as $workTripDetail)
+                                @forelse ($workTripDetails as $workTripDetail)
                                     <tr class="even:bg-gray-50" wire:key="{{ $workTripDetail->id }}">
                                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ ++$i }}</td>
 
@@ -67,11 +67,11 @@
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $workTripDetail->driver }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $workTripDetail->police_number }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $workTripDetail->time_in }}</td>
-										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $workTripDetail->well_name }}</td>
-										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $workTripDetail->type }}</td>
-										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $workTripDetail->rig_name }}</td>
-										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $workTripDetail->facility }}</td>
-										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $workTripDetail->wbs_number }}</td>
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $workTripDetail->detailIn['well_name'] }}</td>
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $workTripDetail->detailIn['type'] }}</td>
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $workTripDetail->detailIn['rig_name'] }}</td>
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $workTripDetail->detailIn['facility'] }}</td>
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $workTripDetail->detailIn['wbs_number'] }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $workTripDetail->time_out }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $workTripDetail->volume }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $workTripDetail->tds }}</td>
@@ -86,14 +86,17 @@
                                                     class="text-red-600 font-bold hover:text-red-900"
                                                     type="button"
                                                     wire:click="delete('{{ $workTripDetail->id }}')"
-                                                    wire:confirm="Are you sure you want to delete?"
-                                                >
+                                                    wire:confirm="Are you sure you want to delete?">
                                                     {{ __('Delete') }}
                                                 </button>
                                             </td>
                                         @endcan
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="17" class="border border-gray-300 px-4 py-2 text-center">Please filter the table record by date.</td>
+                                    </tr>
+                                @endforelse
                                 </tbody>
                             </table>
 

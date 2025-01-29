@@ -4,7 +4,7 @@ namespace App\Livewire\WorkTripInDetails;
 
 use App\Livewire\Forms\WorkTripInDetailForm;
 use App\Mapper\Contracts\IWorkTripMapper;
-use App\Models\WorkTripInDetail;
+use App\Models\WorkTripDetailIn;
 use App\Repositories\Contracts\ICrewRepository;
 use App\Repositories\Contracts\IDBRepository;
 use App\Repositories\Contracts\ILogRepository;
@@ -71,7 +71,7 @@ class Edit extends Component
         $this->vehRepos = $vehRepos;
     }
 
-    public function mount(WorkTripInDetail $workTripInDetail): void
+    public function mount(WorkTripDetailIn $workTripInDetail): void
     {
         $this->form->setWorkTripInDetailModel($workTripInDetail);
         $this->initAuthUser();
@@ -184,7 +184,7 @@ class Edit extends Component
 
     private function initDetail(): void
     {
-        // $this->form->setWorkTripInDetailModel(new WorkTripInDetail(array()));
+        // $this->form->setWorkTripInDetailModel(new WorkTripDetailIn(array()));
         $this->assignPost();
     }
 
@@ -221,9 +221,8 @@ class Edit extends Component
     {
         $post = $this->pstRepos
             ->postByDateBuilder($this->currentDate)
-            ->whereHas('user', fn ($query) =>
-            $query->where('area_name', $this->authUsr['area_name'])
-            );
+            ->whereHas('user', fn ($query) => $query->where('area_name', $this->authUsr['area_name']));
+
         $postId = $post->first()->id
             ?? $this->pstRepos->generatePost($this->authUsr);
 

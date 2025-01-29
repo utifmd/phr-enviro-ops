@@ -4,7 +4,9 @@ namespace App\Livewire\WorkTripOutDetails;
 
 use App\Livewire\Forms\WorkTripOutDetailForm;
 use App\Mapper\Contracts\IWorkTripMapper;
-use App\Models\WorkTripOutDetail;
+use App\Models\WorkTripDetail;
+use App\Models\WorkTripDetailIn;
+use App\Models\WorkTripDetailOut;
 use App\Repositories\Contracts\ICrewRepository;
 use App\Repositories\Contracts\IDBRepository;
 use App\Repositories\Contracts\ILogRepository;
@@ -14,8 +16,10 @@ use App\Repositories\Contracts\IUserRepository;
 use App\Repositories\Contracts\IVehicleRepository;
 use App\Repositories\Contracts\IWellMasterRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
+use App\Utils\ActNameEnum;
 use App\Utils\Constants;
 use App\Utils\Contracts\IUtility;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -37,9 +41,10 @@ class Create extends Component
     public WorkTripOutDetailForm $form;
 
     public array $timeOptions, $authUsr, $wells,
-        $operators, $vehicles, $crews, $facilities;
+        $operators, $vehicles, $crews, $facilities, $pits;
 
     public string $currentDate, $well;
+    public ?string $operatorId = null;
     public bool $isEditMode = false;
 
     public function boot(
@@ -68,7 +73,7 @@ class Create extends Component
         $this->vehRepos = $vehRepos;
     }
 
-    public function mount(WorkTripOutDetail $tripDetail): void
+    public function mount(WorkTripDetailOut $tripDetail): void
     {
         $this->form->setWorkTripOutDetailModel($tripDetail);
 
@@ -85,13 +90,16 @@ class Create extends Component
     public function hydrate(): void
     {
         $this->initAuthUser();
-        $this->initTimeOptions();
+        $this->initDateOptions();
+        $this->assignOperator();
+        $this->onTimeOptionChange();
     }
 
     private function initAuthUser(): void
     {
         $this->authUsr = $this->usrRepos->authenticatedUser()->toArray();
         $this->form->user_id = $this->authUsr['id'];
+        $this->form->area_name = $this->authUsr['area_name'];
     }
 
     private function initAreas(): void
@@ -99,26 +107,45 @@ class Create extends Component
         $this->facilities = $this->wtRepos->getLocationsOptions(
             $this->authUsr['area_name']
         );
+        for ($i = 0; $i < 5; $i++) {
+            $name = $i + 1;
+            $this->pits[$i]['name'] = $name;
+            $this->pits[$i]['value'] = $name;
+        }
     }
 
     private function initOperators(): void
     {
+        $this->operatorId = $this->authUsr['operator_id'];
         $this->operators = $this->opeRepos->getOperatorsOptions();
 
-        $this->initVehicles();
+        $this->assignOperator();
         $this->assignCrews();
+        $this->assignVehicles(
+            Constants::EMPTY_STRING, $this->operatorId
+        );
     }
-
-    private function assignCrews(?string $operatorId = null): void
+    private function assignOperator(): void
     {
-        if (is_null($operatorId)) {
+        try {
+            $operator = collect($this->operators)->filter(
+                fn($ope) => $ope['id'] == $this->operatorId)->first();
+
+            $this->form->transporter = $operator['name']; //trim($operator['prefix'] . ' ' . $operator['name'] . ' ' . $operator['postfix']);
+        } catch (\Exception $e) {
+            $this->addError('error', $e->getMessage());
+        }
+    }
+    private function assignCrews(): void
+    {
+        if (is_null($this->operatorId)) {
             $this->crews = $this->crewRepos->getCrewsOptions(
                 $this->authUsr['operator_id']
             );
             return;
         }
         $collection = $this->wtMapper->mapToOptions(
-            $this->crewRepos->getCrews($operatorId)
+            $this->crewRepos->getCrews($this->operatorId)
         );
         $this->crews = $collection->toArray();
     }
@@ -129,11 +156,6 @@ class Create extends Component
             ->getVehiclesByOperatorIdQuery($operatorId, $query, 5);
 
         $this->vehicles = $this->wtMapper->mapToOptions($collection)->toArray();
-    }
-
-    private function initVehicles(): void
-    {
-        $this->vehicles = array();
     }
 
     private function initWells(): void
@@ -155,7 +177,7 @@ class Create extends Component
 
         $formTimeSession = session('form_time');
         $option = $formTimeSession
-            ?? $this->timeOptions[0]['value'] ?? Constants::EMPTY_STRING;
+            ?? $this->timeOptions[0]['value'] ?? $this->form->time_in;
 
         $this->adjustTime($option);
     }
@@ -170,13 +192,7 @@ class Create extends Component
 
     private function initDetail(): void
     {
-        $this->form->setWorkTripOutDetailModel(new WorkTripOutDetail(array()));
-
-        $operator = $this->authUsr['operator'];
-        $this->form->transporter = trim(
-            $operator['prefix'].' '.$operator['name'].' '.$operator['postfix']
-        );
-        $this->form->time_out = $this->form->time_in;
+        $this->form->setWorkTripOutDetailModel(new WorkTripDetailOut(array()));
         $this->assignPost();
     }
 
@@ -186,12 +202,6 @@ class Create extends Component
         $this->form->time_out = date($time, strtotime('+1 hour'));
     }
 
-    public function onWellSelected(array $well): void
-    {
-        $this->form->well_name = $well['ids_wellname'];
-        $this->form->rig_name = $well['rig_no'];
-        $this->form->wbs_number = $well['wbs_number'];
-    }
     public function onVehicleSelected(array $vehicle): void
     {
         $this->form->police_number = $vehicle['plat'];
@@ -199,15 +209,16 @@ class Create extends Component
 
     public function onTimeOptionChange(): void
     {
-        $this->adjustTime(
-            $this->form->time_in
-        );
+        $this->adjustTime($this->form->time_in);
     }
 
     public function onOperatorOptionChange(): void
     {
-        $this->assignCrews($this->form->transporter);
-        $this->assignVehicles(Constants::EMPTY_STRING);
+        $this->assignOperator();
+        $this->assignCrews();
+        $this->assignVehicles(
+            Constants::EMPTY_STRING, $this->operatorId
+        );
     }
 
     private function assignPost(): void
@@ -215,7 +226,7 @@ class Create extends Component
         $post = $this->pstRepos
             ->postByDateBuilder($this->currentDate)
             ->whereHas('user', fn ($query) =>
-            $query->where('area_name', $this->authUsr['area_name'])
+                $query->where('area_name', $this->authUsr['area_name'])
             );
         $postId = $post->first()->id
             ?? $this->pstRepos->generatePost($this->authUsr);
@@ -232,18 +243,35 @@ class Create extends Component
 
     public function searchVehicleBy(?string $query = null): void
     {
-        $this->assignVehicles($query, $this->form->transporter);
+        $this->assignVehicles($query, $this->operatorId);
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function save(): void
     {
-        // $this->form->validate();
-        $message = json_encode($this->form->toArray());
-        // Log::debug($message);
-        $this->addError('error', $message);
-        /*$this->form->store();
+        try {
+            $validated = $this->form->validate();
+            $this->dbRepos->async();
 
-        $this->redirectRoute('work-trip-out-details.index', navigate: true);*/
+            $validated['type'] = ActNameEnum::Outgoing->value;
+            $createdDetail = WorkTripDetail::query()->create($validated);
+            WorkTripDetailOut::query()->create([
+                'from_facility' => $this->form->from_facility,
+                'from_pit' => $this->form->from_pit,
+                'to_facility' => $this->form->to_facility,
+                'type' => $this->form->type,
+                'work_trip_detail_id' => $createdDetail->id,
+            ]);
+            $this->dbRepos->await();
+            $this->redirectRoute('work-trip-out-details.index', navigate: true);
+
+        } catch (\Exception $e) {
+            $this->dbRepos->cancel();
+
+            $this->addError('error', $e->getMessage());
+        }
     }
 
     #[Layout('layouts.app')]

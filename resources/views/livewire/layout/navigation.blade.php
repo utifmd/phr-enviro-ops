@@ -49,7 +49,10 @@ new class extends Component {
                     @endcan
                     @can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW)
                         <x-nav-link :href="route('work-trip-in-details.index')" :active="request()->routeIs('work-trip-in-details.*')" wire:navigate>
-                            {{ trim($areaName.' Loading /Unloading') }}
+                            {{ trim($areaName.' Un/Loading In') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('work-trip-out-details.index')" :active="request()->routeIs('work-trip-out-details.*')" wire:navigate>
+                            {{ trim($areaName.' Un/Loading Out') }}
                         </x-nav-link>
                     @endcan
                     @can(\App\Policies\UserPolicy::IS_NOT_GUEST_ROLE)
@@ -140,7 +143,10 @@ new class extends Component {
             @endcan
             @can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW)
                 <x-responsive-nav-link :href="route('work-trip-in-details.index')" :active="request()->routeIs('work-trip-in-details.*')" wire:navigate>
-                    {{ trim($areaName.' Loading /Unloading') }}
+                    {{ trim($areaName.' Un/Loading In') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('work-trip-out-details.index')" :active="request()->routeIs('work-trip-out-details.*')" wire:navigate>
+                    {{ trim($areaName.' Un/Loading Out') }}
                 </x-responsive-nav-link>
             @endcan
             @can(\App\Policies\UserPolicy::IS_NOT_GUEST_ROLE)

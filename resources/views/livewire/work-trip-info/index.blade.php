@@ -36,7 +36,7 @@
                                 </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200 bg-white">
-                                @foreach ($infoState as $info)
+                                @forelse ($infoState as $info)
                                     <tr class="even:bg-gray-50" wire:key="{{ $info->date }}">
                                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ ++$i }}.</td>
 
@@ -49,14 +49,17 @@
                                             {{--<button
                                                 class="text-red-600 font-bold hover:text-red-900"
                                                 type="button"
-                                                wire:click="delete({{ $info->date }})"
-                                                wire:confirm="Are you sure you want to delete?"
-                                            >
-                                                {{ __('Delete') }}
+                                                wire:click="destroyAll('{{ $info->post_id }}')"
+                                                wire:confirm="Are you sure you want to delete all trip?">
+                                                {{ __('Delete Permanently') }}
                                             </button>--}}
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="border border-gray-300 px-4 py-2 text-center">There is no data.</td>
+                                    </tr>
+                                @endforelse
                                 </tbody>
                             </table>
 
