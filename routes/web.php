@@ -8,9 +8,9 @@ Route::view('/', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::get('/reports/monthly', \App\Livewire\Reports\Monthly\Index::class)
+/*Route::get('/reports/monthly', \App\Livewire\Reports\Monthly\Index::class)
     ->can(UserPolicy::IS_USER_IS_FAC_REP)
-    ->name('reports.monthly');
+    ->name('reports.monthly');*/
 
 Route::middleware('guest')->group(function () {
     Volt::route('register', 'pages.auth.register')

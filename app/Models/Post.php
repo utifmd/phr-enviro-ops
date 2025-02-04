@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Utils\ActNameEnum;
 use App\Utils\WorkTripTypeEnum;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -32,6 +33,7 @@ use Illuminate\Support\Str;
  * @property $imageUrls
  * @property $user
  * @property $remarks
+ * @property $details
  *
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -119,6 +121,12 @@ class Post extends Model
         return $this->hasMany(WorkTrip::class, 'post_id', 'id')
             ->where('type', WorkTripTypeEnum::ACTUAL->value)
             ->orderByDesc('time');
+    }
+
+    function details(): HasMany
+    {
+        return $this->hasMany(WorkTripDetail::class, 'post_id', 'id')
+            ->where('type', ActNameEnum::Incoming->value);
     }
 
     function user(): BelongsTo

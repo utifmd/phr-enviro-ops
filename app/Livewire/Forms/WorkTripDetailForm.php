@@ -3,12 +3,13 @@
 namespace App\Livewire\Forms;
 
 use App\Models\WorkTripDetail;
+use App\Utils\WorkTripStatusEnum;
 use Livewire\Form;
 
 class WorkTripDetailForm extends Form
 {
     public ?WorkTripDetail $workTripDetailModel;
-    
+
     public $transporter = '';
     public $driver = '';
     public $police_number = '';
@@ -19,6 +20,7 @@ class WorkTripDetailForm extends Form
     public $tds = '';
     public $area_name = '';
     public $time_out = '';
+    public $status = '';
     public $remarks = '';
     public $post_id = '';
     public $user_id = '';
@@ -34,6 +36,7 @@ class WorkTripDetailForm extends Form
 			'load' => 'required',
 			'area_name' => 'required',
 			'time_out' => 'required',
+			'status' => 'string',
 			'remarks' => 'string',
 			'post_id' => 'required',
 			'user_id' => 'required',
@@ -43,7 +46,7 @@ class WorkTripDetailForm extends Form
     public function setWorkTripDetailModel(WorkTripDetail $workTripDetailModel): void
     {
         $this->workTripDetailModel = $workTripDetailModel;
-        
+
         $this->transporter = $this->workTripDetailModel->transporter;
         $this->driver = $this->workTripDetailModel->driver;
         $this->police_number = $this->workTripDetailModel->police_number;
@@ -54,6 +57,7 @@ class WorkTripDetailForm extends Form
         $this->tds = $this->workTripDetailModel->tds;
         $this->area_name = $this->workTripDetailModel->area_name;
         $this->time_out = $this->workTripDetailModel->time_out;
+        $this->status = $this->workTripDetailModel->status ?? WorkTripStatusEnum::PENDING->value;
         $this->remarks = $this->workTripDetailModel->remarks;
         $this->post_id = $this->workTripDetailModel->post_id;
         $this->user_id = $this->workTripDetailModel->user_id;

@@ -14,8 +14,6 @@ class WorkTripDetailExportController extends Controller
     public function export(
         IWorkTripRepository $wtRepos, string $type, string $date): BinaryFileResponse
     {
-        Gate::authorize(UserPolicy::IS_USER_IS_FAC_OPE_N_DEV);
-
         $filename = 'VT Log Sheet Report ' . $date . '.xlsx';
 
         $wtDetailExport = new WorkTripDetailExport(

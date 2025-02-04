@@ -27,6 +27,7 @@ use Illuminate\Support\Str;
  * @property $area_name
  * @property $wbs_number
  * @property $time_out
+ * @property $status
  * @property $remarks
  * @property $post_id
  * @property $user_id
@@ -65,6 +66,7 @@ class WorkTripDetail extends Model
         'tds',
         'area_name',
         'time_out',
+        'status',
         'remarks',
         'post_id',
         'user_id',

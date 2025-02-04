@@ -37,7 +37,7 @@
                             <!-- Authentication -->
                             <button wire:loading.attr="disabled"
                                     wire:click.prevent="onAllowAllRequestPressed"
-                                    wire:confirm="Are you sure to accept this Well Loads Request?"
+                                    wire:confirm="Are you sure to approve all log sheets?"
                                     class="w-full text-start">
                                 <x-dropdown-link class="text-green-600">
                                     {{ __('Allowed All Request') }}

@@ -26,11 +26,14 @@
                             </div>
 
                             @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
-                            <x-menu>
+                            <a class="flex hover:opacity-85" href="{{ route('work-trip-details.export', compact('date', 'type')) }}">
+                                <x-general-button>Export To Excel</x-general-button>
+                            </a>
+                            {{--<x-menu>
                                 <x-dropdown-link href="{{ route('work-trip-details.export', compact('date', 'type')) }}" class="text-green-600 cursor-pointer">
                                     {{ __('Export To Excel') }}
                                 </x-dropdown-link>
-                            </x-menu>
+                            </x-menu>--}}
                             @endcan
                         </div>
                         {{--<a type="button" wire:navigate href="{{ route('work-trip-details.create') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add new</a>--}}

@@ -35,11 +35,23 @@ class Utility implements IUtility
         } while($i < $daysOfMonthLength);
         return $dates;
     }
-    public function datesOfTheMonth(?int $count = 31): array
+    public function datesOfTheMonth(?int $count = null): array
     {
+        $maxDay = date('t'); // $currentDayOfMonth = date('j');
         $result = [];
-        for ($i = 1; $i <= $count; $i++) {
+        for ($i = 1; $i <= /*$count ?? */$maxDay; $i++) {
             $result[] = sprintf('%02d', $i);
+        }
+        return $result;
+    }
+
+    public function datesOfTheMonthOf(string $date): array
+    {
+        $currentDate = Carbon::parse($date);
+        $maxDay = $currentDate->format('t'); // date('t');
+        $result = [];
+        for ($i = 1; $i <= $maxDay; $i++) {
+            $result[] = $currentDate->format('Y-m-') . sprintf('%02d', $i);
         }
         return $result;
     }

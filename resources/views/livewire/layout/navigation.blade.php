@@ -1,12 +1,19 @@
 <?php
 
 use App\Livewire\Actions\Logout;
+use App\Repositories\Contracts\IUserRepository;
 use Livewire\Volt\Component;
 
 new class extends Component {
+    public array $authUsr;
     /**
      * Log the current user out of the application.
      */
+    public function mount(IUserRepository $usrRepos): void
+    {
+        $this->authUsr = $usrRepos->authenticatedUser()->toArray();
+    }
+
     public function logout(Logout $logout): void
     {
         $logout();
@@ -14,7 +21,10 @@ new class extends Component {
         $this->redirect('/', navigate: true);
     }
 }; ?>
-@props(['areaName' => ucfirst(strtolower(auth()->user()->area_name ?? ''))])
+@props([
+    'areaName' => ucfirst(strtolower($authUsr['area_name'] ?? 'NA')),
+    'username' => $authUsr['username'] ?? 'NA'
+])
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -34,31 +44,48 @@ new class extends Component {
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
-                        <x-nav-link :href="route('work-trip-infos.index')" :active="request()->routeIs('work-trip-infos.*')" wire:navigate>
-                            {{ trim($areaName.' VT Planing') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('work-trips.requests.index')" :active="request()->routeIs('work-trips.requests.*')" wire:navigate>
-                            {{ trim($areaName.' VT Verification') }}
-                        </x-nav-link>
-                    @endcan
-                    @can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
-                        <x-nav-link :href="route('work-trips.index')" :active="request()->routeIs('work-trips.requests.*')" wire:navigate>
-                            {{ trim($areaName.' VT Actual') }}
-                        </x-nav-link>
-                    @endcan
-                    @can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW)
-                        <x-nav-link :href="route('work-trip-in-details.index')" :active="request()->routeIs('work-trip-in-details.*')" wire:navigate>
-                            {{ trim($areaName.' Un/Loading In') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('work-trip-out-details.index')" :active="request()->routeIs('work-trip-out-details.*')" wire:navigate>
-                            {{ trim($areaName.' Un/Loading Out') }}
-                        </x-nav-link>
-                    @endcan
                     @can(\App\Policies\UserPolicy::IS_NOT_GUEST_ROLE)
                         <x-nav-link :href="route('well-masters.index')"
                                     :active="request()->routeIs('well-masters.*')" wire:navigate>
                             {{ __('Well Master') }}
+                        </x-nav-link>
+                    @endcan
+                    @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
+                        <x-nav-link :href="route('work-trip-infos.index')"
+                                    :active="request()->routeIs('work-trip-infos.*')" wire:navigate>
+                            VT Planing
+                        </x-nav-link>
+                        <x-nav-link :href="route('work-trip-details.index')"
+                                    :active="request()->routeIs('work-trip-details.index')" wire:navigate>
+                            VT Log Sheet Report
+                        </x-nav-link>
+                        <x-nav-link :href="route('work-trips.requests.index')"
+                                    :active="request()->routeIs('work-trips.requests.*')" wire:navigate>
+                            VT Verification
+                        </x-nav-link>
+                        <x-nav-link :href="route('work-trip-details.report')" :active="request()->routeIs('work-trip-details.report')"
+                                    wire:navigate>
+                            Facility Monthly Report
+                        </x-nav-link>
+                        <x-nav-link :href="route('work-trips.report')" :active="request()->routeIs('work-trips.report')"
+                                    wire:navigate>
+                            Facility Daily Report
+                        </x-nav-link>
+                    @endcan
+                    @can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
+                        <x-nav-link :href="route('work-trips.index')"
+                                    :active="request()->routeIs('work-trips.requests.*')" wire:navigate>
+                            VT Actual
+                        </x-nav-link>
+                    @endcan
+                    @can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW)
+                        <x-nav-link :href="route('work-trip-in-details.index')"
+                                    :active="request()->routeIs('work-trip-in-details.*')" wire:navigate>
+                            Un/Loading In
+                        </x-nav-link>
+                        <x-nav-link :href="route('work-trip-out-details.index')"
+                                    :active="request()->routeIs('work-trip-out-details.*')" wire:navigate>
+                            Un/Loading Out
                         </x-nav-link>
                     @endcan
                 </div>
@@ -70,8 +97,10 @@ new class extends Component {
                     <x-slot name="trigger">
                         <button
                             class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div x-data="{{ json_encode(['name' => auth()->user()->username]) }}" x-text="name"
-                                 x-on:profile-updated.window="name = $event.detail.name"></div>
+                            <sup>({{ $areaName }})</sup>&nbsp;
+                            <div x-data="{{ json_encode(['name' => $username ]) }}" x-text="name"
+                                 x-on:profile-updated.window="name = $event.detail.name">
+                            </div>
 
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
@@ -97,9 +126,11 @@ new class extends Component {
                     </x-slot>
                 </x-dropdown>
                 @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
-                    <x-nav-link class="border-none" :href="route('logs.index')" :active="request()->routeIs('logs.*')" wire:navigate>
+                    <x-nav-link class="border-none" :href="route('logs.index')" :active="request()->routeIs('logs.*')"
+                                wire:navigate>
                         <div class="ms-1">
-                            <img class="fill-current h-4 w-4" src="{{ asset('/csv/notifications_unread.svg') }}" alt="Notification">
+                            <img class="fill-current h-4 w-4" src="{{ asset('/csv/notifications_unread.svg') }}"
+                                 alt="Notification">
                         </div>
                     </x-nav-link>
                 @endcan
@@ -128,30 +159,49 @@ new class extends Component {
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
 
-            @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
-                <x-responsive-nav-link :href="route('work-trip-infos.index')" :active="request()->routeIs('work-trip-infos.*')" wire:navigate>
-                    {{ trim($areaName.' VT Planing') }}
+            @can(\App\Policies\UserPolicy::IS_NOT_GUEST_ROLE)
+                <x-responsive-nav-link :href="route('well-masters.index')"
+                                       :active="request()->routeIs('well-masters.*')" wire:navigate>
+                    {{ __('Well Master') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('work-trips.requests.index')" :active="request()->routeIs('work-trips.requests.*')" wire:navigate>
-                    {{ trim($areaName.' VT Verification') }}
+            @endcan
+
+            @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
+                <x-responsive-nav-link :href="route('work-trip-infos.index')"
+                                       :active="request()->routeIs('work-trip-infos.*')" wire:navigate>
+                    VT Planing
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('work-trip-details.index')"
+                                       :active="request()->routeIs('work-trip-details.index')" wire:navigate>
+                    VT Log Sheet Report
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('work-trips.requests.index')"
+                                       :active="request()->routeIs('work-trips.requests.*')" wire:navigate>
+                    VT Verification
+                <x-responsive-nav-link :href="route('work-trip-details.report')"
+                                       :active="request()->routeIs('work-trip-details.report')" wire:navigate>
+                    Facility Monthly Report
+                </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('work-trips.report')"
+                                       :active="request()->routeIs('work-trips.report')" wire:navigate>
+                    Facility Daily Report
+                </x-responsive-nav-link>
                 </x-responsive-nav-link>
             @endcan
             @can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
-                <x-responsive-nav-link :href="route('work-trips.index')" :active="request()->routeIs('work-trips.*')" wire:navigate>
-                    {{ trim($areaName.' VT Actual') }}
+                <x-responsive-nav-link :href="route('work-trips.index')" :active="request()->routeIs('work-trips.*')"
+                                       wire:navigate>
+                    VT Actual
                 </x-responsive-nav-link>
             @endcan
             @can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW)
-                <x-responsive-nav-link :href="route('work-trip-in-details.index')" :active="request()->routeIs('work-trip-in-details.*')" wire:navigate>
-                    {{ trim($areaName.' Un/Loading In') }}
+                <x-responsive-nav-link :href="route('work-trip-in-details.index')"
+                                       :active="request()->routeIs('work-trip-in-details.*')" wire:navigate>
+                    Un/Loading In
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('work-trip-out-details.index')" :active="request()->routeIs('work-trip-out-details.*')" wire:navigate>
-                    {{ trim($areaName.' Un/Loading Out') }}
-                </x-responsive-nav-link>
-            @endcan
-            @can(\App\Policies\UserPolicy::IS_NOT_GUEST_ROLE)
-                <x-responsive-nav-link :href="route('well-masters.index')" :active="request()->routeIs('well-masters.*')" wire:navigate>
-                    {{ __('Well Master') }}
+                <x-responsive-nav-link :href="route('work-trip-out-details.index')"
+                                       :active="request()->routeIs('work-trip-out-details.*')" wire:navigate>
+                    Un/Loading Out
                 </x-responsive-nav-link>
             @endcan
         </div>
@@ -160,10 +210,10 @@ new class extends Component {
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800"
-                     x-data="{{ json_encode(['name' => auth()->user()->email]) }}"
+                     x-data="{{ json_encode(['name' => $username]) }}"
                      x-text="name"
                      x-on:profile-updated.window="name = $event.detail.name"></div>
-                <div class="font-medium text-sm text-gray-500">{{ auth()->user()->email }}</div>
+                <div class="font-medium text-sm text-gray-500">{{ $username }}</div>
             </div>
 
             <div class="mt-3 space-y-1">
@@ -174,7 +224,8 @@ new class extends Component {
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
                 @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
-                    <x-responsive-nav-link :href="route('logs.index')" :active="request()->routeIs('logs.*')" wire:navigate>
+                    <x-responsive-nav-link :href="route('logs.index')" :active="request()->routeIs('logs.*')"
+                                           wire:navigate>
                         {{ __('Notification') }}
                     </x-responsive-nav-link>
                 @endcan

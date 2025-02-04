@@ -9,6 +9,7 @@ interface IUtility
     function daysOfMonthLength(?int $month): int|false;
     function datesOfTheMonthBy(int $daysOfMonthLength): array;
     function datesOfTheMonth(?int $count): array;
+    function datesOfTheMonthOf(string $date): array;
     function getListOfTimes(int $startHour, int $endHour): array;
     function getListOfDates(int $nextDayCount, ?string $startDate): array;
     function getListOfTimesOptions(int $startHour, int $endHour, ?bool $isWholeTime): array;
