@@ -228,7 +228,7 @@ class Create extends BaseComponent
 
                 $actValue += $detail->load;
 
-                $payload['remark'] = $detail->remarks;
+                $payload['remark'] = empty($detail->remarks) ? 'There is no remark' : $detail->remarks;
                 $payload['url'] = route('work-trip-details.show', $detail->id);
                 $trip['details'][] = $payload;
             }
@@ -257,6 +257,12 @@ class Create extends BaseComponent
             $tripState[$i]['act_value'] = $actPlanVal[1];
         }
         return array_merge($trips, $tripState);
+    }
+
+    private function approveVTSubmission(): void
+    {
+        $builder = $this->wtRepos->detailBuilder($this->form->date)->where('time_in', $this->form->time);
+        $builder->update(['status' => WorkTripStatusEnum::APPROVED->value]);
     }
 
     /**
@@ -292,12 +298,14 @@ class Create extends BaseComponent
     public function onDateOptionChange(): void
     {
         $this->form->validate(['date' => 'required|string']);
+        $this->form->reset('act_value');
         $this->currentDate = $this->form->date;
         $this->checkTripState();
     }
 
     public function onTimeOptionChange(): void
     {
+        $this->form->reset('act_value');
         $this->checkTripState();
         $this->scrollToBottom();
     }
@@ -357,6 +365,7 @@ class Create extends BaseComponent
     {
         try {
             $this->dbRepos->async();
+            $this->approveVTSubmission();
             $this->savePopulated();
             $this->dbRepos->await();
 

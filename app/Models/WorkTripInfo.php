@@ -45,7 +45,7 @@ class WorkTripInfo extends Model
     protected $perPage = 10;
 
     protected $fillable = [
-        'date', 'time', 'act_name', 'act_process', 'act_unit', 'act_value', 'area_name', 'area_loc', 'post_id', 'user_id'
+        'date', 'time', 'act_name', 'act_process', 'act_unit', 'act_value', 'area_name', 'area_loc', 'post_id', 'user_id', 'created_at'
     ];
 
     public function post(): BelongsTo

@@ -21,9 +21,9 @@
                             <x-text-input wire:model="date" wire:change="onDateChange" type="date" min="2021-06-07T000000" max="{{date('Y-m-d')}}"/>
                         </div>
                     @can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW)
-                        <div>
-                            <a type="button" wire:navigate href="{{ route('work-trip-out-details.create') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Set Daily Outgoing Log Sheet</a>
-                        </div>
+                        <a href="{{ route('work-trip-out-details.create') }}" class="flex hover:opacity-85" wire:navigate>
+                            <x-general-button>Set Daily Outgoing Log Sheet</x-general-button>
+                        </a>
                     @endcan
                     </div>
                 </div>

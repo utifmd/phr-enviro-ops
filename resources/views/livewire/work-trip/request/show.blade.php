@@ -37,10 +37,10 @@
                             <!-- Authentication -->
                             <button wire:loading.attr="disabled"
                                     wire:click.prevent="onAllowAllRequestPressed"
-                                    wire:confirm="Are you sure to approve all log sheets?"
+                                    wire:confirm="Are you sure to close & approve all log sheets?"
                                     class="w-full text-start">
                                 <x-dropdown-link class="text-green-600">
-                                    {{ __('Allowed All Request') }}
+                                    {{ __('Close & Approve All Request') }}
                                 </x-dropdown-link>
                             </button>
                             <button wire:loading.attr="disabled"
@@ -48,54 +48,33 @@
                                     wire:confirm="Are you sure to reject this Well Loads Request?"
                                     class="w-full text-start">
                                 <x-dropdown-link class="text-red-600">
-                                    {{ __('Denied All Request') }}
+                                    {{ __('Open & Reject All Request') }}
                                 </x-dropdown-link>
                             </button>
                         @endcan
-                        {{--@foreach($form->postModel->imageUrls as $uploaded)
-                            <x-dropdown-link target="__blank" :href="$uploaded->url ?? '#'">
-                                <!--wire:navigate>-->
-                                {{ __('Evidence') }}
-                            </x-dropdown-link>
-                        @endforeach--}}
-
-                        {{--@canany([\App\Policies\UserPolicy::IS_USER_IS_FAC_REP, \App\Policies\PostPolicy::IS_THE_POST_STILL_PENDING], $form->postModel)
-                            <div class="w-full h-3.5"></div>
-                            <x-dropdown-link
-                                    wire:navigate
-                                    type="button"
-                                    href="{{ route('work-trips.edit', $form->postModel->id) }}"
-                                    wire:loading.attr="disabled" class="text-yellow-300 font-bold">
-                                {{ __('Update Request') }}
-                            </x-dropdown-link>
-                            <button
-                                    wire:loading.attr="disabled"
-                                    --}}{{--wire:click.prevent="onDeletePressed('{{$form->postModel->id}}')"--}}{{--
-                                    wire:confirm="Are you sure to delete this Well Loads?"
-                                    class="w-full text-start">
-                                <x-dropdown-link class="text-red-600 font-bold">
-                                    {{ __('Delete Permanently') }}
-                                </x-dropdown-link>
-                            </button>
-                        @endcanany--}}
                     </x-dropdown-button>
                 </div>
-                @if($workTrips)
-                    <div class="flow-root">
-                        <div class="overflow-x-auto">
-                            <div class="inline-block min-w-full py-10 align-middle">
-                                <table wire:loading.class="opacity-50" class="w-full divide-y divide-gray-300">
+
+                @error('error')
+                    <x-input-error class="mt-2" :messages="$message"/>
+                @enderror
+                <div class="flow-root">
+                    <div class="overflow-x-auto">
+                        <div class="inline-block min-w-full py-10 align-middle">
+                            @foreach($workTrips as $time => $trips)
+                                <p class="my-4 font-semibold text-gray-900">&#128339; {{ $time }}</p>
+                                <table wire:loading.class="opacity-50" class="w-full divide-y divide-gray-300 mb-8">
                                     <thead>
                                     <tr>
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">No</th>
 
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Activity</th>
-                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Location</th>
-                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Datetime</th>
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Facility</th>
+                                        {{--<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Datetime</th>--}}
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Total (Actual)</th>
-                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Actual By</th>
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Send By</th>
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Request Status</th>
-                                    @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
+                                        @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
                                             <th scope="col"
                                                 class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
                                             </th>
@@ -103,12 +82,11 @@
                                     </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-200 bg-white">
-                                    @foreach($workTrips as $i => $trip)
+                                    @foreach($trips as $i => $trip)
                                         <tr class="even:bg-gray-50" wire:key="{{ $trip['id'] }}">
-                                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ ++$i }}.</td>
+                                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{++$i}}.</td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $trip['act_name'] }} {{ $trip['act_process'] }}</td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $trip['area_loc'] }}</td>
-                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $trip['date'] }} {{ $trip['time'] }}</td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $trip['act_value'] .' '. $trip['act_unit'] }}</td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $trip['user']['name'] ?? 'NA' }}</td>
                                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium">
@@ -137,10 +115,10 @@
                                     @endforeach
                                     </tbody>
                                 </table>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
-                @endif
+                </div>
             </div>
         </div>
     </div>

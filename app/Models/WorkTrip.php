@@ -46,7 +46,7 @@ class WorkTrip extends Model
     protected $table = 'work_trips';
 
     protected $fillable = [
-        'type', 'date', 'time', 'act_name', 'act_process', 'act_unit', 'act_value', 'area_name', 'area_loc', 'status', 'post_id', 'user_id'
+        'type', 'date', 'time', 'act_name', 'act_process', 'act_unit', 'act_value', 'area_name', 'area_loc', 'status', 'post_id', 'user_id', 'created_at'
     ];
 
     public function post(): BelongsTo

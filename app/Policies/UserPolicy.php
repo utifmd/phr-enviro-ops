@@ -59,11 +59,13 @@ class UserPolicy
     }
     public function isUserIsPmCow(User $user): bool
     {
-        return $user->role == UserRoleEnum::PM_COW_ROLE->value;
+        return $user->role == UserRoleEnum::PM_COW_ROLE->value ||
+            $user->role == UserRoleEnum::DEV_ROLE->value;
     }
     public function isUserIsVtCrew(User $user): bool
     {
-        return $user->role == UserRoleEnum::VT_CREW_ROLE->value;
+        return $user->role == UserRoleEnum::VT_CREW_ROLE->value ||
+            $user->role == UserRoleEnum::DEV_ROLE->value;
     }
     public function isUserHasCurrentPost(User $user): bool
     {

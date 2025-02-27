@@ -14,11 +14,14 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $postTypes = collect(\App\Utils\PostTypeEnum::cases())
                 ->map(fn ($item) => $item->value)->toArray();
+            $postStatus = collect(\App\Utils\PostStatusEnum::cases())
+                ->map(fn ($item) => $item->value)->toArray();
 
             $table->uuid('id')->primary();
             $table->string('title')->nullable();
             $table->string('description')->nullable();
             $table->enum('type', $postTypes);
+            $table->enum('status', $postStatus);
 
             $table->foreignUuid('operator_id')
                 ->constrained('operators');

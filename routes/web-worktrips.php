@@ -32,6 +32,10 @@ Route::middleware('auth')->group(function () {
         ->name('work-trips.report')
         ->can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP);
 
+    Route::view('/work-trips/operational-report', 'livewire.work-trip.report.operational')
+        ->name('work-trips.operational-report')
+        ->can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP);
+
     Route::get('/work-trip/export/{date}', [
         \App\Http\Controllers\WorkTripDetailExportController::class, 'export'])
         ->name('work-trip.export')

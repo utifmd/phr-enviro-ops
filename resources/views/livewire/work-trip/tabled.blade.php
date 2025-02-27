@@ -27,16 +27,16 @@
                     </thead>
                     <tbody x-data="{tripState: @entangle('tripState'), formActValue: @entangle('form.act_value')}" class="divide-y divide-gray-200 bg-white">
                         <template x-for="(trip, i) in tripState" :key="i">
-                            <tr wire:key="i" class="even:bg-gray-50 hover:bg-amber-50">
-                                <td x-text="i +1" class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900"></td>
-                                <td x-text="trip.time" class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900" {{--wire:click="onInfoStateTimeSelected({{$i}})"--}}></td>
-                                <td x-text="trip.act_name+' '+trip.act_process" class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900" {{--wire:click="onInfoStateActNameSelected({{$i}})"--}}></td>
-                                <td x-text="trip.area_loc" class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900"></td>
-                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
-                                    <span x-on:click="if(formActValue.length !== 0) trip.act_value = formActValue+'/'+trip.act_value.split('/')[1]" x-text="trip.act_value+' '+trip.act_unit" class="cursor-pointer hover:underline hover:font-semibold hover:text-yellow-600"></span>
+                            <tr wire:key="i" class="text-sm font-semibold even:bg-gray-50" :class="trip.act_name !== 'Production' ? 'text-gray-500' : 'hover:bg-amber-50'">
+                                <td x-text="i +1" class="whitespace-nowrap py-4 pl-4 pr-3"></td>
+                                <td x-text="trip.time" class="whitespace-nowrap py-4 pl-4 pr-3" {{--wire:click="onInfoStateTimeSelected({{$i}})"--}}></td>
+                                <td x-text="trip.act_name+' '+trip.act_process" class="whitespace-nowrap py-4 pl-4 pr-3" {{--wire:click="onInfoStateActNameSelected({{$i}})"--}}></td>
+                                <td x-text="trip.area_loc" class="whitespace-nowrap py-4 pl-4 pr-3"></td>
+                                <td class="whitespace-nowrap py-4 pl-4 pr-3">
+                                    <span x-on:click="if(formActValue.length !== 0 && trip.act_name === 'Production') trip.act_value = formActValue+'/'+trip.act_value.split('/')[1]" x-text="trip.act_value+' '+trip.act_unit" :class="trip.act_name === 'Production' && 'cursor-pointer hover:underline hover:font-semibold hover:text-yellow-600'"></span>
                                 </td>
                                 {{--<td x-text="trip.in_detail_remark" class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900"></td>--}}
-                                <td class="py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">
+                                <td class="py-4 pl-4 pr-3">
                                     <template x-for="(detail, idx) in trip.details" :key="idx">
                                         <li><a x-text="detail.remark" x-bind:href="detail.url" target="_blank" class="hover:opacity-50"></a></li>
                                     </template>

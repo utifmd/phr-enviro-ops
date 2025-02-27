@@ -1,6 +1,6 @@
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Daily Tracking Vacuum Truck And Water Truck
+        Daily Outgoing Log Sheet
     </h2>
 </x-slot>
 
@@ -10,8 +10,8 @@
             <div class="w-full">
                 <div class="sm:flex sm:items-center">
                     <div class="sm:flex-auto">
-                        <h1 class="text-base font-semibold leading-6 text-gray-900">{{ __('Update') }} VT Log Sheet Detail</h1>
-                        <p class="mt-2 text-sm text-gray-700">Update existing {{ __('VT Log Sheet Detail') }}.</p>
+                        <h1 class="text-base font-semibold leading-6 text-gray-900">{{ __('Update') }} Log Sheet Detail</h1>
+                        <p class="mt-2 text-sm text-gray-700">Update existing {{ __('Log Sheet Detail') }}.</p>
                     </div>
                     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                         <a type="button" wire:navigate href="{{ route('work-trip-in-details.index') }}"

@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Repositories\Contracts\IPostRepository;
 use App\Service\Contracts\IWellService;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -16,15 +17,27 @@ class Index extends Component
     use WithPagination;
     protected IWellService $service;
     protected LengthAwarePaginator $posts;
+    public string $date;
 
     public function boot(IWellService $service): void
     {
         $this->service = $service;
+        $this->date = date('Y-m-d');
     }
 
     public function mount(): void
     {
-        $this->posts = $this->service->pagedWellPost();
+        $this->iniPosts();
+    }
+
+    public function hydrate(): void
+    {
+        $this->iniPosts();
+    }
+
+    public function onDateChange(): void
+    {
+        $this->iniPosts();
     }
 
     public function delete(Post $post): void
@@ -32,6 +45,11 @@ class Index extends Component
         $post->delete();
 
         $this->redirectRoute('work-trips.index', navigate: true);
+    }
+
+    private function iniPosts(): void
+    {
+        $this->posts = $this->service->pagedWellPostBy($this->date);
     }
 
     #[Layout('layouts.app')]

@@ -1,6 +1,6 @@
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Daily Tracking Vacuum Truck And Water Truck
+        Daily Incoming Log Sheet
     </h2>
 </x-slot>
 

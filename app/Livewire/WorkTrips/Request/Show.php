@@ -9,6 +9,7 @@ use App\Repositories\Contracts\IDBRepository;
 use App\Repositories\Contracts\ILogRepository;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\Contracts\IUtility;
+use App\Utils\PostStatusEnum;
 use App\Utils\WorkTripStatusEnum;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
@@ -51,10 +52,20 @@ class Show extends Component
     {
         $this->workTrips = array();
         $this->tripIdsQueue = array();
+        $timedWorkTrips = array();
         foreach ($workTrips as $actualTrip) {
             $this->tripIdsQueue[] = $actualTrip->id ?? $actualTrip['id'];
-            $this->workTrips[] = $actualTrip;
+            $timedWorkTrips[$actualTrip['time']] = null;
         }
+        foreach ($workTrips as $actualTrip) {
+            foreach ($timedWorkTrips as $time => $_) {
+                if ($actualTrip['time'] != $time) continue;
+
+                $timedWorkTrips[$time][] = $actualTrip;
+            }
+        }
+
+        $this->workTrips = $timedWorkTrips;
     }
 
     private function initTimeOptions(): void
@@ -66,10 +77,12 @@ class Show extends Component
     private function mapWorkTrip(
         string $id, array $current, array $request): array
     {
-        foreach ($current as $trip) {
-            if($trip['id'] != $id) continue;
+        foreach ($current as $trips) {
+            foreach ($trips as $trip) {
+                if($trip['id'] != $id) continue;
 
-            $trip['status'] = $request['status'];
+                $trip['status'] = $request['status'];
+            }
         }
         return $current;
     }
@@ -104,6 +117,10 @@ class Show extends Component
                 return;
             }
             foreach ($idOrIds as $id) { $onComplete($id); }
+            $isClosed = $request != WorkTripStatusEnum::APPROVED->value
+                ? PostStatusEnum::OPEN->value : PostStatusEnum::CLOSE->value;
+
+            Post::query()->find($this->form->postModel->id)->update(['status' => $isClosed]);
             $this->assignLog(
                 'work-trips/requests', $request.' actual ('.count($idOrIds).')'
             );
@@ -113,7 +130,7 @@ class Show extends Component
             $this->dbRepos->cancel();
             $this->addError('error', $throwable->getMessage());
 
-            Log::error($throwable->getMessage());;
+            Log::error($throwable->getMessage());
         }
     }
 
@@ -149,20 +166,6 @@ class Show extends Component
 
         $this->initWorkTrips($trips);
     }
-    /*public function onDeletePressed(string $postId): void
-    {
-        try {
-            $this->form->onRemoveEvidences(function (array $paths) {
-                foreach ($paths as $path) { unlink(storage_path($path)); }
-            });
-        } catch (\Throwable $throwable){
-            Log::debug($throwable->getMessage());
-
-        } finally {
-            $this->postRepository->removePost($postId);
-            $this->redirectRoute('work-trips.index');
-        }
-    }*/
 
     #[Layout('layouts.app')]
     public function render(): View

@@ -126,6 +126,7 @@ class Import extends Component
                 }
                 $info['post_id'] = $dateAndPostIdState[$info['date']];
                 $info['user_id'] = $this->authUsr['id'];
+                $info['created_at'] = $info['date'];
                 $this->wtRepos->addInfo($info);
                 $report['added']++;
             }

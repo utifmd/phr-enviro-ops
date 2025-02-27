@@ -19,6 +19,7 @@ use Illuminate\Support\Str;
  * @property $title
  * @property $description
  * @property $type
+ * @property $status
  * @property $user_id
  * @property $created_at
  * @property $updated_at
@@ -51,7 +52,7 @@ class Post extends Model
     protected $table = 'posts';
 
     protected $fillable = [
-        'title', 'description', 'type', 'user_id', 'operator_id', 'created_at'
+        'title', 'description', 'type', 'status', 'user_id', 'operator_id', 'created_at'
     ];
     protected $perPage = 6;
 

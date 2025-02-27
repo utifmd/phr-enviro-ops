@@ -50,7 +50,7 @@ class Create extends BaseComponent
         $this->form->setWorkTripInfoModel($workTripInfo);
         $this->initAuthUser();
         $this->initDate($date);
-        $this->initTimeOptions(/*$date*/);
+        $this->initTimeOptions(!$this->isEditMode);
         $this->initLocOptions();
         $this->checkInfoState($date);
     }
@@ -173,10 +173,11 @@ class Create extends BaseComponent
         $this->form->date = $this->dateOptions[0]['value'] ?? '';
     }
 
-    private function initTimeOptions(): void
+    private function initTimeOptions(bool $isWholeTime = true): void
     {
         $this->timesRaw = $this->util->getListOfTimes(Constants::TIME_START, Constants::TIME_END);
-        $this->timeOptions = $this->util->getListOfTimesOptions(Constants::TIME_START, Constants::TIME_END, true);
+        $this->timeOptions = $this->util->getListOfTimesOptions(
+            Constants::TIME_START, Constants::TIME_END, $isWholeTime);
         $this->form->time = $this->timeOptions[0]['value'] ?? '';
     }
 

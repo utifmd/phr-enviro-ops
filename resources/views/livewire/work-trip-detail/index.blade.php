@@ -1,6 +1,6 @@
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ __('VT Log Sheet Report') }}
+        {{ __('Facility Log Sheet') }}
     </h2>
 </x-slot>
 
@@ -10,8 +10,8 @@
             <div class="w-full">
                 <div class="sm:flex sm:items-center">
                     <div class="sm:flex-auto">
-                        <h1 class="text-base font-semibold leading-6 text-gray-900">{{ __('VT Log Sheet Report') }}</h1>
-                        <p class="mt-2 text-sm text-gray-700">A list of all the {{ __('VT Log Sheet Report') }}.</p>
+                        <h1 class="text-base font-semibold leading-6 text-gray-900">{{ __('Facility Log Sheet') }}</h1>
+                        <p class="mt-2 text-sm text-gray-700">A list of all the {{ __('Facility Log Sheet') }}.</p>
                     </div>
                     <div class="flex space-x-1 mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                         <div class="flex space-x-2">

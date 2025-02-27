@@ -11,6 +11,7 @@ use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\ActNameEnum;
 use App\Utils\Constants;
 use App\Utils\Contracts\IUtility;
+use App\Utils\PostStatusEnum;
 use App\Utils\PostTypeEnum;
 use App\Utils\WorkTripDetailTypeEnum;
 use App\Utils\WorkTripStatusEnum;
@@ -74,6 +75,7 @@ class Index extends Component
         );
         $builder
             ->where('type', PostTypeEnum::POST_WELL_TYPE->value)
+            ->where('status', PostStatusEnum::CLOSE->value)
             ->whereHas('details', function ($query) use ($startEndDate) { return $query
                 ->where('area_name', $this->authUsr['area_name'])
                 ->whereBetween('created_at', $startEndDate);
@@ -136,6 +138,7 @@ class Index extends Component
             ->selectRaw('time, act_name, act_process, act_unit, area_loc, type, SUM(act_value) AS total')
             ->where('area_name', $areaName)
             ->where('status', WorkTripStatusEnum::APPROVED->value)
+            ->whereHas('post', fn ($query) => $query->where('status', PostStatusEnum::CLOSE->value))
             ->groupBy('time', 'act_name', 'act_process', 'act_unit', 'area_loc', 'type')
             ->get()
             ->toArray();
@@ -148,19 +151,17 @@ class Index extends Component
         $yHeader = $this->utility->getListOfTimes(0, 22);
 
         foreach ($yHeader as $i => $time) {
-            $workTrips = array_filter(array_values($sumWorkTripBy), fn($wt) => $wt['time'] == $time);
+            $workTrips = array_filter($sumWorkTripBy, fn($wt) => $wt['time'] == $time);
 
             if (empty($workTrips)) continue;
-            if ($i == 0) {
-                $headerMapper = fn ($wt) =>
-                    $wt['type'] .' '.
-                    $wt['act_name'] .' '.
-                    $wt['act_process'] .(!str_contains($wt['area_loc'], 'CMTF')
-                        ? (' to '. $wt['area_loc']) : '') .' ('.
-                    $wt['act_unit'] .')';
+            $headerMapper = fn ($wt) =>
+                $wt['type'] .' '.
+                $wt['act_name'] .' '.
+                $wt['act_process'] .(!str_contains($wt['area_loc'], 'CMTF')
+                    ? (' to '. $wt['area_loc']) : '') .' ('.
+                $wt['act_unit'] .')';
 
-                $pivot['xHeader'] = array_map($headerMapper, $workTrips);
-            }
+            $pivot['xHeader'] = array_map($headerMapper, $workTrips);
             $pivot['xContent'][$time] = array_map(fn ($wt) => $wt['total'], array_values($workTrips));
         }
         $this->pivotWorkTrips = $pivot;

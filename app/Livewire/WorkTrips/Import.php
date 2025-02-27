@@ -129,6 +129,26 @@ class Import extends Component
         return $report;
     }
 
+    private function assignPost(string $date, string $postId): void
+    {
+        $operator = $this->authUsr['operator'];
+        $actValSum = $this->wtRepos
+            ->sumActualByAreaAndDate($this->authUsr['area_name'], $date);
+        $patch = [
+            'id' => $postId,
+            'title' => trim($operator['prefix'] .' '. $operator['name'] .' '. $operator['postfix']),
+            'description' => 'Total Actual at '.$date.' is '.$actValSum. ' Load',
+        ];
+        $this->pstRepos->updatePost($patch);
+    }
+
+    private function generatePost(): void
+    {
+        foreach ($this->dateAndPostIdState as $date => $postId) {
+            $this->assignPost($date, $postId);
+        }
+    }
+
     /**
      * @throws Exception
      */
@@ -153,6 +173,7 @@ class Import extends Component
             }
             $trip['type'] = WorkTripTypeEnum::ACTUAL->value;
             $trip['status'] = WorkTripStatusEnum::APPROVED->value;
+            $trip['created_at'] = $trip['date'];
             $trip['post_id'] = $this->dateAndPostIdState[$trip['date']];
             $trip['user_id'] = $this->authUsr['id']; /*$this->assignNotes($trip['date'], $trip['note'], $trip['post_id'], $trip['user_id']);*/
 
@@ -175,6 +196,7 @@ class Import extends Component
             $workTrips = $this->mapCsvToWorkTrip($csv);
             $report = $this->generateTripActual($workTrips, $report);
             $report = $this->generateTripPlan($report);
+            $this->generatePost();
 
             $message = 'Hasil eksekusi file yang anda upload adalah ';
             $message .= 'updated: ' . $report['updated'] . ', added: ' . $report['added'];

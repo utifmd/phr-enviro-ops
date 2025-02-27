@@ -3,7 +3,7 @@
 
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ __('Planning') }}
+        {{ __('Facility Plan') }}
     </h2>
 </x-slot>
 <div class="py-12">
@@ -12,8 +12,8 @@
             <div class="w-full">
                 <div class="sm:flex sm:items-center">
                     <div class="sm:flex-auto">
-                        <h1 class="text-base font-semibold leading-6 text-gray-900">{{ __('Planning'). $tile }}</h1>
-                        <p class="mt-2 text-sm text-gray-700">A list of all the {{ __('Planning'). $tile }}.</p>
+                        <h1 class="text-base font-semibold leading-6 text-gray-900">{{ __('Facility Plan'). $tile }}</h1>
+                        <p class="mt-2 text-sm text-gray-700">A list of all the {{ __('Facility Plan'). $tile }}.</p>
                     </div>
                     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                         <a type="button" wire:navigate href="{{ route('work-trip-infos.create') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add Plan</a>

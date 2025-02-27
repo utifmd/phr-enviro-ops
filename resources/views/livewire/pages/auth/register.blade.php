@@ -44,7 +44,7 @@ new #[Layout('layouts.guest')] class extends Component {
         <!-- Name -->
         <div>
             <x-input-label for="name" :value="__('Name')"/>
-            <x-text-input wire:model="name" id="name" class="block mt-1 w-full" type="text" name="name" required
+            <x-text-input wire:model="name" id="name" class="block mt-1 w-full" type="text" name="name" required placeholder="Full name"
                           autofocus autocomplete="name"/>
             <x-input-error :messages="$errors->get('name')" class="mt-2"/>
         </div>
@@ -52,7 +52,7 @@ new #[Layout('layouts.guest')] class extends Component {
         <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')"/>
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required
+            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required placeholder="Email"
                           autocomplete="username"/>
             <x-input-error :messages="$errors->get('email')" class="mt-2"/>
         </div>
@@ -63,7 +63,7 @@ new #[Layout('layouts.guest')] class extends Component {
 
             <x-text-input wire:model="password" id="password" class="block mt-1 w-full"
                           type="password"
-                          name="password"
+                          name="password" placeholder="New Password"
                           required autocomplete="new-password"/>
 
             <x-input-error :messages="$errors->get('password')" class="mt-2"/>
@@ -74,7 +74,7 @@ new #[Layout('layouts.guest')] class extends Component {
             <x-input-label for="password_confirmation" :value="__('Confirm Password')"/>
 
             <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
-                          type="password"
+                          type="password"  placeholder="Retype Password"
                           name="password_confirmation" required autocomplete="new-password"/>
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2"/>

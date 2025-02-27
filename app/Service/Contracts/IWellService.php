@@ -23,6 +23,7 @@ interface IWellService
     function getPtLoadVtRequest(): array;
 
     function pagedWellPost(?bool $isBypassed, ?string $idsWellName): LengthAwarePaginator;
+    function pagedWellPostBy(string $date): LengthAwarePaginator;
 
     /*function searchWellPostByName(string $wellName): ?Post;
     function removeWellPost(string $wellId): bool;*/

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" xmlns:livewire="http://www.w3.org/1999/html">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,12 +15,18 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            <livewire:layout.navigation />
 
+    @can(\App\Policies\UserPolicy::IS_NOT_GUEST_ROLE)
+        <livewire:layout.sidebar />
+    @endcan
+    <div class="min-h-screen sm:ml-64 bg-gray-100">
+
+        @can(\App\Policies\UserPolicy::IS_NOT_GUEST_ROLE)
+            <livewire:layout.topbar />
+        @endcan
             <!-- Page Heading -->
             @if (isset($header))
-                <header class="bg-white shadow">
+                <header class="bg-white">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
@@ -32,7 +38,7 @@
                 {{ $slot }}
             </main>
         </div>
-        <!-- Listener Alpine.js -->
+    <!-- Listener Alpine.js -->
         <script>
             document.addEventListener('scroll-to-section', (event) => {
                 const id = event.detail.id;

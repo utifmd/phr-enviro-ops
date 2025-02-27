@@ -10,6 +10,7 @@ use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\ActNameEnum;
 use App\Utils\Constants;
 use App\Utils\Contracts\IUtility;
+use App\Utils\PostStatusEnum;
 use App\Utils\PostTypeEnum;
 use App\Utils\WorkTripDetailTypeEnum;
 use App\Utils\WorkTripStatusEnum;
@@ -75,6 +76,7 @@ class Index extends Component
         );
         $builder
             ->where('type', PostTypeEnum::POST_WELL_TYPE->value)
+            ->where('status', PostStatusEnum::CLOSE->value)
             ->whereHas('details', function ($query) use ($startEndDate) { return $query
                 ->where('area_name', $this->authUsr['area_name'])
                 ->whereBetween('created_at', $startEndDate);
@@ -115,7 +117,9 @@ class Index extends Component
     private function sumDetailLoadBy(string $date, string $wellName, string $detailInType): int
     {
         return $this->buildGetDetailBy($date, $wellName, $detailInType)
-            ->where('status', WorkTripStatusEnum::APPROVED->value)->sum('load');
+            ->whereHas('post', fn ($query) => $query->where('status', PostStatusEnum::CLOSE->value))
+            ->where('status', WorkTripStatusEnum::APPROVED->value)
+            ->sum('load');
     }
 
     public function initPivotWorkTripDetails(): void

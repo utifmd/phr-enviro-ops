@@ -138,10 +138,18 @@ class WellService implements IWellService
     {
         if ($isBypassed) return $this->postRepository->pagedPosts($idsWellName);
 
-        if ($this->authUser['area_name'] == AreaNameEnum::AllArea->value) {
+        $areaName = $this->authUser['area_name'];
+        if ($areaName == AreaNameEnum::AllArea->value) {
             return $this->postRepository->getPosts();
         }
-        return $this->postRepository->pagedPostByUserId($this->userId);
+        return $this->postRepository->pagedPostByUserId($this->userId, $areaName);
+    }
+
+    public function pagedWellPostBy(string $date): LengthAwarePaginator
+    {
+        return $this->postRepository->pagedPostBy(
+            $this->authUser['area_name'], $date
+        );
     }
 
     function pagedWellMaster(?string $query, ?int $page = null): LengthAwarePaginator

@@ -177,22 +177,32 @@ class PostRepository implements IPostRepository
         });
     }
 
-    public function pagedPostByUserId(string $userId): LengthAwarePaginator
+    public function pagedPostByUserId(string $userId, string $areaName): LengthAwarePaginator
+    {
+        return $this->pagedPostBy($areaName);
+    }
+
+    public function pagedPostBy(string $areaName, ?string $date = null): LengthAwarePaginator
     {
         $builder = Post::query()
             ->where('title', '<>', Constants::EMPTY_STRING, 'and')
-            ->where('user_id', '=', $userId, 'and')
-            ->where('type', '=', PostTypeEnum::POST_WELL_TYPE->value)
-            ->orderBy('created_at', 'desc')
-            ->paginate();
+            ->whereHas('workTrip', fn($query) => $query->where('area_name', $areaName))
+            // ->where('user_id', '=', $userId, 'and')
+            ->where('type', '=', PostTypeEnum::POST_WELL_TYPE->value);
 
-        return $builder->through(function ($post){
-            $post->timeAgo = $this->utility->timeAgo($post->updated_at);
-            // $post->transporter = $this->utility->transporter($post->operator);
-            $post->pendingCount = $this->utility->countWtPendingRequest($post);
-            $post->desc = str_replace(';', ' ', $post->desc);
-            return $post;
-        });
+        if (!is_null($date)) {
+            $builder->whereDate('created_at', $date);
+        }
+        return $builder
+            ->orderBy('created_at', 'desc')
+            ->paginate()
+            ->through(function ($post){
+                $post->timeAgo = $this->utility->timeAgo($post->updated_at);
+                // $post->transporter = $this->utility->transporter($post->operator);
+                $post->pendingCount = $this->utility->countWtPendingRequest($post);
+                $post->desc = str_replace(';', ' ', $post->desc);
+                return $post;
+            });
     }
 
     function updatePost(array $request): ?Post

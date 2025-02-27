@@ -21,7 +21,8 @@ interface IPostRepository
     // function getPostByUserId(string $userId): ?Post;
     function countLoadPostBy(?string $userId, ?string $status): int;
     function pagedPosts(?string $idsWellName): LengthAwarePaginator;
-    function pagedPostByUserId(string $userId): LengthAwarePaginator;
+    function pagedPostByUserId(string $userId, string $areaName): LengthAwarePaginator;
+    function pagedPostBy(string $areaName, ?string $date): LengthAwarePaginator;
     function getPosts(): LengthAwarePaginator;
     function updatePost(array $request): ?Post;
     function removePost(string $post_id): bool;
