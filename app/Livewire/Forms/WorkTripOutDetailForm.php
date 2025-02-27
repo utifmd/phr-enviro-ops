@@ -43,7 +43,7 @@ class WorkTripOutDetailForm extends Form
             'volume' => 'integer|nullable',
             'load' => 'required|integer',
             'area_name' => 'required|string',
-            'remarks' => 'required|string',
+            'remarks' => 'string|nullable',
             'post_id' => 'required|uuid',
             'user_id' => 'required|uuid',
             'created_at' => 'required|string'

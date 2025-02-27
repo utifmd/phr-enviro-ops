@@ -146,7 +146,7 @@ class Create extends BaseComponent
             $info['date'], $info['time'], $info['area_name']
         );
         if ($areTripsAlreadyExist) {
-            throw new \Exception('Failed, the plan already used by contractor.');
+            throw new \Exception('Sorry, these plan already closed.');
         }
         foreach ($this->delInfoQueue as $info) {
             $this->wtRepos->removeInfoById($info['id']);

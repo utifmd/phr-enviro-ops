@@ -20,14 +20,6 @@ use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-/*
- * TODO:
- * 1. show VT log sheet to front for verification
- * 2. disable incoming and outgoing editable load value by PMCOW
- * 3. make detail status to disposition by PMCOW
- * 4. make detail status to approved by Fac Reps Facility
- * 4. export to excel
- * */
 class Index extends Component
 {
     protected IUserRepository $usrRepos;

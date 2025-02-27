@@ -23,10 +23,16 @@
                 <div class="flow-root">
                     <div class="mt-8 overflow-x-auto">
                         <div class="max-w-xl py-2 align-middle">
-                            <form method="POST" wire:submit="save" role="form" enctype="multipart/form-data">
-                                @csrf
-                                @include('livewire.work-trip-in-detail.form')
-                            </form>
+                            @error('error')
+                                <x-input-error class="mt-2" :messages="$message"/>
+                            @enderror
+                            @if($areInfosExists)
+                                <form method="POST" wire:submit="save" role="form" enctype="multipart/form-data">
+                                    @csrf
+                                    @include('livewire.work-trip-in-detail.form')
+                                </form>
+                            @endif
+                            <x-loading-indicator wire:loading />
                         </div>
                     </div>
                 </div>

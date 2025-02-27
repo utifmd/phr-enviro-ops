@@ -1,6 +1,6 @@
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Daily Tracking Vacuum Truck And Water Truck
+        Daily Outgoing Log Sheet
     </h2>
 </x-slot>
 
@@ -23,10 +23,16 @@
                 <div class="flow-root">
                     <div class="mt-8 overflow-x-auto">
                         <div class="max-w-xl py-2 align-middle">
-                            <form method="POST" wire:submit="save" role="form" enctype="multipart/form-data">
-                                @csrf
-                                @include('livewire.work-trip-out-detail.form')
-                            </form>
+
+                            @error('error')
+                            <x-input-error class="mt-2" :messages="$message"/>
+                            @enderror
+                            @if($areInfosExists)
+                                <form method="POST" wire:submit="save" role="form" enctype="multipart/form-data">
+                                    @csrf
+                                    @include('livewire.work-trip-out-detail.form')
+                                </form>
+                            @endif
                         </div>
                     </div>
                 </div>

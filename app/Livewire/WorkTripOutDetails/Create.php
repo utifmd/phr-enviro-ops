@@ -45,7 +45,7 @@ class Create extends Component
 
     public string $currentDate, $well;
     public ?string $operatorId = null;
-    public bool $isEditMode = false;
+    public bool $isEditMode = false, $areInfosExists = false;
 
     public function boot(
         IDBRepository $dbRepos,
@@ -79,6 +79,13 @@ class Create extends Component
 
         $this->initAuthUser();
         $this->initDateOptions();
+
+        $this->checkFacPlan();
+        if (!$this->areInfosExists) {
+
+            $this->addError('error', "Today's plan has not been set.");
+            return;
+        }
         $this->initAreas();
         $this->initWells();
         $this->initOperators();
@@ -123,6 +130,12 @@ class Create extends Component
         $this->assignCrews();
         $this->assignVehicles(
             Constants::EMPTY_STRING, $this->operatorId
+        );
+    }
+    private function checkFacPlan(): void
+    {
+        $this->areInfosExists = $this->wtRepos->areInfosExistByDateAndArea(
+            $this->currentDate, $this->authUsr['area_name']
         );
     }
     private function assignOperator(): void
@@ -193,7 +206,7 @@ class Create extends Component
     private function initDetail(): void
     {
         $this->form->setWorkTripOutDetailModel(new WorkTripDetailOut(array()));
-        $this->assignPost();
+        $this->getCurrentPost();
     }
 
     private function adjustTime($time): void
@@ -221,17 +234,15 @@ class Create extends Component
         );
     }
 
-    private function assignPost(): void
+    private function getCurrentPost(): void
     {
         $post = $this->pstRepos
             ->postByDateBuilder($this->currentDate)
             ->whereHas('user', fn ($query) =>
-                $query->where('area_name', $this->authUsr['area_name'])
-            );
-        $postId = $post->first()->id
-            ?? $this->pstRepos->generatePost($this->authUsr);
+            $query->where('area_name', $this->authUsr['area_name'])
+            ); //$postId = $post->first()->id ?? $this->pstRepos->generatePost($this->authUsr);
 
-        $this->form->post_id = $postId;
+        $this->form->post_id = $post->first()->id;
     }
 
     public function searchWellBy(?string $query = null): void
