@@ -2,13 +2,13 @@
 
 namespace App\Livewire\Actions;
 
-use App\Models\UserCurrentPost;
+use App\Models\PostWoExistingProc;
 
 class SetRouteName
 {
     public function __invoke(string $postId, string $userId): void
     {
-        UserCurrentPost::factory()->create([
+        PostWoExistingProc::factory()->create([
             'user_id' => $userId, 'post_id' => $postId
         ]);
     }

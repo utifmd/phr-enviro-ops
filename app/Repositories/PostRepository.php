@@ -7,7 +7,7 @@ use App\Models\Post;
 use App\Repositories\Contracts\IPostRepository;
 use App\Utils\Constants;
 use App\Utils\PostTypeEnum;
-use App\Utils\WorkOrderStatusEnum;
+use App\Utils\PostWoStatusEnum;
 use App\Utils\Contracts\IUtility;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -32,7 +32,7 @@ class PostRepository implements IPostRepository
     {
         $post = [
             'type' => PostTypeEnum::POST_WELL_TYPE->value,
-            'operator_id' => $user['operator_id'],
+            'company_id' => $user['company_id'],
             'user_id' => $user['id'],
         ];
         if (!is_null($data)) {
@@ -149,7 +149,7 @@ class PostRepository implements IPostRepository
                 ->where('type', '=', PostTypeEnum::POST_WELL_TYPE->value);
         }
         $builder = $builder
-            ->selectRaw('posts.*, (SELECT COUNT(w.id) FROM work_orders AS w WHERE w.post_id=posts.id AND w.status=?) AS pending_wo_length', [WorkOrderStatusEnum::STATUS_PENDING->value])
+            ->selectRaw('posts.*, (SELECT COUNT(w.id) FROM work_orders AS w WHERE w.post_id=posts.id AND w.status=?) AS pending_wo_length', [PostWoStatusEnum::STATUS_PENDING->value])
             ->orderByRaw('pending_wo_length DESC, posts.created_at DESC')
             ->paginate();
 
@@ -186,8 +186,7 @@ class PostRepository implements IPostRepository
     {
         $builder = Post::query()
             ->where('title', '<>', Constants::EMPTY_STRING, 'and')
-            ->whereHas('workTrip', fn($query) => $query->where('area_name', $areaName))
-            // ->where('user_id', '=', $userId, 'and')
+            ->whereHas('postFacReport', fn($query) => $query->where('area_name', $areaName)) // ->where('user_id', '=', $userId, 'and')
             ->where('type', '=', PostTypeEnum::POST_WELL_TYPE->value);
 
         if (!is_null($date)) {

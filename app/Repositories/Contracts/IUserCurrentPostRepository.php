@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Contracts;
 
-use App\Models\UserCurrentPost;
+use App\Models\PostWoExistingProc;
 use Illuminate\Support\Collection;
 
 interface IUserCurrentPostRepository

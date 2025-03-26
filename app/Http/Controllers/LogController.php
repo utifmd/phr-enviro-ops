@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\LogResource;
 use App\Repositories\Contracts\ILogRepository;
 use App\Service\LogService;
-use App\Utils\WorkTripStatusEnum;
+use App\Utils\PostFacReportStatusEnum;
 use Illuminate\Http\JsonResponse;
 
 class LogController extends Controller

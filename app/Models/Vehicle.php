@@ -15,8 +15,8 @@ use Illuminate\Support\Str;
  * @property $plat
  * @property $type
  * @property $vendor
- * @property $vehicleClass
- * @property $operator_id
+ * @property $equipment
+ * @property $company_id
  * @property $created_at
  * @property $updated_at
  *
@@ -32,7 +32,7 @@ class Vehicle extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'plat', 'type', 'vendor', 'vehicle_class_id', 'operator_id'
+        'plat', 'type', 'vendor', 'equipment_id', 'company_id'
     ];
 
     protected static function booted(): void
@@ -42,14 +42,14 @@ class Vehicle extends Model
         });
     }
 
-    public function operator(): BelongsTo
+    public function company(): BelongsTo
     {
-        return $this->belongsTo(Operator::class, 'id', 'operator_id');
+        return $this->belongsTo(Company::class, 'id', 'company_id');
     }
 
-    public function vehicleClass(): BelongsTo
+    public function equipment(): BelongsTo
     {
-        return $this->belongsTo(VehicleClass::class, 'vehicle_class_id', 'id');
+        return $this->belongsTo(Equipment::class, 'equipment_id', 'id');
     }
 
     /*public function vehicle(): BelongsTo

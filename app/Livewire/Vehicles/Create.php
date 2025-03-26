@@ -14,7 +14,7 @@ class Create extends Component
     protected ILogRepository $logRepos;
     public VehicleForm $form;
     #[Url]
-    public ?string $operatorId;
+    public ?string $operatorId = null;
 
     public function boot(ILogRepository $logRepos): void
     {
@@ -23,7 +23,7 @@ class Create extends Component
 
     public function mount(Vehicle $vehicle): void
     {
-        $vehicle->operator_id = $this->operatorId;
+        $vehicle->company_id = $this->operatorId;
         $this->form->setVehicleModel($vehicle);
     }
 

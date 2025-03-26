@@ -17,7 +17,7 @@ class UserForm extends Form
     public ?string $password;
     public ?string $area_name;
     public ?string $role;
-    public ?string $operator_id;
+    public ?string $company_id;
 
     public function rules(): array
     {
@@ -27,7 +27,7 @@ class UserForm extends Form
 			'username' => 'required|string|regex:/^[a-z0-9_.-]{3,27}$/',
 			'area_name' => 'required|string',
 			'role' => 'required|string',
-			'operator_id' => 'required|string',
+			'company_id' => 'required|string',
         ];
     }
 
@@ -40,7 +40,7 @@ class UserForm extends Form
         $this->username = $this->userModel->username;
         $this->area_name = $this->userModel->area_name;
         $this->role = $this->userModel->role;
-        $this->operator_id = $this->userModel->operator_id;
+        $this->company_id = $this->userModel->company_id;
     }
 
     /**

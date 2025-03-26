@@ -2,12 +2,12 @@
 
 namespace App\Livewire\Forms;
 
-use App\Models\WorkTripDetailOut;
+use App\Models\PostFacOut;
 use Livewire\Form;
 
 class WorkTripOutDetailForm extends Form
 {
-    public ?WorkTripDetailOut $workTripOutDetailModel;
+    public ?PostFacOut $workTripOutDetailModel;
 
     public $transporter = '';//
     public $driver = ''; //
@@ -50,7 +50,7 @@ class WorkTripOutDetailForm extends Form
         ];
     }
 
-    public function setWorkTripOutDetailModel(WorkTripDetailOut $workTripOutDetailModel): void
+    public function setWorkTripOutDetailModel(PostFacOut $workTripOutDetailModel): void
     {
         $this->workTripOutDetailModel = $workTripOutDetailModel;
 

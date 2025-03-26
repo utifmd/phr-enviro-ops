@@ -3,8 +3,8 @@
 namespace App\Mapper;
 
 use App\Mapper\Contracts\IWorkTripMapper;
-use App\Utils\WorkTripStatusEnum;
-use App\Utils\WorkTripTypeEnum;
+use App\Utils\PostFacReportStatusEnum;
+use App\Utils\PostFacReportTypeEnum;
 use Illuminate\Support\Collection;
 
 class WorkTripMapper implements IWorkTripMapper
@@ -16,11 +16,11 @@ class WorkTripMapper implements IWorkTripMapper
         $planTrips = [];
         // usort($tripState, fn($a, $b) => $b['id'] > $a['id']);
         foreach ($tripState as $trip) {
-            if($trip['type'] != WorkTripTypeEnum::PLAN->value) continue;
+            if($trip['type'] != PostFacReportTypeEnum::PLAN->value) continue;
             $planTrips[] = $trip;
         }
         foreach ($tripState as $i => $trip) {
-            if($trip['type'] != WorkTripTypeEnum::ACTUAL->value) continue;
+            if($trip['type'] != PostFacReportTypeEnum::ACTUAL->value) continue;
             $trip['act_value'] = ($trip['act_value'] ?? 0).'/'.($planTrips[$i]['act_value'] ?? 0);
             $actualTrips[] = $trip;
         }
@@ -31,7 +31,7 @@ class WorkTripMapper implements IWorkTripMapper
     {
         $actualTrips = [];
         foreach ($tripState as $trip) {
-            if($trip['type'] != WorkTripTypeEnum::ACTUAL->value) continue;
+            if($trip['type'] != PostFacReportTypeEnum::ACTUAL->value) continue;
             // $trip['act_value'] = ($trip['act_value'] ?? 0).'/'.($planTrips[$i]['act_value'] ?? 0);
             $trip['act_value'] = ($trip['act_value'] ?? 0).'/';
 
@@ -52,7 +52,7 @@ class WorkTripMapper implements IWorkTripMapper
     {
         $trips = [];
         foreach ($tripState as $trip) {
-            $trip['status'] = WorkTripStatusEnum::PENDING->value;
+            $trip['status'] = PostFacReportStatusEnum::PENDING->value;
             $trip['act_value'] = explode('/', $trip['act_value'])[0] ?? 0;
             $trips[] = $trip;
         }

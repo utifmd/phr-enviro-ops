@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Utils\ActNameEnum;
 use App\Utils\AreaNameEnum;
-use App\Utils\WorkTripTypeEnum;
+use App\Utils\PostFacReportTypeEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,7 +20,7 @@ class WorkTripFactory extends Factory
     public function definition(): array
     {
         return [
-            'type' => WorkTripTypeEnum::PLAN->value,
+            'type' => PostFacReportTypeEnum::PLAN->value,
             'date' => date('d-m-Y'), //fake()->date,
             'time' => date('H-i-s'), //fake()->time,
             'act_name' => ActNameEnum::Incoming->value,

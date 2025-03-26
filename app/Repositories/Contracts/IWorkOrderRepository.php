@@ -2,12 +2,12 @@
 
 namespace App\Repositories\Contracts;
 
-use App\Models\WorkOrder;
+use App\Models\PostWo;
 use Illuminate\Support\Collection;
 
 interface IWorkOrderRepository
 {
-    function addWorkOrder(array $request): ?WorkOrder;
+    function addWorkOrder(array $request): ?PostWo;
 
     // function getWorkOrderByPostId(string $id): Collection;
     function getWorkOrdersByDepartmentId(string $id): Collection;
@@ -23,7 +23,7 @@ interface IWorkOrderRepository
         string $wellNumber, ?string $wbsNumber, ?string $createdDate, ?string $createdTime): Collection;
 
     // function searchWorkOrderBySize(int $page, int $size): Collection;
-    function updateWorkOrder(string $workOrderId, array $request): ?WorkOrder;
+    function updateWorkOrder(string $workOrderId, array $request): ?PostWo;
     function removeWorkOrder(string $workOrderId): bool;
     function removeWorkOrderBy(string $postId): bool;
 }

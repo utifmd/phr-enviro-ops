@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\UserCurrentPost;
+use App\Models\PostWoExistingProc;
 use App\Repositories\Contracts\IUserCurrentPostRepository;
 use Illuminate\Support\Collection;
 
@@ -10,7 +10,7 @@ class UserCurrentPostRepository implements IUserCurrentPostRepository
 {
     function update(string $userId, array $data): ?Collection
     {
-        $builder = UserCurrentPost::query()->where(
+        $builder = PostWoExistingProc::query()->where(
             'user_id', '=', $userId
         );
         $model = $builder->get();

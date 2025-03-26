@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Department;
+use App\Models\Team;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,6 +13,6 @@ class DepartmentSeeder extends Seeder
      */
     public function run(): void
     {
-        Department::factory(8)->create();
+        Team::factory(8)->create();
     }
 }

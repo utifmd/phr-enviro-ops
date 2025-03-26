@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Mapper\Contracts\IWorkTripMapper;
-use App\Models\Crew;
+use App\Models\ManPower;
 use App\Repositories\Contracts\ICrewRepository;
 use Illuminate\Support\Collection;
 
@@ -18,10 +18,10 @@ class CrewRepository implements ICrewRepository
 
     function getCrews(?string $operatorId = null): Collection
     {
-        $builder = Crew::query();
+        $builder = ManPower::query();
 
         if ($operatorId) {
-            $builder->where('operator_id', '=', $operatorId);
+            $builder->where('company_id', '=', $operatorId);
         }
         return $builder->get();
     }

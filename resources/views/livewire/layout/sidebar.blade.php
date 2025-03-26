@@ -29,7 +29,7 @@ new class extends Component {
 
 <aside id="separator-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
     <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-        <ul x-data="{ facOpen: false, reportOpen: false, projectOpen: false, importOpen: false }" class="space-y-2 font-medium">
+        <ul x-data="{ facOpen: true, reportOpen: false, projectOpen: false, importOpen: false }" class="space-y-2 font-medium">
             <li>
                 <a href="{{route('dashboard')}}" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group" wire:navigate>
                     <x-application-logo class="block h-5 w-auto fill-current text-gray-800" />
@@ -53,9 +53,9 @@ new class extends Component {
                     <!-- Dropdown menu, shown when "reportOpen" is true -->
                     <ul x-show="reportOpen" x-transition class="py-2 space-y-2">
                         <li>
-                            <a href="{{route('work-trips.operational-report')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Operational</a>
-                            <a href="{{route('work-trip-details.report')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Monthly</a>
-                            <a href="{{route('work-trips.report')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Daily</a>
+                            <a href="{{route('post-fac-report.operational-report')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Operational</a>
+                            <a href="{{route('post-fac.report')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Monthly</a>
+                            <a href="{{route('post-fac-report.report')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Daily</a>
                         </li>
                     </ul>
                 </li>
@@ -87,26 +87,30 @@ new class extends Component {
                 <!-- Dropdown menu, shown when "facOpen" is true -->
                 <ul x-show="facOpen" x-transition class="py-2 space-y-2">
                     <li>
-                        @can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW)
-                            <a href="{{route('work-trip-in-details.index')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Incoming</a>
-                            <a href="{{route('work-trip-out-details.index')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Outgoing</a>
-                        @endcan
+                        {{--@can(\App\Policies\UserPolicy::IS_USER_IS_VT_CREW)
+                            <a href="{{route('post-fac-in.index')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Incoming</a>
+                            <a href="{{route('post-fac-out.index')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Outgoing</a>
+                        @endcan--}}
 
                         @can(\App\Policies\UserPolicy::IS_USER_IS_PM_COW)
-                            <a href="{{route('work-trips.index')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>In/Out Actual</a>
+                            <a href="{{route('post-fac-in.index')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Incoming</a>
+                            <a href="{{route('post-fac-out.index')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Outgoing</a>
+                            <a href="{{route('post-fac-prod.index')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Production</a>
+                            <a href="{{route('post-fac-report.summary')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Summary</a>
+                            {{--<a href="{{route('post-fac-report.index')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>In/Out Actual</a>--}}
                         @endcan
 
                         @can(\App\Policies\UserPolicy::IS_USER_IS_FAC_REP)
-                            <a href="{{route('work-trip-infos.index')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>In/Out Planing</a>
-                                <a href="{{route('work-trip-details.index')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>In/Out Log Sheet</a>
-                                <a href="{{route('work-trips.requests.index')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Ops Verification</a>
+                            <a href="{{route('post-fac-threshold.index')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>In/Out Planing</a>
+                                <a href="{{route('post-fac.index')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>In/Out Log Sheet</a>
+                                <a href="{{route('post-fac-report.requests.index')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Ops Verification</a>
                         @endcan
                     </li>
                 </ul>
             </li>
             @can(\App\Policies\UserPolicy::IS_DEV_ROLE)
                 <li>
-                    <a href="{{route('departments.index')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" wire:navigate>
+                    <a href="{{route('teams.index')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" wire:navigate>
                         <svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
                             <path d="M18 0H6a2 2 0 0 0-2 2h14v12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Z"/>
                             <path d="M14 4H2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2ZM2 16v-6h12v6H2Z"/>
@@ -115,7 +119,7 @@ new class extends Component {
                     </a>
                 </li>
                 <li>
-                    <a href="{{route('operators.index')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" wire:navigate>
+                    <a href="{{route('companies.index')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" wire:navigate>
                         <svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
                             <path d="M16 14V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 0 0 0-2h-1v-2a2 2 0 0 0 2-2ZM4 2h2v12H4V2Zm8 16H3a1 1 0 0 1 0-2h9v2Z"/>
                         </svg>
@@ -123,7 +127,7 @@ new class extends Component {
                     </a>
                 </li>
                 <li>
-                    <a href="{{route('crews.index')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" wire:navigate>
+                    <a href="{{route('man-power.index')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" wire:navigate>
                         <svg  class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                             <path fill-rule="evenodd" d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z" clip-rule="evenodd"/>
                         </svg>
@@ -179,8 +183,8 @@ new class extends Component {
                     <ul x-show="importOpen" x-transition class="py-2 space-y-2">
                         <li>
                             <a href="{{route('well-masters.import')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Well Master</a>
-                            <a href="{{route('work-trip-infos.import')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Facility In/Out Planing</a>
-                            <a href="{{route('work-trips.import')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Facility In/Out Actual</a>
+                            <a href="{{route('post-fac-threshold.import')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Facility In/Out Planing</a>
+                            <a href="{{route('post-fac-report.import')}}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" wire:navigate>Facility In/Out Actual</a>
                         </li>
                     </ul>
                 </li>

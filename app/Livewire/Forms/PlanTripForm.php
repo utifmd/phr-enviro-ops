@@ -2,13 +2,13 @@
 
 namespace App\Livewire\Forms;
 
-use App\Models\PlanTrip;
+use App\Models\PostWoPlanTrip;
 use Illuminate\Support\Collection;
 use Livewire\Form;
 
 class PlanTripForm extends Form
 {
-    public ?PlanTrip $planTripModel;
+    public ?PostWoPlanTrip $planTripModel;
     public Collection $tripPlans;
 
     public $start_from = '';
@@ -37,7 +37,7 @@ class PlanTripForm extends Form
         ];
     }
 
-    public function setPlanTripModel(PlanTrip $planTripModel): void
+    public function setPlanTripModel(PostWoPlanTrip $planTripModel): void
     {
         $this->planTripModel = $planTripModel;
 

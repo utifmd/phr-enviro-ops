@@ -1,6 +1,6 @@
 <?php
 
-use App\Utils\CrewRoleEnum;
+use App\Utils\ManPowerRoleEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +16,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name')->nullable(false);
             $table->integer('role')
-                ->default(CrewRoleEnum::OPERATOR_ROLE->value)
+                ->default(ManPowerRoleEnum::OPERATOR_ROLE->value)
                 ->nullable(false);
 
             $table->foreignUuid('operator_id')

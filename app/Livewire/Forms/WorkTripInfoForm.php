@@ -2,12 +2,12 @@
 
 namespace App\Livewire\Forms;
 
-use App\Models\WorkTripInfo;
+use App\Models\PostFacThreshold;
 use Livewire\Form;
 
 class WorkTripInfoForm extends Form
 {
-    public ?WorkTripInfo $workTripInfoModel;
+    public ?PostFacThreshold $workTripInfoModel;
 
     public $date = '';
     public $time = '';
@@ -28,7 +28,7 @@ class WorkTripInfoForm extends Form
         ];
     }
 
-    public function setWorkTripInfoModel(WorkTripInfo $workTripInfoModel): void
+    public function setWorkTripInfoModel(PostFacThreshold $workTripInfoModel): void
     {
         $this->workTripInfoModel = $workTripInfoModel;
 

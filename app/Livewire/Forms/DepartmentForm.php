@@ -2,12 +2,12 @@
 
 namespace App\Livewire\Forms;
 
-use App\Models\Department;
+use App\Models\Team;
 use Livewire\Form;
 
 class DepartmentForm extends Form
 {
-    public ?Department $departmentModel;
+    public ?Team $departmentModel;
 
     public $prefix = '';
     public $postfix = '';
@@ -22,7 +22,7 @@ class DepartmentForm extends Form
         ];
     }
 
-    public function setDepartmentModel(Department $departmentModel): void
+    public function setDepartmentModel(Team $departmentModel): void
     {
         $this->departmentModel = $departmentModel;
 

@@ -3,11 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\Activity;
-use App\Models\WorkTrip;
+use App\Models\PostFacReport;
 use App\Models\Area;
 use App\Utils\ActNameEnum;
 use App\Utils\AreaNameEnum;
-use App\Utils\WorkTripTypeEnum;
+use App\Utils\PostFacReportTypeEnum;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Log;
 

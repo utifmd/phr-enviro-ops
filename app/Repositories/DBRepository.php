@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\Operator;
+use App\Models\Company;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 

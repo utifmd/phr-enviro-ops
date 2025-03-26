@@ -162,17 +162,17 @@ class Utility implements IUtility
     }
     public function countWoPendingRequest(Post $post): int
     {
-        return collect($post->workTrips)
+        return collect($post->postsFacReport)
             ->filter(function ($wt){
-                return $wt->status == WorkOrderStatusEnum::STATUS_PENDING->value;
+                return $wt->status == PostWoStatusEnum::STATUS_PENDING->value;
             })
             ->count();
     }
     public function countWtPendingRequest(Post $post): int
     {
-        return collect($post->workTrips)
+        return collect($post->postsFacReport)
             ->filter(function ($wt){
-                return $wt->status == WorkTripStatusEnum::PENDING->value;
+                return $wt->status == PostFacReportStatusEnum::PENDING->value;
             })
             ->count();
     }

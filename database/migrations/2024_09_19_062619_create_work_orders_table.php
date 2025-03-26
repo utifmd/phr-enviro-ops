@@ -1,7 +1,7 @@
 <?php
 
-use App\Utils\WorkOrderShiftEnum;
-use App\Utils\WorkOrderStatusEnum;
+use App\Utils\PostWoShiftEnum;
+use App\Utils\PostWoStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('work_orders', function (Blueprint $table) {
 
-            $shiftAllowed = collect(WorkOrderShiftEnum::cases())
+            $shiftAllowed = collect(PostWoShiftEnum::cases())
                 ->map(function ($case) { return $case->value; })
                 ->toArray();
-            $statusAllowed = collect(WorkOrderStatusEnum::cases())
+            $statusAllowed = collect(PostWoStatusEnum::cases())
                 ->map(function ($case) { return $case->value; })
                 ->toArray();
 

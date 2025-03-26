@@ -26,8 +26,8 @@ class UserMapper implements IUserMapper
         $user->email = $auth->email;
         $user->role = $auth->role;
         $user->area_name = $auth->area_name;
-        $user->operator_id = $auth->operator_id;
-        $user->operator = $auth->operator;
+        $user->company_id = $auth->company_id;
+        $user->company = $auth->company;
         $user->email_verified_at = $auth->email_verified_at;
         $user->created_at = $auth->created_at;
         $user->updated_at = $auth->updated_at;

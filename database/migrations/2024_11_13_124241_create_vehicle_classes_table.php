@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('vehicle_classes', function (Blueprint $table) {
-            $allowed = collect(\App\Utils\VehicleClassEnum::cases())->map(fn ($case) => $case->value)->toArray();
+            $allowed = collect(\App\Utils\EquipmentEnum::cases())->map(fn ($case) => $case->value)->toArray();
             $table->uuid('id')->primary();
             $table->enum('name', $allowed);
             $table->string('type')->nullable(false)->unique();

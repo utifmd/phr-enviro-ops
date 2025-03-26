@@ -3,7 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Information;
-use App\Models\PlanOrder;
+use App\Models\PostWoPlanOrder;
 use App\Models\Post;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
@@ -23,7 +23,7 @@ class WorkOrderExport implements
     private string $generatedWoNumber;
 
     private Information $information;
-    private PlanOrder $planOrder;
+    private PostWoPlanOrder $planOrder;
     private Collection $planTrips;
     /**
     * @return void

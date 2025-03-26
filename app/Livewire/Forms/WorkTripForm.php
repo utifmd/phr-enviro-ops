@@ -2,14 +2,14 @@
 
 namespace App\Livewire\Forms;
 
-use App\Models\WorkTrip;
+use App\Models\PostFacReport;
 use App\Utils\AreaNameEnum;
-use App\Utils\WorkTripTypeEnum;
+use App\Utils\PostFacReportTypeEnum;
 use Livewire\Form;
 
 class WorkTripForm extends Form
 {
-    public ?WorkTrip $workTripModel;
+    public ?PostFacReport $workTripModel;
 
     public $type = '';
     public $date = '';
@@ -40,11 +40,11 @@ class WorkTripForm extends Form
         ];
     }
 
-    public function setWorkTripModel(WorkTrip $workTripModel): void
+    public function setWorkTripModel(PostFacReport $workTripModel): void
     {
         $this->workTripModel = $workTripModel;
 
-        $this->type = WorkTripTypeEnum::PLAN->value;
+        $this->type = PostFacReportTypeEnum::PLAN->value;
         $this->date = date('d-m-Y');
         $this->time = date('H-i-s');
         $this->act_name = $this->workTripModel->act_name;

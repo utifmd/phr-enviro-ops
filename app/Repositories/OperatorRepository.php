@@ -2,20 +2,20 @@
 
 namespace App\Repositories;
 
-use App\Models\Operator;
-use App\Models\VehicleClass;
+use App\Models\Company;
+use App\Models\Equipment;
 use Illuminate\Support\Collection;
 
 class OperatorRepository implements Contracts\IOperatorRepository
 {
     function getOperators(): Collection
     {
-        return Operator::query()->get();
+        return Company::query()->get();
     }
 
     function getOperatorsOptions(): array
     {
-        return $this->getOperators()->map(function (Operator $operator) {
+        return $this->getOperators()->map(function (Company $operator) {
             $operator->name = trim($operator->prefix.' '.$operator->name.' '.$operator->postfix);
             $operator->value = $operator->id;
             return $operator;

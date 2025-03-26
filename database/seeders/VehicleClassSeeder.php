@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\VehicleClass;
-use App\Utils\VehicleClassEnum;
+use App\Models\Equipment;
+use App\Utils\EquipmentEnum;
 use Illuminate\Database\Seeder;
 
 class VehicleClassSeeder extends Seeder
@@ -16,8 +16,8 @@ class VehicleClassSeeder extends Seeder
         $typeAllowed = ['Vacuum Truck', 'Water Truck'];
 
         foreach ($typeAllowed as $type) {
-            VehicleClass::factory()->create([
-                'name' => VehicleClassEnum::HEAVY_VEHICLE_TYPE->value,
+            Equipment::factory()->create([
+                'name' => EquipmentEnum::HEAVY_VEHICLE_TYPE->value,
                 'type' => $type,
             ]);
         }

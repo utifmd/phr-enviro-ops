@@ -19,7 +19,7 @@ class RegisterForm extends Form
     public ?string $email;
     public ?string $password;
     public ?string $role;
-    public ?string $operator_id;
+    public ?string $company_id;
     public ?string $password_confirmation;
 
     public function boot(IUserRepository $repository): void
@@ -33,7 +33,7 @@ class RegisterForm extends Form
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'. User::class],
             'password' => ['required', 'string', 'confirmed', Password::defaults()],
             'username' => ['string', 'max:255'],
-            'operator_id' => ['required', 'string', 'max:255'],
+            'company_id' => ['required', 'string', 'max:255'],
             'role' => ['string']
         ];
     }
@@ -45,7 +45,7 @@ class RegisterForm extends Form
         $this->username = $this->userModel->username ?? "";
         $this->role = $this->userModel->role ?? "";
         $this->password = $this->userModel->password;
-        $this->operator_id = $this->userModel->operator_id;
+        $this->company_id = $this->userModel->company_id;
         $this->password_confirmation = $this->userModel->password_confirmation;
     }
 

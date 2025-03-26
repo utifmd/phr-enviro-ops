@@ -11,7 +11,7 @@ use App\Repositories\Contracts\IWorkOrderRepository;
 use App\Service\Contracts\IWellService;
 use App\Utils\AreaNameEnum;
 use App\Utils\Contracts\IUtility;
-use App\Utils\WorkOrderStatusEnum;
+use App\Utils\PostWoStatusEnum;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
 
@@ -169,10 +169,10 @@ class WellService implements IWellService
         $total_count = $this->postRepository->countLoadPostBy($this->userId);
 
         $accepted_count = $this->postRepository->countLoadPostBy(
-            $this->userId, WorkOrderStatusEnum::STATUS_ACCEPTED->value
+            $this->userId, PostWoStatusEnum::STATUS_ACCEPTED->value
         );
         $rejected_count = $this->postRepository->countLoadPostBy(
-            $this->userId, WorkOrderStatusEnum::STATUS_REJECTED->value
+            $this->userId, PostWoStatusEnum::STATUS_REJECTED->value
         );
         $pending_request = max(
             $total_count - ($rejected_count + $total_count), 0
@@ -187,10 +187,10 @@ class WellService implements IWellService
         $total_count = $this->postRepository->countLoadPostBy();
 
         $accepted_count = $this->postRepository->countLoadPostBy(
-            null, WorkOrderStatusEnum::STATUS_ACCEPTED->value
+            null, PostWoStatusEnum::STATUS_ACCEPTED->value
         );
         $rejected_count = $this->postRepository->countLoadPostBy(
-            null, WorkOrderStatusEnum::STATUS_REJECTED->value
+            null, PostWoStatusEnum::STATUS_REJECTED->value
         );
         $pending_request = max(
             $total_count - ($rejected_count + $total_count), 0

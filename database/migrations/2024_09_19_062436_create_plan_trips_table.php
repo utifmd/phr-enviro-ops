@@ -1,6 +1,6 @@
 <?php
 
-use App\Utils\WorkTripTypeEnum;
+use App\Utils\PostFacReportTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,10 +13,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('plan_trips', function (Blueprint $table) {
-            $tripType = collect(\App\Utils\PlanTripTypeEnum::cases())
+            $tripType = collect(\App\Utils\PostWoPlanTripTypeEnum::cases())
                 ->map(function ($item) { return $item->value; })->toArray();
 
-            $statusAllowed = collect(WorkTripTypeEnum::cases())
+            $statusAllowed = collect(PostFacReportTypeEnum::cases())
                 ->map(fn($case) => $case->value)->toArray();
 
             $table->uuid('id')->primary();
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->enum('trip_type', $tripType);
 
             $table->enum('status', $statusAllowed)
-                ->default(WorkTripTypeEnum::PLAN->value);
+                ->default(PostFacReportTypeEnum::PLAN->value);
 
             $table->timestamps();
             $table->foreignUuid('post_id')

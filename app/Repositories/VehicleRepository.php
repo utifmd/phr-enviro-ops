@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Vehicle;
-use App\Models\VehicleClass;
+use App\Models\Equipment;
 use App\Repositories\Contracts\IVehicleRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -15,7 +15,7 @@ class VehicleRepository implements IVehicleRepository
         $builder = Vehicle::query();
 
         if ($operatorId) {
-            $builder->where('operator_id', '=', $operatorId);
+            $builder->where('company_id', '=', $operatorId);
         }
         return $builder->get();
     }
@@ -30,8 +30,8 @@ class VehicleRepository implements IVehicleRepository
     }
     function getVehicleTypesOptions(): array
     {
-        return VehicleClass::all()
-            ->map(function(VehicleClass $vehicle) {
+        return Equipment::all()
+            ->map(function(Equipment $vehicle) {
                 $vehicle->name = $vehicle->type;
                 $vehicle->value = $vehicle->name;
                 return $vehicle;
@@ -48,7 +48,7 @@ class VehicleRepository implements IVehicleRepository
     function getVehiclesByOperatorIdQuery(string $operatorId, string $query, ?int $limit): Collection
     {
         return $this->vehiclesByQueryBuilder($query)
-            ->where('operator_id', $operatorId)
+            ->where('company_id', $operatorId)
             ->limit($limit)->get();
     }
 

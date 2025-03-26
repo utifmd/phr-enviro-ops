@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('information', function (Blueprint $table) {
-            $vehicleTypes = collect(\App\Utils\InformationVehicleTypeEnum::cases())
+            $vehicleTypes = collect(\App\Utils\PostWoInfoVehicleTypeEnum::cases())
                 ->map(fn ($item) => $item->value)->toArray();
 
-            $shifts = collect(\App\Utils\InformationShiftEnum::cases())
+            $shifts = collect(\App\Utils\PostWoInfoShiftEnum::cases())
                 ->map(fn ($item) => $item->value)->toArray();
 
-            $areas = collect(\App\Utils\InformationAreaEnum::cases())
+            $areas = collect(\App\Utils\PostWoInfoAreaEnum::cases())
                 ->map(fn ($item) => $item->value)->toArray();
 
             $table->uuid('id')->primary();

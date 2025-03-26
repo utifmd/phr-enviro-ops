@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Utils\CrewRoleEnum;
+use App\Utils\ManPowerRoleEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,8 +19,8 @@ class CrewFactory extends Factory
     {
         return [
             'name' => fake()->name,
-            'role' => CrewRoleEnum::ASSOCIATE_DRIVER_ROLE->value,
-            'operator_id' => null
+            'role' => ManPowerRoleEnum::ASSOCIATE_DRIVER_ROLE->value,
+            'company_id' => null
         ];
     }
 }

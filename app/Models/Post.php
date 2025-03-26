@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Utils\ActNameEnum;
-use App\Utils\WorkTripTypeEnum;
+use App\Utils\PostFacReportTypeEnum;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -28,13 +28,14 @@ use Illuminate\Support\Str;
  * @property $information
  * @property $planOrder
  * @property $planTrips
- * @property $workTrip
- * @property $workTrips
+ * @property $postRemark
+ * @property $postRemarks
+ * @property $postsFac
+ * @property $postFacReport
+ * @property $postsFacReport
  * @property $imageUrl
  * @property $imageUrls
  * @property $user
- * @property $remarks
- * @property $details
  *
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -52,21 +53,54 @@ class Post extends Model
     protected $table = 'posts';
 
     protected $fillable = [
-        'title', 'description', 'type', 'status', 'user_id', 'operator_id', 'created_at'
+        'title', 'description', 'type', 'status', 'user_id', 'company_id', 'created_at'
     ];
     protected $perPage = 6;
+
+    function postRemark(): HasOne
+    {
+        return $this->hasOne(
+            PostRemark::class, 'post_id', 'id'
+        );
+    }
+    public function company(): HasOne
+    {
+        return $this->hasOne(
+            Company::class, 'id', 'company_id'
+        );
+    }
+
+    function postFacReport(): HasOne
+    {
+        return $this->hasOne(
+            PostFacReport::class, 'post_id', 'id'
+        );
+    }
+
+    function postsFacReport(): HasMany
+    {
+        return $this->hasMany(PostFacReport::class, 'post_id', 'id')
+            ->where('type', PostFacReportTypeEnum::ACTUAL->value)
+            ->orderByDesc('time');
+    }
+
+    function postsFac(): HasMany
+    {
+        return $this->hasMany(PostFac::class, 'post_id', 'id')
+            ->where('type', ActNameEnum::Incoming->value);
+    }
+
+    function user(): BelongsTo
+    {
+        return $this->belongsTo(
+            User::class
+        );
+    }
 
     function imageUrl(): HasOne
     {
         return $this->hasOne(
             ImageUrl::class, 'post_id', 'id'
-        );
-    }
-
-    function remarks(): HasOne
-    {
-        return $this->hasOne(
-            WorkTripNote::class, 'post_id', 'id'
         );
     }
 
@@ -87,55 +121,22 @@ class Post extends Model
     function planTrips(): HasMany
     {
         return $this->hasMany(
-            PlanTrip::class, 'post_id', 'id'
+            PostWoPlanTrip::class, 'post_id', 'id'
         );
     }
 
     function planOrder(): HasOne
     {
         return $this->hasOne(
-            PlanOrder::class, 'post_id', 'id'
+            PostWoPlanOrder::class, 'post_id', 'id'
         );
     }
 
     public function workOrders(): HasMany
     {
-        return $this->hasMany(WorkOrder::class);
+        return $this->hasMany(PostWo::class);
     }
 
-    public function operator(): HasOne
-    {
-        return $this->hasOne(
-            Operator::class, 'id', 'operator_id'
-        );
-    }
-
-    function workTrip(): HasOne
-    {
-        return $this->hasOne(
-            WorkTrip::class, 'post_id', 'id'
-        );
-    }
-
-    function workTrips(): HasMany
-    {
-        return $this->hasMany(WorkTrip::class, 'post_id', 'id')
-            ->where('type', WorkTripTypeEnum::ACTUAL->value)
-            ->orderByDesc('time');
-    }
-
-    function details(): HasMany
-    {
-        return $this->hasMany(WorkTripDetail::class, 'post_id', 'id')
-            ->where('type', ActNameEnum::Incoming->value);
-    }
-
-    function user(): BelongsTo
-    {
-        return $this->belongsTo(
-            User::class
-        );
-    }
 
     protected static function booted(): void
     {

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Operator;
+use App\Models\Company;
 use App\Models\User;
 use App\Utils\UserRoleEnum;
 use Illuminate\Database\Seeder;
@@ -14,9 +14,9 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        Operator::query()->each(function (Operator $operator) {
+        Company::query()->each(function (Company $operator) {
 
-            User::factory()->create(['operator_id' => $operator->id]);
+            User::factory()->create(['company_id' => $operator->id]);
         });
         $email = 'mk.planner@pertamina.com';
         User::factory()->create([
@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
             'email' => $email,
             'username' => explode('@', $email)[0],
             'role' => UserRoleEnum::DEV_ROLE->value,
-            'operator_id' => Operator::query()->first()->id,
+            'company_id' => Company::query()->first()->id,
         ]);
     }
 }

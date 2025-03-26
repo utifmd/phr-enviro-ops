@@ -2,33 +2,33 @@
 
 namespace App\Livewire\Forms;
 
-use App\Models\Crew;
+use App\Models\ManPower;
 use Livewire\Form;
 
 class CrewForm extends Form
 {
-    public ?Crew $crewModel;
-    
+    public ?ManPower $crewModel;
+
     public $name = '';
     public $role = '';
-    public $operator_id = '';
+    public $company_id = '';
 
     public function rules(): array
     {
         return [
 			'name' => 'required|string',
 			'role' => 'required',
-			'operator_id' => 'required|uuid',
+			'company_id' => 'required|uuid',
         ];
     }
 
-    public function setCrewModel(Crew $crewModel): void
+    public function setCrewModel(ManPower $crewModel): void
     {
         $this->crewModel = $crewModel;
-        
+
         $this->name = $this->crewModel->name;
         $this->role = $this->crewModel->role;
-        $this->operator_id = $this->crewModel->operator_id;
+        $this->company_id = $this->crewModel->company_id;
     }
 
     public function store(): void

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Department;
-use App\Models\Operator;
+use App\Models\Team;
+use App\Models\Company;
 use Illuminate\Database\Seeder;
 
 class OperatorSeeder extends Seeder
@@ -13,9 +13,9 @@ class OperatorSeeder extends Seeder
      */
     public function run(): void
     {
-        $collection = Department::query()->get()->all();
+        $collection = Team::query()->get()->all();
         foreach ($collection as $departmentId) {
-            Operator::factory()->create(['department_id' => $departmentId->id]);
+            Company::factory()->create(['department_id' => $departmentId->id]);
         }
     }
 }

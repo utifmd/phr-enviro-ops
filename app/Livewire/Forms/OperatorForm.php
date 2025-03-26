@@ -2,13 +2,13 @@
 
 namespace App\Livewire\Forms;
 
-use App\Models\Operator;
+use App\Models\Company;
 use Illuminate\Validation\ValidationException;
 use Livewire\Form;
 
 class OperatorForm extends Form
 {
-    public ?Operator $operatorModel;
+    public ?Company $operatorModel;
 
     public ?string $prefix;
     public ?string $postfix;
@@ -27,7 +27,7 @@ class OperatorForm extends Form
         ];
     }
 
-    public function setOperatorModel(Operator $operatorModel): void
+    public function setOperatorModel(Company $operatorModel): void
     {
         $this->operatorModel = $operatorModel;
 
@@ -35,7 +35,7 @@ class OperatorForm extends Form
         $this->postfix = $this->operatorModel->postfix;
         $this->name = $this->operatorModel->name;
         $this->short_name = $this->operatorModel->short_name;
-        $this->department_id = $this->operatorModel->department_id;
+        $this->department_id = $this->operatorModel->team_id;
     }
 
     /**

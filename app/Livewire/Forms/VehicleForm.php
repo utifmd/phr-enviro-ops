@@ -8,11 +8,11 @@ use Livewire\Form;
 class VehicleForm extends Form
 {
     public ?Vehicle $vehicleModel;
-    
+
     public $plat = '';
     public $type = '';
     public $vendor = '';
-    public $operator_id = '';
+    public $company_id = '';
 
     public function rules(): array
     {
@@ -20,18 +20,18 @@ class VehicleForm extends Form
 			'plat' => 'required|string',
 			'type' => 'required|string',
 			'vendor' => 'required|string',
-			'operator_id' => 'required',
+			'company_id' => 'required',
         ];
     }
 
     public function setVehicleModel(Vehicle $vehicleModel): void
     {
         $this->vehicleModel = $vehicleModel;
-        
+
         $this->plat = $this->vehicleModel->plat;
         $this->type = $this->vehicleModel->type;
         $this->vendor = $this->vehicleModel->vendor;
-        $this->operator_id = $this->vehicleModel->operator_id;
+        $this->company_id = $this->vehicleModel->company_id;
     }
 
     public function store(): void

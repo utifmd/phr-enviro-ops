@@ -5,19 +5,19 @@ namespace App\Repositories;
 use App\Mapper\Contracts\IWorkTripMapper;
 use App\Models\Activity;
 use App\Models\Area;
-use App\Models\WorkTrip;
-use App\Models\WorkTripDetail;
-use App\Models\WorkTripDetailIn;
-use App\Models\WorkTripInfo;
-use App\Models\WorkTripNote;
+use App\Models\PostFacReport;
+use App\Models\PostFac;
+use App\Models\PostFacIn;
+use App\Models\PostFacThreshold;
+use App\Models\PostRemark;
 use App\Repositories\Contracts\IWorkTripRepository;
 use App\Utils\ActNameEnum;
 use App\Utils\ActUnitEnum;
 use App\Utils\AreaNameEnum;
 use App\Utils\Constants;
-use App\Utils\WorkOrderStatusEnum;
-use App\Utils\WorkTripStatusEnum;
-use App\Utils\WorkTripTypeEnum;
+use App\Utils\PostWoStatusEnum;
+use App\Utils\PostFacReportStatusEnum;
+use App\Utils\PostFacReportTypeEnum;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
@@ -36,40 +36,48 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function index(): Collection
     {
-        return WorkTrip::all();
+        return PostFacReport::all();
     }
 
     public function indexByStatus(string $status): Collection
     {
-        return WorkTrip::query()->where('status', $status)->get();
+        return PostFacReport::query()->where('status', $status)->get();
     }
 
     public function getById($id): Collection
     {
-        return WorkTrip::query()->find($id);
+        return PostFacReport::query()->find($id);
     }
 
     public function store(array $data): Collection
     {
-        return WorkTrip::query()->create($data);
+        return PostFacReport::query()->create($data);
     }
 
     public function update(array $data, $id): bool
     {
-        return WorkTrip::query()->find($id)->update($data);
+        return PostFacReport::query()->find($id)->update($data);
     }
 
     public function delete($id): ?bool
     {
-        $workTrip = WorkTrip::query()->find($id);
+        $workTrip = PostFacReport::query()->find($id);
         if (!$workTrip) return false;
 
         return $workTrip->delete();
     }
 
+    public function deleteThresholdBy(string $date): ?bool
+    {
+        $threshold = PostFacThreshold::query()->whereDate('date', $date);
+        if (!$threshold) return false;
+
+        return $threshold->delete();
+    }
+
     public function getByPostId($id): Collection
     {
-        return WorkTrip::query()->where('post_id', $id)->get();
+        return PostFacReport::query()->where('post_id', $id)->get();
     }
 
     function getProcessOptions(?string $actName): array
@@ -133,13 +141,13 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function sumInfoAndTripByArea(string $area): LengthAwarePaginator
     {
-        return WorkTrip::query()
+        return PostFacReport::query()
             ->selectRaw(
                 'type, date, act_unit, users.name AS user_actual, SUM(act_value) AS value_actual_sum, status')
-            ->leftJoin('users', 'users.id', '=', 'work_trips.user_id')
-            ->where('work_trips.area_name', '=', $area, 'and')
+            ->leftJoin('users', 'users.id', '=', 'post_fac_report.user_id')
+            ->where('post_fac_report.area_name', '=', $area, 'and')
             ->where('act_unit', '=', ActUnitEnum::LOAD->value, 'and')
-            ->where('type', '=', WorkTripTypeEnum::ACTUAL->value)
+            ->where('type', '=', PostFacReportTypeEnum::ACTUAL->value)
             ->groupBy('type', 'date', 'act_unit', 'user_actual', 'status')
             ->orderByDesc('date')
             ->paginate();
@@ -147,17 +155,17 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function addTrip(array $workTripTrip): void
     {
-        WorkTrip::query()->create($workTripTrip);
+        PostFacReport::query()->create($workTripTrip);
     }
 
     public function updateTrip(array $workTripTrip): void
     {
-        WorkTrip::query()->find($workTripTrip['id'])->update($workTripTrip);
+        PostFacReport::query()->find($workTripTrip['id'])->update($workTripTrip);
     }
 
     public function removeTripById(string $id): void
     {
-        $workTrip = WorkTrip::query()->find($id);
+        $workTrip = PostFacReport::query()->find($id);
         if (!$workTrip) return;
 
         $workTrip->delete();
@@ -165,7 +173,7 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function getTripByDate(string $date): array
     {
-        return WorkTrip::query()
+        return PostFacReport::query()
             ->where('date', $date)->get()->toArray();
     }
 
@@ -173,7 +181,7 @@ class WorkTripRepository implements IWorkTripRepository
     private function workTripsBuilderBy(
         string $area, $dateOrDates, $timeOrTimes = null): Builder
     {
-        $builder = WorkTrip::query();
+        $builder = PostFacReport::query();
 
         if ($area != AreaNameEnum::AllArea->value) {
             $builder->where('area_name', '=', $area);
@@ -183,7 +191,7 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function getTripByDateAndArea(string $date, string $area): array
     {
-        $builder = WorkTrip::query()->where('date', $date);
+        $builder = PostFacReport::query()->where('date', $date);
 
         if ($area != AreaNameEnum::AllArea->value) {
             $builder->where('area_name', '=', $area);
@@ -193,8 +201,8 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function getActualTripByPostId(string $postId): array
     {
-        return WorkTrip::with('user')
-            ->where('type', '=', WorkTripTypeEnum::ACTUAL->value, 'and')
+        return PostFacReport::with('user')
+            ->where('type', '=', PostFacReportTypeEnum::ACTUAL->value, 'and')
             ->where('post_id', '=', $postId, 'and')
             ->orderByDesc('time')
             ->get()->toArray();
@@ -202,8 +210,8 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function getActualTripByTimeAndPostId(string $time, string $postId): array
     {
-        return WorkTrip::with('user')
-            ->where('type', '=', WorkTripTypeEnum::ACTUAL->value, 'and')
+        return PostFacReport::with('user')
+            ->where('type', '=', PostFacReportTypeEnum::ACTUAL->value, 'and')
             ->where('post_id', '=', $postId, 'and')
             ->where('time', $time)
             ->get()->toArray();
@@ -211,7 +219,7 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function getTripByDatetime(string $date, string $time): array
     {
-        return WorkTrip::query()
+        return PostFacReport::query()
             ->where('date', '=', $date, 'and')
             ->where('time', $time)
             ->get()->toArray();
@@ -220,7 +228,7 @@ class WorkTripRepository implements IWorkTripRepository
     public function getTripByDatetimeAndArea(
         string $date, string $time, string $area): array
     {
-        $builder = WorkTrip::query()
+        $builder = PostFacReport::query()
             ->where('date', '=', $date)
             ->where('time', $time);
 
@@ -232,10 +240,10 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function sumTripByArea(string $area): LengthAwarePaginator
     {
-        return WorkTrip::query()
+        return PostFacReport::query()
             ->selectRaw('date, act_unit, users.name AS user, SUM(act_value) AS act_value_sum')
-            ->leftJoin('users', 'users.id', '=', 'work_trips.user_id')
-            ->where('work_trips.area_name', '=', $area, 'and')
+            ->leftJoin('users', 'users.id', '=', 'post_fac_report.user_id')
+            ->where('post_fac_report.area_name', '=', $area, 'and')
             ->where('act_unit', '=', ActUnitEnum::LOAD->value)
             ->groupBy('date', 'act_unit', 'user')
             ->orderByDesc('date')
@@ -243,18 +251,18 @@ class WorkTripRepository implements IWorkTripRepository
     }
     public function getTrips(): LengthAwarePaginator
     {
-        return WorkTrip::query()->paginate();
+        return PostFacReport::query()->paginate();
     }
 
     public function areTripsExistByDate(string $date): bool
     {
-        return WorkTrip::query()
+        return PostFacReport::query()
             ->where('date', $date)->exists();
     }
 
     public function areTripsExistByDateAndArea(string $date, string $area): bool
     {
-        $builder = WorkTrip::query()->where('date', $date);
+        $builder = PostFacReport::query()->where('date', $date);
 
         if ($area != AreaNameEnum::AllArea->value) {
             $builder->where('area_name', '=', $area);
@@ -264,7 +272,7 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function areTripsExistByDatetime(string $date, string $time): bool
     {
-        return WorkTrip::query()
+        return PostFacReport::query()
             ->where('date', '=', $date, 'and')
             ->where('time', $time)
             ->exists();
@@ -272,7 +280,7 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function areTripsExistByDatetimeAndArea(string $date, string $time, string $area): bool
     {
-        $builder = WorkTrip::query()
+        $builder = PostFacReport::query()
             ->where('date', '=', $date)
             ->where('time', $time);
 
@@ -290,19 +298,19 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function addInfo(array $workTripInfo): void
     {
-        WorkTripInfo::query()->create($workTripInfo);
+        PostFacThreshold::query()->create($workTripInfo);
     }
 
     public function updateInfo(array $workTripInfo): void
     {
-        WorkTripInfo::query()
+        PostFacThreshold::query()
             ->find($workTripInfo['id'])
             ->update($workTripInfo);
     }
 
     public function removeInfoById(string $id): void
     {
-        $info = WorkTripInfo::query()->find($id);
+        $info = PostFacThreshold::query()->find($id);
         if(!$info) return;
 
         $info->delete();
@@ -310,13 +318,13 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function getInfoByDate(string $date): array
     {
-        return WorkTripInfo::query()
+        return PostFacThreshold::query()
             ->where('date', $date)->get()->toArray();
     }
 
     public function getInfoByDateAndArea(string $date, string $area): array
     {
-        $builder = WorkTripInfo::query()->where('date', $date);
+        $builder = PostFacThreshold::query()->where('date', $date);
 
         if ($area != AreaNameEnum::AllArea->value) {
             $builder->where('area_name', '=', $area);
@@ -328,7 +336,7 @@ class WorkTripRepository implements IWorkTripRepository
     private function workTripInfosBuilderBy(
         string $area, $dateOrDates, $timeOrTimes = null): Builder
     {
-        $builder = WorkTripInfo::query();
+        $builder = PostFacThreshold::query();
 
         if ($area != AreaNameEnum::AllArea->value) {
             $builder->where('area_name', '=', $area);
@@ -343,7 +351,7 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function getInfoByDatetime(string $date, string $time): array
     {
-        return WorkTripInfo::query()
+        return PostFacThreshold::query()
             ->where('date', '=', $date, 'and')
             ->where('time', $time)
             ->get()->toArray();
@@ -351,7 +359,7 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function getInfoByDatetimeAndArea(string $date, string $time, string $area): array
     {
-        $builder = WorkTripInfo::query()
+        $builder = PostFacThreshold::query()
             ->where('date', '=', $date)
             ->where('time', $time);
 
@@ -369,13 +377,13 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function sumInfoByArea(string $area): LengthAwarePaginator
     {
-        $builder = WorkTripInfo::query()
+        $builder = PostFacThreshold::query()
             ->selectRaw('date, act_unit, users.name AS user, SUM(act_value) AS act_value_sum') /*->where('user_id', '=', $this->authId, 'and')*/
-            ->leftJoin('users', 'users.id', '=', 'work_trip_infos.user_id')
+            ->leftJoin('users', 'users.id', '=', 'post_fac_threshold.user_id')
             ->where('act_unit', '=', ActUnitEnum::LOAD->value);
 
         if ($area != AreaNameEnum::AllArea->value) {
-            $builder->where('work_trip_infos.area_name', '=', $area);
+            $builder->where('post_fac_threshold.area_name', '=', $area);
         }
         return $builder
             ->groupBy('date', 'act_unit', 'user')
@@ -384,18 +392,18 @@ class WorkTripRepository implements IWorkTripRepository
     }
     public function getInfos(): LengthAwarePaginator
     {
-        return WorkTripInfo::query()->paginate();
+        return PostFacThreshold::query()->paginate();
     }
     public function areInfosExistByDate(string $date): bool
     {
-        return WorkTripInfo::query()
+        return PostFacThreshold::query()
             ->where('date', $date)
             ->exists();
     }
 
     public function areInfosExistByDateAndArea(string $date, string $area): bool
     {
-        $builder = WorkTripInfo::query();
+        $builder = PostFacThreshold::query();
 
         if ($area != AreaNameEnum::AllArea->value) {
             $builder->where('area_name', '=', $area);
@@ -411,7 +419,7 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function areInfosExistByArea(string $area): bool
     {
-        $builder = WorkTripInfo::query();
+        $builder = PostFacThreshold::query();
 
         if ($area != AreaNameEnum::AllArea->value) {
             $builder->where('area_name', '=', $area);
@@ -421,7 +429,7 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function areInfosExistByDatetime(string $date, string $time): bool
     {
-        return WorkTripInfo::query()
+        return PostFacThreshold::query()
             ->where('date', '=', $date, 'and')
             ->where('time', $time)
             ->exists();
@@ -429,7 +437,7 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function areInfosExistByDatetimeAndArea(string $date, string $time, string $area): bool
     {
-        $builder = WorkTripInfo::query()
+        $builder = PostFacThreshold::query()
             ->where('date', '=', $date)
             ->where('time', $time);
 
@@ -448,7 +456,7 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function getLatestInfosDateByArea(string $area): ?string
     {
-        $builder = WorkTripInfo::query();
+        $builder = PostFacThreshold::query();
 
         if ($area != AreaNameEnum::AllArea->value) {
             $builder->where('area_name', '=', $area);
@@ -463,9 +471,9 @@ class WorkTripRepository implements IWorkTripRepository
     }
     public function sumActualByAreaAndDate(mixed $areaName, mixed $date): int
     {
-        $builder = WorkTrip::query()
+        $builder = PostFacReport::query()
             ->selectRaw('SUM(act_value) AS act_value_sum')
-            ->where('type', '=', WorkTripTypeEnum::ACTUAL->value)
+            ->where('type', '=', PostFacReportTypeEnum::ACTUAL->value)
             ->where('act_unit', '=', ActUnitEnum::LOAD->value)
             ->where('date', $date);
 
@@ -478,20 +486,20 @@ class WorkTripRepository implements IWorkTripRepository
     public function addNotesWith(
         string $postId, string $userId, string $message): void
     {
-        WorkTripNote::query()->create([
+        PostRemark::query()->create([
             'post_id' => $postId, 'user_id' => $userId, 'message' => $message,
         ]);
     }
 
     public function addNotes(array $data): void
     {
-        WorkTripNote::query()->create($data);
+        PostRemark::query()->create($data);
     }
 
     private function notesByDateAndUserIdBuilder(
         string $userId, string $date): Builder
     {
-        return WorkTripNote::with('user')
+        return PostRemark::with('user')
             ->where('user_id', '=', $userId, 'and')
             ->whereBetween('created_at', [
                 Carbon::parse($date)->startOfDay(),
@@ -513,12 +521,12 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function updateNotesByPostId(string $id, string $message): void
     {
-        WorkTripNote::query()->where('post_id', $id)->update(['message' => $message]);
+        PostRemark::query()->where('post_id', $id)->update(['message' => $message]);
     }
 
     public function getNotesByDateAndUserId(string $date, string $userId): array
     {
-        $builder = WorkTripNote::with('user')
+        $builder = PostRemark::with('user')
             ->where('user_id', '=', $userId, 'and')
             ->whereBetween('created_at', [
                 Carbon::parse($date)->startOfDay(),
@@ -530,7 +538,7 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function getNotesByArea(string $areaName): Collection
     {
-        $builder = WorkTripNote::query();
+        $builder = PostRemark::query();
 
         if ($areaName != AreaNameEnum::AllArea->value) {
             $builder->whereHas('user', function ($query) use ($areaName) {
@@ -539,13 +547,13 @@ class WorkTripRepository implements IWorkTripRepository
         }
         return $builder
             ->orderByDesc('created_at')
-            ->limit(WorkTripNote::PER_PAGE)->get();
+            ->limit(PostRemark::PER_PAGE)->get();
     }
 
     public function getNotesByDateArea(
         string $areaName, string $startDate, string $endDate): Collection
     {
-        $builder = WorkTripNote::query();
+        $builder = PostRemark::query();
 
         if ($areaName != AreaNameEnum::AllArea->value) {
             $builder->whereHas('user', function ($query) use ($areaName) {
@@ -558,13 +566,13 @@ class WorkTripRepository implements IWorkTripRepository
                 Carbon::parse($endDate)->endOfDay(),
             ])
             ->orderByDesc('created_at')
-            ->limit(WorkTripNote::PER_PAGE)
+            ->limit(PostRemark::PER_PAGE)
             ->get();
     }
 
     public function tripsExistByDateTimeTypeProcLocBuilder(array $trip): Builder
     {
-        return WorkTrip::query()
+        return PostFacReport::query()
             ->where('date', '=', $trip['date'], 'and')
             ->where('time', '=', $trip['time'], 'and')
             ->where('type', '=', $trip['type'], 'and')
@@ -574,7 +582,7 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function infosExistByDateTimeTypeProcLocBuilder(array $info): Builder
     {
-        return WorkTripInfo::query()
+        return PostFacThreshold::query()
             ->where('date', '=', $info['date'], 'and')
             ->where('time', '=', $info['time'], 'and')
             ->where('act_process', '=', $info['act_process'], 'and')
@@ -597,7 +605,7 @@ class WorkTripRepository implements IWorkTripRepository
 
     public function detailBuilder(string $createdAt): Builder
     {
-        return WorkTripDetail::query()->whereBetween('created_at', [
+        return PostFac::query()->whereBetween('created_at', [
                 Carbon::parse($createdAt)->startOfDay(),
                 Carbon::parse($createdAt)->endOfDay(),
             ]);
@@ -611,11 +619,11 @@ class WorkTripRepository implements IWorkTripRepository
         if (is_null($actName)) return $builder;
 
         if($actName != ActNameEnum::Incoming->value) {
-            $builder->whereHas('detailOut', function ($query) use ($facility) {
+            $builder->whereHas('postFacOut', function ($query) use ($facility) {
                 $query->where('from_facility', '=', $facility);
             });
         } else {
-            $builder->whereHas('detailIn', function ($query) use ($facility) {
+            $builder->whereHas('postFacIn', function ($query) use ($facility) {
                 $query->where('facility', '=', $facility);
             });
         }
@@ -627,7 +635,7 @@ class WorkTripRepository implements IWorkTripRepository
     {
         return collect($workTrips)
             ->filter(fn ($wt) =>
-                $wt->status == WorkOrderStatusEnum::STATUS_PENDING->value)
+                $wt->status == PostWoStatusEnum::STATUS_PENDING->value)
             ->count();
     }
 

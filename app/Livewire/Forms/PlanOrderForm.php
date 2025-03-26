@@ -2,12 +2,12 @@
 
 namespace App\Livewire\Forms;
 
-use App\Models\PlanOrder;
+use App\Models\PostWoPlanOrder;
 use Livewire\Form;
 
 class PlanOrderForm extends Form
 {
-    public ?PlanOrder $planOrder;
+    public ?PostWoPlanOrder $planOrder;
 
     public $status = '';
     public $description = '';
@@ -48,7 +48,7 @@ class PlanOrderForm extends Form
         ];
     }
 
-    public function setPlanOrder(PlanOrder $planOrder): void
+    public function setPlanOrder(PostWoPlanOrder $planOrder): void
     {
         $this->planOrder = $planOrder;
 

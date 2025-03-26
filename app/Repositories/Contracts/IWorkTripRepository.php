@@ -14,6 +14,7 @@ interface IWorkTripRepository
     public function store(array $data): Collection;
     public function update(array $data,$id): bool;
     public function delete($id): ?bool;
+    public function deleteThresholdBy(string $date): ?bool;
 
     function getProcessOptions(?string $actName): array;
     function getLocationsOptions(?string $areaName): array;

@@ -2,23 +2,26 @@
 
     <div>
         <x-input-label for="plat" :value="__('Plat')"/>
-        <x-text-input wire:model="form.plat" id="plat" name="plat" type="text" class="mt-1 block w-full" autocomplete="plat" placeholder="Plat"/>
+        <x-text-input wire:model="form.plat" id="plat" name="plat" type="text" class="mt-1 block w-full"
+                      autocomplete="plat" placeholder="Plat"/>
         @error('form.plat')
-            <x-input-error class="mt-2" :messages="$message"/>
+        <x-input-error class="mt-2" :messages="$message"/>
         @enderror
     </div>
     <div>
         <x-input-label for="type" :value="__('Type')"/>
-        <x-select-option wire:model="form.type" :cases="\App\Utils\Enums\VehicleTypeEnum::cases()" id="type" name="type" />
+        <x-select-option wire:model="form.type" :cases="\App\Utils\PostWoInfoVehicleTypeEnum::cases()" id="type"
+                         name="type"/>
         @error('form.type')
-            <x-input-error class="mt-2" :messages="$message"/>
+        <x-input-error class="mt-2" :messages="$message"/>
         @enderror
     </div>
     <div>
         <x-input-label for="vendor" :value="__('Vendor')"/>
-        <x-text-input wire:model="form.vendor" id="vendor" name="vendor" type="text" class="mt-1 block w-full" autocomplete="vendor" placeholder="Vendor"/>
+        <x-text-input wire:model="form.vendor" id="vendor" name="vendor" type="text" class="mt-1 block w-full"
+                      autocomplete="vendor" placeholder="Vendor"/>
         @error('form.vendor')
-            <x-input-error class="mt-2" :messages="$message"/>
+        <x-input-error class="mt-2" :messages="$message"/>
         @enderror
 
         @error('form.operator_id')

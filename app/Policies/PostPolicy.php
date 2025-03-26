@@ -5,7 +5,7 @@ namespace App\Policies;
 use App\Models\Post;
 use App\Models\User;
 use App\Utils\UserRoleEnum;
-use App\Utils\WorkOrderStatusEnum;
+use App\Utils\PostWoStatusEnum;
 
 class PostPolicy
 {
@@ -42,7 +42,7 @@ class PostPolicy
             function($wo) { return $wo['status']; }
         );
         /*$isAtLeastGotApproval = !; return $post->user_id == $user->id&&  $isAtLeastGotApproval;*/
-        return $woStatuses->contains(WorkOrderStatusEnum::STATUS_PENDING->value);
+        return $woStatuses->contains(PostWoStatusEnum::STATUS_PENDING->value);
     }
     /*public function onUserOwnThePost(User $user, Post $post): Response
     {

@@ -18,6 +18,6 @@ class WorkTripPolicy
     const IS_WORK_TRIP_CREATED = 'isWorkTripCreated';
     public function isWorkTripCreated(User $user, Post $post): bool
     {
-        return $post->workTrip != null;
+        return $post->postFacReport != null;
     }
 }

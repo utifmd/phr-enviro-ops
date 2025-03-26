@@ -2,13 +2,13 @@
 
 namespace App\Livewire\Forms;
 
-use App\Models\WorkTripDetail;
-use App\Utils\WorkTripStatusEnum;
+use App\Models\PostFac;
+use App\Utils\PostFacReportStatusEnum;
 use Livewire\Form;
 
 class WorkTripDetailForm extends Form
 {
-    public ?WorkTripDetail $workTripDetailModel;
+    public ?PostFac $workTripDetailModel;
 
     public $transporter = '';
     public $driver = '';
@@ -43,7 +43,7 @@ class WorkTripDetailForm extends Form
         ];
     }
 
-    public function setWorkTripDetailModel(WorkTripDetail $workTripDetailModel): void
+    public function setWorkTripDetailModel(PostFac $workTripDetailModel): void
     {
         $this->workTripDetailModel = $workTripDetailModel;
 
@@ -57,7 +57,7 @@ class WorkTripDetailForm extends Form
         $this->tds = $this->workTripDetailModel->tds;
         $this->area_name = $this->workTripDetailModel->area_name;
         $this->time_out = $this->workTripDetailModel->time_out;
-        $this->status = $this->workTripDetailModel->status ?? WorkTripStatusEnum::PENDING->value;
+        $this->status = $this->workTripDetailModel->status ?? PostFacReportStatusEnum::PENDING->value;
         $this->remarks = $this->workTripDetailModel->remarks;
         $this->post_id = $this->workTripDetailModel->post_id;
         $this->user_id = $this->workTripDetailModel->user_id;

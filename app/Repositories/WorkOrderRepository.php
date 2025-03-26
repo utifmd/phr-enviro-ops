@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Models\WorkOrder;
+use App\Models\PostWo;
 use App\Repositories\Contracts\IWorkOrderRepository;
-use App\Utils\WorkOrderScopeEnum;
-use App\Utils\WorkOrderStatusEnum;
+use App\Utils\PostWoScopeEnum;
+use App\Utils\PostWoStatusEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Log;
 
 class WorkOrderRepository implements IWorkOrderRepository
 {
-    function addWorkOrder(array $request): ?WorkOrder
+    function addWorkOrder(array $request): ?PostWo
     {
-        $createdPost = WorkOrder::query()->create($request);
+        $createdPost = PostWo::query()->create($request);
         $post = $this->fromBuilderOrModel($createdPost);
 
         if (is_null($post->id)) return null;
@@ -25,7 +25,7 @@ class WorkOrderRepository implements IWorkOrderRepository
 
     function getWorkOrderByPostId(string $id): Collection
     {
-        $builder = WorkOrder::query()->where(
+        $builder = PostWo::query()->where(
             'post_id', '=', $id
         );
         return $builder->get();
@@ -36,7 +36,7 @@ class WorkOrderRepository implements IWorkOrderRepository
     {
         $whereBindings = [
             $year, $month, $isRig, $idsWellName,
-            WorkOrderStatusEnum::STATUS_ACCEPTED->value
+            PostWoStatusEnum::STATUS_ACCEPTED->value
         ];
         $selectQuery = 'ids_wellname, is_rig,
                  DATE_PART(\'day\', created_at) AS day,
@@ -51,14 +51,14 @@ class WorkOrderRepository implements IWorkOrderRepository
         $groupByQuery = 'DATE_PART(\'day\', created_at),
                  ids_wellname, is_rig';
 
-        return WorkOrder::query()->selectRaw($selectQuery)
+        return PostWo::query()->selectRaw($selectQuery)
             ->whereRaw($whereQuery, $whereBindings)
             ->groupByRaw($groupByQuery)
             ->get();
     }
     public function getWorkOrdersNameByMonth(string $year, string $month): Collection
     {
-        $builder = WorkOrder::query()
+        $builder = PostWo::query()
             ->select([
                 'work_orders.ids_wellname', 'work_orders.is_rig', 'well_masters.wbs_number'])
             ->leftJoin('well_masters',
@@ -66,7 +66,7 @@ class WorkOrderRepository implements IWorkOrderRepository
             ->whereRaw(
                 "DATE_PART('year', work_orders.created_at) = ? AND
                 DATE_PART('month', work_orders.created_at) = ? AND
-                work_orders.status = ? ", [$year, $month, WorkOrderStatusEnum::STATUS_ACCEPTED->value])
+                work_orders.status = ? ", [$year, $month, PostWoStatusEnum::STATUS_ACCEPTED->value])
             ->groupByRaw(
                 'DATE_PART(\'month\', work_orders.created_at),
                 work_orders.ids_wellname,
@@ -79,7 +79,7 @@ class WorkOrderRepository implements IWorkOrderRepository
     function searchWorkOrderByWell(
         string $wellNumber, ?string $wbsNumber, ?string $createdDate, ?string $createdTime): Collection
     {
-        $builder = WorkOrder::query();
+        $builder = PostWo::query();
         $builder
             ->where('well_number', 'LIKE', '%'. $wellNumber .'%')
             ->orWhere('wbs_number', 'LIKE', '%'. $wellNumber .'%');
@@ -93,10 +93,10 @@ class WorkOrderRepository implements IWorkOrderRepository
         return $builder->get();
     }
 
-    function updateWorkOrder(string $workOrderId, array $request): ?WorkOrder
+    function updateWorkOrder(string $workOrderId, array $request): ?PostWo
     {
         try {
-            $model = WorkOrder::query()->find($workOrderId);
+            $model = PostWo::query()->find($workOrderId);
             if(isset($request['shift']))
                 $model->shift = $request['shift'];
             if(isset($request['is_rig']))
@@ -118,7 +118,7 @@ class WorkOrderRepository implements IWorkOrderRepository
     function removeWorkOrder(string $workOrderId): bool
     {
         try {
-            $model = WorkOrder::query()->find($workOrderId);
+            $model = PostWo::query()->find($workOrderId);
             return $model->delete();
         } catch (\Throwable $t) {
             Log::error($t->getMessage());
@@ -128,15 +128,15 @@ class WorkOrderRepository implements IWorkOrderRepository
 
     public function removeWorkOrderBy(string $postId): bool
     {
-        $builder = WorkOrder::query()
+        $builder = PostWo::query()
             ->where('post_id', '=', $postId);
 
         return $builder->delete();
     }
 
-    private function fromBuilderOrModel(Model|Builder $model): WorkOrder
+    private function fromBuilderOrModel(Model|Builder $model): PostWo
     {
-        $workOrder = new WorkOrder();
+        $workOrder = new PostWo();
         $workOrder->id = $model['id'];
         $workOrder->shift = $model['shift'];
         $workOrder->is_rig = $model['is_rig'];
@@ -150,36 +150,36 @@ class WorkOrderRepository implements IWorkOrderRepository
 
     function getWorkOrdersByDepartmentId(string $id): Collection
     {
-        return WorkOrder::query()->where('department_id', '=', $id)->get();
+        return PostWo::query()->where('department_id', '=', $id)->get();
     }
 
     function getWorkOrdersByOperatorId(string $id): Collection
     {
-        return WorkOrder::query()->where('operator_id', '=', $id)->get();
+        return PostWo::query()->where('company_id', '=', $id)->get();
     }
 
     public function getWorkOrdersByVehicleId(string $id): Collection
     {
-        return WorkOrder::query()->where('vehicle_id', '=', $id)->get();
+        return PostWo::query()->where('vehicle_id', '=', $id)->get();
     }
 
     public function countWorkOrdersByScope(int $scope): Collection
     {
-        $builder = WorkOrder::query();
+        $builder = PostWo::query();
 
         $builder = match ($scope) {
-            WorkOrderScopeEnum::DEP_SCOPE->value => $builder
-                ->selectRaw('departments.short_name AS scope_name, COUNT(work_orders.department_id) AS count')
-                ->join('departments', 'departments.id', '=', 'work_orders.department_id')
-                ->groupBy('work_orders.department_id', 'departments.short_name'),
+            PostWoScopeEnum::DEP_SCOPE->value => $builder
+                ->selectRaw('teams.short_name AS scope_name, COUNT(work_orders.department_id) AS count')
+                ->join('teams', 'teams.id', '=', 'work_orders.department_id')
+                ->groupBy('work_orders.department_id', 'teams.short_name'),
 
-            WorkOrderScopeEnum::OPE_SCOPE->value => $builder
-                // ->selectRaw('operators.short_name AS scope_name, COUNT(work_orders.operator_id) AS count')
-                ->selectRaw('TRIM(CONCAT(operators.prefix, \' \', operators.short_name, \' \', operators.postfix)) AS scope_name, COUNT(work_orders.operator_id) AS count')
-                ->join('operators', 'operators.id', '=', 'work_orders.operator_id')
-                ->groupBy('work_orders.operator_id', 'operators.short_name', 'operators.prefix', 'operators.postfix'),
+            PostWoScopeEnum::OPE_SCOPE->value => $builder
+                // ->selectRaw('operators.short_name AS scope_name, COUNT(work_orders.company_id) AS count')
+                ->selectRaw('TRIM(CONCAT(operators.prefix, \' \', operators.short_name, \' \', operators.postfix)) AS scope_name, COUNT(work_orders.company_id) AS count')
+                ->join('operators', 'operators.id', '=', 'work_orders.company_id')
+                ->groupBy('work_orders.company_id', 'operators.short_name', 'operators.prefix', 'operators.postfix'),
 
-            WorkOrderScopeEnum::VEH_SCOPE->value => $builder
+            PostWoScopeEnum::VEH_SCOPE->value => $builder
                 ->selectRaw('vehicles.plat AS scope_name, COUNT(work_orders.vehicle_id) AS count')
                 ->join('vehicles', 'vehicles.id', '=', 'work_orders.vehicle_id')
                 ->groupBy('work_orders.vehicle_id', 'vehicles.plat'),

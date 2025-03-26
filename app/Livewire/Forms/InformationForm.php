@@ -10,7 +10,7 @@ class InformationForm extends Form
 {
     public ?Information $informationModel;
 
-    public $operator_id = '';
+    public $company_id = '';
     public $vehicle_type = '';
     public $vehicle_id = '';
     public $crew_id = '';
@@ -23,7 +23,7 @@ class InformationForm extends Form
     public function rules(): array
     {
         return [
-			'operator_id' => 'required|string',
+			'company_id' => 'required|string',
 			'vehicle_type' => 'required|string',
 			'vehicle_id' => 'required|string',
 			'crew_id' => 'required|string',
@@ -39,7 +39,7 @@ class InformationForm extends Form
     {
         $this->informationModel = $informationModel;
 
-        $this->operator_id = $this->informationModel->operator_id;
+        $this->company_id = $this->informationModel->company_id;
         $this->vehicle_type = $this->informationModel->vehicle_type;
         $this->vehicle_id = $this->informationModel->vehicle_id;
         $this->crew_id = $this->informationModel->crew_id;

@@ -3,7 +3,7 @@
 namespace App\Livewire\Actions;
 
 use App\Models\User;
-use App\Models\WorkOrder;
+use App\Models\PostWo;
 use Illuminate\Support\Facades\Auth;
 
 class GetRouteName
@@ -15,6 +15,6 @@ class GetRouteName
         if ($currentPost = $currentUser->currentPost ?? false) {
             return $currentPost->url;
         }
-        return WorkOrder::ROUTE_NAME.'.index';
+        return PostWo::ROUTE_NAME.'.index';
     }
 }

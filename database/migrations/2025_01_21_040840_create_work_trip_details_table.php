@@ -26,6 +26,8 @@ return new class extends Migration
             $table->enum('area_name', $areas->toArray());
             $table->time('time_out')->nullable(false);
             $table->string('remarks')->nullable();
+            $statusAllowed = collect(\App\Utils\PostFacReportStatusEnum::cases())->map(fn($case) => $case->value)->toArray();
+            $table->enum('status', $statusAllowed)->default(\App\Utils\PostFacReportStatusEnum::PENDING->value);
 
             $table->foreignUuid('post_id')
                 ->constrained('posts')

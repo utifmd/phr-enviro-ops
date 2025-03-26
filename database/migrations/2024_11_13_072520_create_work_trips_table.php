@@ -18,10 +18,10 @@ return new class extends Migration
             $actNameAllowed = collect(\App\Utils\ActNameEnum::cases())
                 ->map(fn($case) => $case->value)->toArray();
 
-            $typeAllowed = collect(\App\Utils\WorkTripTypeEnum::cases())
+            $typeAllowed = collect(\App\Utils\PostFacReportTypeEnum::cases())
                 ->map(fn($case) => $case->value)->toArray();
 
-            $statusAllowed = collect(\App\Utils\WorkTripStatusEnum::cases())
+            $statusAllowed = collect(\App\Utils\PostFacReportStatusEnum::cases())
                 ->map(fn($case) => $case->value)->toArray();
 
             $table->uuid('id')->primary();

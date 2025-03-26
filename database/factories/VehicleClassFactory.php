@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\VehicleClass;
-use App\Utils\VehicleClassEnum;
+use App\Models\Equipment;
+use App\Utils\EquipmentEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +19,7 @@ class VehicleClassFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake(VehicleClassEnum::class),
+            'name' => fake(EquipmentEnum::class),
             'type' => fake()->name,
         ];
     }

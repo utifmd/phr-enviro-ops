@@ -20,10 +20,10 @@ new class extends Component {
         $authenticated = Auth::user();
         $this->name = $authenticated->name;
         $this->username = $authenticated->username;
-        $this->operator_name = $authenticated->operator->name
-            ? trim($authenticated->operator->prefix.' '.
-                $authenticated->operator->name.' '.
-                $authenticated->operator->postfix) : 'NA';
+        $this->operator_name = $authenticated->company->name
+            ? trim($authenticated->company->prefix . ' ' .
+                $authenticated->company->name . ' ' .
+                $authenticated->company->postfix) : 'NA';
         $this->email = $authenticated->email;
     }
 
@@ -73,7 +73,7 @@ new class extends Component {
 <section>
     <header>
         <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Profile Information') }}
+            {{ __('Profile PostWoInfo') }}
         </h2>
 
         <p class="mt-1 text-sm text-gray-600">
@@ -97,14 +97,16 @@ new class extends Component {
         </div>
         <div>
             <x-input-label for="username" :value="__('Username')"/>
-            <x-text-input wire:model="username" disabled="disabled" id="username" username="username" type="text" class="mt-1 block w-full"
+            <x-text-input wire:model="username" disabled="disabled" id="username" username="username" type="text"
+                          class="mt-1 block w-full"
                           required autofocus autocomplete="username"/>
             <x-input-error class="mt-2" :messages="$errors->get('username')"/>
         </div>
 
         <div>
             <x-input-label for="email" :value="__('Email')"/>
-            <x-text-input wire:model="email" disabled="disabled" id="email" name="email" type="email" class="mt-1 block w-full" required
+            <x-text-input wire:model="email" disabled="disabled" id="email" name="email" type="email"
+                          class="mt-1 block w-full" required
                           autocomplete="username"/>
             <x-input-error class="mt-2" :messages="$errors->get('email')"/>
 

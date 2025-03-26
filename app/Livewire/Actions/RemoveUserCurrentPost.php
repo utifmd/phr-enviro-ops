@@ -2,13 +2,13 @@
 
 namespace App\Livewire\Actions;
 
-use App\Models\UserCurrentPost;
+use App\Models\PostWoExistingProc;
 
 class RemoveUserCurrentPost
 {
     public function execute(string $userId): void
     {
-        $model = UserCurrentPost::query()->where(
+        $model = PostWoExistingProc::query()->where(
             'user_id', '=', $userId
         );
         if ($model->get()->isEmpty()) return;

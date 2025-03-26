@@ -27,6 +27,6 @@ class WorkTripDetailExport implements FromView, ShouldAutoSize
         $date = $this->date;
         $workTripDetails = $this->wtRepos->detailBuilder($date)->where('type', $type)->get();
 
-        return view('livewire.work-trip-detail.tabled', compact('workTripDetails', 'type', 'date'));
+        return view('livewire.post-fac.tabled', compact('workTripDetails', 'type', 'date'));
     }
 }

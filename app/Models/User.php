@@ -23,17 +23,17 @@ use Illuminate\Support\Str;
  * @property $password
  * @property $role
  * @property $area_name
- * @property $operator_id
+ * @property $company_id
  * @property $remember_token
  * @property $created_at
  * @property $updated_at
  *
  * RELATION
  * @property $currentPost
- * @property $operator
+ * @property $company
  * @property $posts
- * @property $workTrips
- * @property $workTripNotes
+ * @property $postFac
+ * @property $postRemarks
  *
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -71,7 +71,7 @@ class User extends Authenticatable
         'username',
         'role',
         'area_name',
-        'operator_id',
+        'company_id',
         'password',
     ];
 
@@ -88,17 +88,17 @@ class User extends Authenticatable
         ];
     }
 
-    public function operator(): HasOne
+    public function company(): HasOne
     {
         return $this->hasOne(
-            Operator::class, 'id', 'operator_id'
+            Company::class, 'id', 'company_id'
         );
     }
 
     public function currentPost(): HasOne
     {
         return $this->hasOne(
-            UserCurrentPost::class, 'user_id', 'id'
+            PostWoExistingProc::class, 'user_id', 'id'
 
         )->where('steps', '=', -1);
     }
@@ -110,16 +110,16 @@ class User extends Authenticatable
         );
     }
 
-    public function workTripInfos(): HasMany
+    public function postThresholds(): HasMany
     {
         return $this->hasMany(
-            WorkTripInfo::class, 'user_id', 'id'
+            PostFacThreshold::class, 'user_id', 'id'
         );
     }
-    public function workTripNotes(): HasMany
+    public function postRemarks(): HasMany
     {
         return $this->hasMany(
-            WorkTripNote::class, 'user_id', 'id'
+            PostRemark::class, 'user_id', 'id'
         );
     }
 
@@ -136,5 +136,5 @@ class User extends Authenticatable
             $model->id = Str::uuid()->toString();
         });
     }
-    
+
 }

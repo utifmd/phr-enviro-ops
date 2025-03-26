@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('work_trip_details_out', function (Blueprint $table) {
-            $rigOrMudPit = collect(\App\Utils\WorkTripDetailTypeEnum::cases())->map(fn($case) => $case->value);
+            $rigOrMudPit = collect(\App\Utils\PostFacTypeEnum::cases())->map(fn($case) => $case->value);
 
             $table->uuid('id')->primary();
             $table->string('from_facility')->nullable(false);

@@ -2,8 +2,8 @@
 
 namespace Tests\Models;
 
-use App\Models\WorkTrip;
-use App\Utils\WorkTripTypeEnum;
+use App\Models\PostFacReport;
+use App\Utils\PostFacReportTypeEnum;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
@@ -11,7 +11,7 @@ class WorkTripTest extends TestCase
 {
     public function testName()
     {
-        $collections = \App\Utils\WorkTripTypeEnum::cases()[0];
+        $collections = \App\Utils\PostFacReportTypeEnum::cases()[0];
         Log::debug(json_encode($collections));
 
         self::assertTrue(true);
