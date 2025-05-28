@@ -20,7 +20,7 @@ return new class extends Migration
         Schema::table('vehicles', function (Blueprint $table) {
             $table->renameColumn('operator_id', 'company_id');
         });
-        Schema::table('man_power', function (Blueprint $table) {
+        Schema::table('man_powers', function (Blueprint $table) {
             $table->renameColumn('operator_id', 'company_id');
         });
     }
