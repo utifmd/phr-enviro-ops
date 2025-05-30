@@ -50,14 +50,13 @@ new #[Layout('layouts.guest')] class extends Component {
             $validated['password'] = Hash::make($validated['password']);
 
             event(new Registered($user = User::create($validated)));
+            Auth::login($user);
 
             \Illuminate\Support\Facades\Log::debug('Register do');
         } catch (Exception $e) {
             \Illuminate\Support\Facades\Log::debug('Register else' . $e->getMessage());
             $this->addError('error', $e->getMessage());
         }
-
-        Auth::login($user);
 
         $this->redirect(route('dashboard', absolute: false), navigate: true);
     }
